@@ -8,6 +8,6 @@ Informatik Projekt 2 - Doppelpendel
 Michael Hoehn, Stefan Hauenstein
 
 
-== Scrum URL
+== Iterationsplan
 
-https://scrumy.com/doppelpendel
+https://www.pivotaltracker.com/projects/505419
