@@ -1,0 +1,14 @@
+== Readme
+
+Informatik Projekt 2 - Doppelpendel 
+
+
+== Projektteam
+
+Michael Hoehn
+Stefan Hauenstein
+
+
+== Scrum URL
+
+https://scrumy.com/doppelpendel
