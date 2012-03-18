@@ -5,8 +5,7 @@ Informatik Projekt 2 - Doppelpendel
 
 == Projektteam
 
-Michael Hoehn
-Stefan Hauenstein
+Michael Hoehn, Stefan Hauenstein
 
 
 == Scrum URL
