@@ -1,7 +1,11 @@
 ﻿package ch.zhaw.doppelpendel
 {
+	import ch.zhaw.doppelpendel.gui.Controls;
 	import ch.futurecom.debug.FucoStats;
 	import ch.futurecom.log.FucoLogger;
+	import ch.futurecom.net.loader.FucoURLLoader;
+	import ch.futurecom.system.contextmenu.CustomContextMenu;
+	import ch.futurecom.utils.PathUtils;
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.StageEvent;
 	import ch.zhaw.doppelpendel.gui.Background;
@@ -25,7 +29,15 @@
 		public static var STATS:Boolean = true;
 
 		/* ----------------------------------------------------------------- */
+		
+		// imported values
+		private var theParameters:Object;
+		private var xmlURL:String;
 
+		// xml stuff
+		private var _xml:XML;
+		private var xmlLoader:FucoURLLoader;
+		
 		public function Main()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -38,7 +50,26 @@
 			// do the stage tango
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
+			
+			// set fc context menu
+			new CustomContextMenu(this);
 
+			// get flash params
+			theParameters = stage.loaderInfo.parameters;
+			xmlURL = theParameters["xmlURL"];
+
+			if (xmlURL == null)
+			{
+				xmlURL = "";
+			}
+
+			// get base
+			var theRootClipURL:String = stage.loaderInfo.url;
+			var tmpArr:Array = theRootClipURL.split("\\");
+			var tmpBaseURL:String = tmpArr.join("/");
+
+			PathUtils.baseURL = tmpBaseURL.substring(0, tmpBaseURL.lastIndexOf("/")) + "/".toLowerCase();
+			
 			// set debuggers
 			if (Main.DEBUG)
 			{
@@ -91,6 +122,9 @@
 			//add pendulum
 			var pendulum:Pendulum = new Pendulum();
 			this.addChild(pendulum);
+			
+			var controls:Controls = new Controls();
+			this.addChild(controls);
 		}
 		
 		/* ----------------------------------------------------------------- */
