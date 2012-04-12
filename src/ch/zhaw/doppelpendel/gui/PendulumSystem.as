@@ -1,21 +1,18 @@
 /**
- * @class Pendulum
+ * @class PendulumSystem
  * 
  * @author 		mih
  */
-package ch.zhaw.doppelpendel.gui
-{
+package ch.zhaw.doppelpendel.gui {
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.StageEvent;
+	import ch.zhaw.doppelpendel.gui.element.Pendulum;
 
 	import flash.events.Event;
 	
-	public class Pendulum extends AssetPendulum
+	public class PendulumSystem extends AssetPendulum
 	{
-//		private var pendelA:Sprite;
-//		private var pendelB:Sprite;
-		
-		public function Pendulum()
+		public function PendulumSystem()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -23,12 +20,37 @@ package ch.zhaw.doppelpendel.gui
 		private function onAddedToStage(e:Event = null):void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-	
+			
+			init();
+			
 			//add listener
 			setPosition();
 			StageUtils.stage.addEventListener(StageEvent.STAGERESIZE, onStageResize);
 		}
 		
+		private function init():void
+		{
+			var pendulum1:Pendulum = new Pendulum(0xff0000);
+			var pendulum2:Pendulum = new Pendulum(0x00ff00);
+			
+			this.addChild(pendulum1);
+			pendulum1.addChild(pendulum2);
+			
+			
+			
+			
+			pendulum1.x = 50;
+			pendulum2.y = pendulum1.pHeight - (2 * pendulum1.pOffset);
+			
+			//test
+			
+			pendulum1.rotation = 350;
+			pendulum2.rotation = 10;
+			
+			
+			
+			//pendulum1.pHeight = 150;
+		} 
 		
 		// pendelA = new Sprite();
 			// pendelB = new Sprite();
