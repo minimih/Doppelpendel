@@ -1,4 +1,4 @@
-package hid {
+package ch.zhaw.doppelpendel.hid {
 
 	/**
 	 * @author mih

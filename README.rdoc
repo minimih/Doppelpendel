@@ -5,10 +5,13 @@ Informatik Projekt 2 - Doppelpendel
 
 == Projektteam
 
-Michael Hoehn
-Stefan Hauenstein
+Michael Hoehn, Stefan Hauenstein
 
 
-== Scrum URL
+== Iterationsplan
 
-https://scrumy.com/doppelpendel
+https://www.pivotaltracker.com/projects/505419
+
+== Website
+
+http://ussvoyager.ch/zhaw/doppelpendel/
