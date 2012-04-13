@@ -1,6 +1,4 @@
-﻿package ch.zhaw.doppelpendel
-{
-	import ch.zhaw.doppelpendel.gui.Controls;
+﻿package ch.zhaw.doppelpendel {
 	import ch.futurecom.debug.FucoStats;
 	import ch.futurecom.log.FucoLogger;
 	import ch.futurecom.net.loader.FucoURLLoader;
@@ -9,7 +7,8 @@
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.StageEvent;
 	import ch.zhaw.doppelpendel.gui.Background;
-	import ch.zhaw.doppelpendel.gui.Pendulum;
+	import ch.zhaw.doppelpendel.gui.Controls;
+	import ch.zhaw.doppelpendel.gui.PendulumSystem;
 
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -120,7 +119,7 @@
 			this.addChild(background);
 			
 			//add pendulum
-			var pendulum:Pendulum = new Pendulum();
+			var pendulum:PendulumSystem = new PendulumSystem();
 			this.addChild(pendulum);
 			
 			var controls:Controls = new Controls();
