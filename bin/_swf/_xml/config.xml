@@ -4,6 +4,15 @@
 		<imageFilename><![CDATA[micasa-malwettbewerb]]></imageFilename>
 	</config>
 	
+	<system gravity="9.81">
+		<pendulum  length="1.00" mass="1.00" phi="1.00" >
+			
+		</pendulum>
+		<pendulum>
+		
+		</pendulum>
+	</system>
+	
 	<error>
 		<unknown><![CDATA[Unbekannter Fehler.]]></unknown>
 	</error>
