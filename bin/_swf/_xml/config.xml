@@ -1,20 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <data>
-	<config>
-		<imageFilename><![CDATA[micasa-malwettbewerb]]></imageFilename>
-	</config>
-	
-	<system gravity="9.81">
-		<pendulum  length="1.00" mass="1.00" phi="1.00" >
-			
-		</pendulum>
-		<pendulum>
-		
-		</pendulum>
+	<!--
+	gravity in m/s^2 (9.81 = earth)
+	density in kg/m^3 (2700 = aluminium)
+	-->
+	<system gravity="9.81" density="2700">
+		<!--
+		length in m
+		phi in grad
+		color in hex
+		-->
+		<pendulum length="0.5" phi="0" color="0xFF0000" />
+		<pendulum length="0.35" phi="0" color="0xFFFF00" />
 	</system>
-	
-	<error>
-		<unknown><![CDATA[Unbekannter Fehler.]]></unknown>
-	</error>
-	
 </data>

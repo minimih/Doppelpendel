@@ -1,4 +1,5 @@
-﻿package ch.zhaw.doppelpendel {
+﻿package ch.zhaw.doppelpendel
+{
 	import ch.futurecom.debug.FucoStats;
 	import ch.futurecom.log.FucoLogger;
 	import ch.futurecom.net.loader.FucoURLLoader;
@@ -6,14 +7,14 @@
 	import ch.futurecom.utils.PathUtils;
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.StageEvent;
-	import ch.zhaw.doppelpendel.gui.Background;
-	import ch.zhaw.doppelpendel.gui.Controls;
-	import ch.zhaw.doppelpendel.gui.PendulumSystem;
 
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
 	
 	// set SWF width, height, framerate and bg color
 	[SWF(width="800", height="600", frameRate="60", backgroundColor="#ffffff")]
@@ -104,26 +105,67 @@
 			onStageResize();
 			stage.addEventListener(Event.RESIZE, onStageResize);
 			
-			// init
-			init();
+			// loadXML
+			loadXML();
+		}
+		
+		/* ----------------------------------------------------------------- */
+
+		private function loadXML():void
+		{
+			if (Main.DEBUG && xmlURL == "")
+			{
+				xmlURL = PathUtils.baseURL + "_xml/config.xml";
+			}
+			FucoLogger.debug("Main.loadXML: " + xmlURL);
+
+			xmlLoader = new FucoURLLoader();
+			xmlLoader.disableCache = true;
+			xmlLoader.addEventListener(Event.COMPLETE, onXMLLoaded);
+			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, onXMLLoadError);
+			xmlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onXMLLoadError);
+			xmlLoader.addEventListener(ErrorEvent.ERROR, onXMLLoadError);
+			xmlLoader.loadURL(xmlURL);
+		}
+
+		private function onXMLLoadError(e:ErrorEvent):void
+		{
+			cleanXMLLoader();
+			var msg:String = "loading of xml failed. fatal. exiting.....";
+			FucoLogger.fatal("Main.onXMLLoadError. " + msg);
+		}
+
+		private function onXMLLoaded(e:Event):void
+		{
+			_xml = xmlLoader.xmlData();
+			cleanXMLLoader();
+			
+			start();
+		}
+
+		/* ---------------------------------------------------------------- */
+
+		private function cleanXMLLoader():void
+		{
+			if (xmlLoader != null)
+			{
+				xmlLoader.removeEventListener(Event.COMPLETE, onXMLLoaded);
+				xmlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onXMLLoadError);
+				xmlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onXMLLoadError);
+				xmlLoader.removeEventListener(ErrorEvent.ERROR, onXMLLoadError);
+				xmlLoader = null;
+			}
 		}
 
 		/* ----------------------------------------------------------------- */
 
-		private function init():void
+		private function start():void
 		{
-			FucoLogger.debug("Main.init");
+			FucoLogger.debug("Main.start");
 
-			//add bg
-			var background:Background = new Background();
-			this.addChild(background);
-			
-			//add pendulum
-			var pendulum:PendulumSystem = new PendulumSystem();
-			this.addChild(pendulum);
-			
-			var controls:Controls = new Controls();
-			this.addChild(controls);
+			// call the model
+			var model:Doppelpendel = Doppelpendel.getInstance();
+			model.init(this);
 		}
 		
 		/* ----------------------------------------------------------------- */
@@ -134,6 +176,12 @@
 			StageUtils.stageHeight = stage.stageHeight;
 
 			stage.dispatchEvent(new StageEvent(StageEvent.STAGERESIZE));
+		}
+		
+		/* ----------------------------------------------------------------- */
+
+		public function get xml():XML {
+			return _xml;
 		}
 	}
 }

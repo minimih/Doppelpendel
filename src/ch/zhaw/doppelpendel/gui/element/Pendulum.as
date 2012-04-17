@@ -3,24 +3,50 @@
  * 
  * @author 		mih
  */
-package ch.zhaw.doppelpendel.gui.element {
+package ch.zhaw.doppelpendel.gui.element
+{
+	import flash.display.LineScaleMode;
 	import flash.display.Sprite;
 	
 	public class Pendulum extends Sprite
 	{
 		private var mcBar:Sprite;
 
+		private var drawFactor:Number;
+
+		private var _pDensity:Number;
+		private var _pMass:Number;
+		
+		private var _pLength:Number;
 		private var _pWidth:Number;
-		private var _pHeight:Number;
+		private var _pDepth:Number;
+
+		private var _pVolume:Number;
+		
 		private var _pOffset:Number;
+		
+		private var _pRotation:Number;
 		private var _pColor:Number;
 		
-		public function Pendulum(c:Number)
+		public function Pendulum(d:Number, l:Number, r:Number, c:Number)
 		{
-			_pWidth = 16;
-			_pHeight = 100; //TODO needs to be calculated with mass
+			//display factor = 375;
+			drawFactor = 375;
+			
+			_pDensity = d;
+			
+			_pLength = l*drawFactor;
+			_pWidth = 0.04*drawFactor; // 4cm
+			_pDepth = 0.004*drawFactor; // 4mm
+			
+			_pVolume = _pLength * _pWidth * _pDepth;
+			
+			//calc mass
+			_pMass = _pDensity * _pVolume;
+			
 			_pOffset = pWidth/2;
 			
+			_pRotation = r;
 			_pColor = c;
 
 			mcBar = new Sprite();
@@ -37,9 +63,9 @@ package ch.zhaw.doppelpendel.gui.element {
 		private function drawBar():void
 		{
 			mcBar.graphics.clear();
-			mcBar.graphics.lineStyle(2,0x000000);
+			mcBar.graphics.lineStyle(2,0x000000,1.0,false);
 			mcBar.graphics.beginFill(pColor, 0.5);
-			mcBar.graphics.drawRect(-pOffset, -pOffset, pWidth, pHeight);
+			mcBar.graphics.drawRect(-pOffset, -pOffset, pWidth, pLength);
 		}
 		
 		public function get pWidth():Number {
@@ -53,12 +79,12 @@ package ch.zhaw.doppelpendel.gui.element {
 			drawBar();
 		}
 		
-		public function get pHeight():Number {
-			return _pHeight;
+		public function get pLength():Number {
+			return _pLength;
 		}
 		
-		public function set pHeight(h:Number):void {
-			_pHeight = h;
+		public function set pLength(h:Number):void {
+			_pLength = h;
 			
 			drawBar();
 		}

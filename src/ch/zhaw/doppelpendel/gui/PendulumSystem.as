@@ -3,17 +3,30 @@
  * 
  * @author 		mih
  */
-package ch.zhaw.doppelpendel.gui {
-	import ch.futurecom.utils.StageUtils;
-	import ch.zhaw.doppelpendel.event.StageEvent;
+package ch.zhaw.doppelpendel.gui
+{
 	import ch.zhaw.doppelpendel.gui.element.Pendulum;
 
+	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	public class PendulumSystem extends AssetPendulum
 	{
-		public function PendulumSystem()
+		private var xmlData:XMLList;
+		
+		private var gravity:Number;
+		private var density:Number;
+		
+		private var arrPendulum:Vector.<Pendulum>;		
+		
+		private var mcFixpoint:Sprite;
+		
+		public function PendulumSystem(xml:XMLList)
 		{
+			xmlData = xml;
+			
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
@@ -21,96 +34,58 @@ package ch.zhaw.doppelpendel.gui {
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			
-			init();
-			
-			//add listener
-			setPosition();
-			StageUtils.stage.addEventListener(StageEvent.STAGERESIZE, onStageResize);
+			setupSystem();
 		}
 		
-		private function init():void
+		/**
+		 * Sets up the Pendulum System
+		 * depending on the Config file
+		 */
+		private function setupSystem():void
 		{
-			var pendulum1:Pendulum = new Pendulum(0xff0000);
-			var pendulum2:Pendulum = new Pendulum(0x00ff00);
+			//set gravity
+			gravity = xmlData.@gravity;
+			density = xmlData.@density;
 			
-			this.addChild(pendulum1);
-			pendulum1.addChild(pendulum2);
+			mcFixpoint = this.mc_fixpoint;
 			
-			
-			
-			
-			pendulum1.x = 50;
-			pendulum2.y = pendulum1.pHeight - (2 * pendulum1.pOffset);
-			
-			//test
-			
-			pendulum1.rotation = 350;
-			pendulum2.rotation = 10;
-			
-			
-			
-			//pendulum1.pHeight = 150;
+			var xmlPendulum:XMLList = xmlData.pendulum;
+			if(xmlPendulum.length() >= 1 && xmlPendulum.length() <= 2){
+				
+				arrPendulum = new Vector.<Pendulum>();
+				
+				for (var i : int = 0; i < xmlPendulum.length(); i++) {
+					var currentP:Pendulum = new Pendulum(density, xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].@color);
+					arrPendulum.push(currentP);
+					
+					if(i == 0){
+						mcFixpoint.addChild(currentP);
+					}else{
+						var parentP:Pendulum = arrPendulum[i-1];
+						parentP.addChild(currentP);
+						//set y for parentPendulum
+						currentP.y = parentP.pLength - (2 * parentP.pOffset);
+					}
+				}
+				
+				//startTimer
+				startTimer();
+			}else{
+				//not supported
+			}
 		} 
 		
-		// pendelA = new Sprite();
-			// pendelB = new Sprite();
-			//			
-			// this.addChild(pendelA);
-			// pendelA.addChild(pendelB);
-			//			
-			// pendelA.graphics.lineStyle(3,0x000000);
-			// pendelA.graphics.moveTo(0,0);
-			// pendelA.graphics.lineTo(0,100);
-			//			
-			// var rA:Sprite = new Sprite();
-			// pendelA.addChild(rA);
-			// rA.graphics.beginFill(0x00ffff);
-			// rA.graphics.drawCircle(0, 0, 10);
-			// rA.graphics.endFill();
-			//
-			// rA.x = 0;
-			// rA.y = 100;
-			//			
-			// pendelB.graphics.lineStyle(3,0x000000);
-			// pendelB.graphics.moveTo(0,0);
-			// pendelB.graphics.lineTo(0,100);
-			//
-			// var rB:Sprite = new Sprite();
-			// pendelB.addChild(rB);
-			// rB.graphics.beginFill(0xff0000);
-			// rB.graphics.drawCircle(0, 0, 10);
-			// rB.graphics.endFill();
-			//
-			// rB.x = 0;
-			// rB.y = 100;
-			//
-			// pendelA.x = Math.round(stage.stageWidth/2);
-			// pendelA.y = Math.round(stage.stageHeight/2);
-			//			
-			// pendelB.x = 0;
-			// pendelB.y = 100;
-			//			
-			// pendelA.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			
-//		private function onEnterFrame(e:Event):void
-//		{
-//			pendelA.rotation += 1;
-//			pendelB.rotation -= 5;
-//		}
-		
-		/* ----------------------------------------------------------------- */
-		
-		private function setPosition():void
+		private function startTimer():void
 		{
-			this.x = Math.round(StageUtils.stageWidth * 0.5);
-			this.y = Math.round(StageUtils.stageHeight * 0.25) ;
+			var timer:Timer = new Timer(10);
+			timer.addEventListener(TimerEvent.TIMER, timerHandler); 
+			timer.start();
 		}
 		
-		/* ----------------------------------------------------------------- */
-	
-		private function onStageResize(e:Event):void
+		private function timerHandler(e:TimerEvent):void
 		{
-			setPosition();
+			arrPendulum[0].rotation += 10;
+			arrPendulum[1].rotation -= 25;
 		}
 	}
 }
