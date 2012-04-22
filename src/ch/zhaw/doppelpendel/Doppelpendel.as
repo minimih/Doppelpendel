@@ -7,6 +7,7 @@ package ch.zhaw.doppelpendel
 {
 	import ch.futurecom.log.FucoLogger;
 	import ch.futurecom.utils.StageUtils;
+	import ch.zhaw.doppelpendel.event.ControlEvent;
 	import ch.zhaw.doppelpendel.event.StageEvent;
 	import ch.zhaw.doppelpendel.gui.Background;
 	import ch.zhaw.doppelpendel.gui.Controls;
@@ -14,7 +15,7 @@ package ch.zhaw.doppelpendel
 
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	
+
 	public class Doppelpendel extends EventDispatcher
 	{
 		// singleton
@@ -47,33 +48,55 @@ package ch.zhaw.doppelpendel
 
 			_main = main;
 
-			//add bg
+			// add bg
 			background = new Background();
 			main.addChild(background);
-			
-			//add system
+
+			// add system
 			system = new PendulumSystem(xml.system);
 			main.addChild(system);
-			
+
 			controls = new Controls();
 			main.addChild(controls);
-			
+
+			// set listeners
+			controls.addEventListener(ControlEvent.START, onStartSystem);
+			controls.addEventListener(ControlEvent.STOP, onStopSystem);
+			controls.addEventListener(ControlEvent.RESET, onResetSystem);
+
 			// init stage resize listener
 			onStageResize();
 			StageUtils.stage.addEventListener(StageEvent.STAGERESIZE, onStageResize);
 		}
-		
+
+		/* ---------------------------------------------------------------- */
+
+		private function onStartSystem(e:Event):void
+		{
+			system.startSystem();
+		}
+
+		private function onStopSystem(e:Event):void
+		{
+			system.stopSystem();
+		}
+
+		private function onResetSystem(e:Event):void
+		{
+			system.resetSystem();
+		}
+
 		/* ---------------------------------------------------------------- */
 
 		private function onStageResize(event:Event = null):void
 		{
 			var sw:Number = StageUtils.stage.stageWidth;
 			var sh:Number = StageUtils.stage.stageHeight;
-			
+
 			StageUtils.stageWidth = sw;
 			StageUtils.stageHeight = sh;
-			
-			//calc pos
+
+			// calc pos
 			system.x = sw * 0.5;
 			system.y = (sh - controls.height) * 0.5;
 		}

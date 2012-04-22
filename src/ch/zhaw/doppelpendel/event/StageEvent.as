@@ -9,7 +9,6 @@ package ch.zhaw.doppelpendel.event
 
 	public class StageEvent extends Event
 	{
-		//update module data
 		public static const STAGERESIZE:String = "stageResize";
 		
 		private var _arguments:Object;
