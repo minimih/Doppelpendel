@@ -17,7 +17,7 @@
 	import flash.events.SecurityErrorEvent;
 	
 	// set SWF width, height, framerate and bg color
-	[SWF(width="800", height="600", frameRate="60", backgroundColor="#ffffff")]
+	[SWF(width="1024", height="768", frameRate="60", backgroundColor="#ffffff")]
 
 	public class Main extends Sprite
 	{
@@ -31,7 +31,6 @@
 		/* ----------------------------------------------------------------- */
 		
 		// imported values
-		private var theParameters:Object;
 		private var xmlURL:String;
 
 		// xml stuff
@@ -53,15 +52,6 @@
 			
 			// set fc context menu
 			new CustomContextMenu(this);
-
-			// get flash params
-			theParameters = stage.loaderInfo.parameters;
-			xmlURL = theParameters["xmlURL"];
-
-			if (xmlURL == null)
-			{
-				xmlURL = "";
-			}
 
 			// get base
 			var theRootClipURL:String = stage.loaderInfo.url;
@@ -105,7 +95,6 @@
 			onStageResize();
 			stage.addEventListener(Event.RESIZE, onStageResize);
 			
-			// loadXML
 			loadXML();
 		}
 		
@@ -113,10 +102,7 @@
 
 		private function loadXML():void
 		{
-			if (Main.DEBUG && xmlURL == "")
-			{
-				xmlURL = PathUtils.baseURL + "_xml/config.xml";
-			}
+			xmlURL = PathUtils.baseURL + "_xml/config.xml";
 			FucoLogger.debug("Main.loadXML: " + xmlURL);
 
 			xmlLoader = new FucoURLLoader();
@@ -131,8 +117,7 @@
 		private function onXMLLoadError(e:ErrorEvent):void
 		{
 			cleanXMLLoader();
-			var msg:String = "loading of xml failed. fatal. exiting.....";
-			FucoLogger.fatal("Main.onXMLLoadError. " + msg);
+			FucoLogger.fatal("Main.onXMLLoadError. " + e.text);
 		}
 
 		private function onXMLLoaded(e:Event):void

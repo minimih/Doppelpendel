@@ -46,7 +46,12 @@ package ch.zhaw.doppelpendel.gui.form
 		public function set enabled(b:Boolean):void {
 			_enabled = b;
 			
-			//frame.visible = b;
+			if(b){
+				frame.alpha = 1;
+			}else{
+				frame.alpha = 0.5;				
+			}
+			
 			back.visible = b;
 			
 			tfInput.selectable = b;

@@ -8,10 +8,12 @@ package ch.zhaw.doppelpendel
 	import ch.futurecom.log.FucoLogger;
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.ControlEvent;
+	import ch.zhaw.doppelpendel.event.PendulumEvent;
 	import ch.zhaw.doppelpendel.event.StageEvent;
 	import ch.zhaw.doppelpendel.gui.Background;
 	import ch.zhaw.doppelpendel.gui.Controls;
 	import ch.zhaw.doppelpendel.gui.PendulumSystem;
+	import ch.zhaw.doppelpendel.gui.element.Pendulum;
 
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -60,13 +62,29 @@ package ch.zhaw.doppelpendel
 			main.addChild(controls);
 
 			// set listeners
+			onUpdateControls();
+			system.addEventListener(PendulumEvent.UPDATE, onUpdateControls);
+			
 			controls.addEventListener(ControlEvent.START, onStartSystem);
 			controls.addEventListener(ControlEvent.STOP, onStopSystem);
 			controls.addEventListener(ControlEvent.RESET, onResetSystem);
 
+			controls.addEventListener(ControlEvent.UPDATE, onUpdateSystem);
+
 			// init stage resize listener
 			onStageResize();
 			StageUtils.stage.addEventListener(StageEvent.STAGERESIZE, onStageResize);
+		}
+
+		/* ---------------------------------------------------------------- */
+
+		private function onUpdateControls(e:Event = null):void
+		{
+			var arrPendulum:Vector.<Pendulum> = system.getPendulum();
+			for (var i:int = 0; i < arrPendulum.length; i++)
+			{
+				controls.updateControls(i, arrPendulum[i].pPhi, arrPendulum[i].pOmega, arrPendulum[i].pLength, arrPendulum[i].pMass);
+			}
 		}
 
 		/* ---------------------------------------------------------------- */
@@ -84,6 +102,12 @@ package ch.zhaw.doppelpendel
 		private function onResetSystem(e:Event):void
 		{
 			system.resetSystem();
+		}
+
+		private function onUpdateSystem(e:Event):void
+		{
+			//controls.
+			system.updateSystem();
 		}
 
 		/* ---------------------------------------------------------------- */

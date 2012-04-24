@@ -5,8 +5,14 @@
  */
 package ch.zhaw.doppelpendel.gui.element
 {
+	import ch.futurecom.log.FucoLogger;
+	import ch.zhaw.doppelpendel.utils.Geom;
+
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Elastic;
+
 	import flash.display.Sprite;
-	
+
 	public class Pendulum extends Sprite
 	{
 		private var mcBar:Sprite;
@@ -20,102 +26,139 @@ package ch.zhaw.doppelpendel.gui.element
 
 		private var _pDensity:Number;
 		private var _pMass:Number;
-		
+
 		private var _pLength:Number;
 		private var _pWidth:Number;
 		private var _pDepth:Number;
 
 		private var _pVolume:Number;
-		
-		private var _pRotation:Number;
+
+		private var _pPhi:Number;
+		private var _pOmega:Number;
+
 		private var _pColor:Number;
-		
-		public function Pendulum(d:Number, l:Number, r:Number, c:Number)
+
+		public function Pendulum(d:Number, l:Number, r:Number, o:Number, c:Number)
 		{
-			//display factor = 375;
+			// display factor = 375;
 			drawFactor = 375;
-			
+
 			_pDensity = d;
-			
+
 			_pLength = l;
 			_pWidth = 0.04; // 4cm
 			_pDepth = 0.004; // 4mm
 			
-			_pVolume = _pLength * _pWidth * _pDepth;
-			
-			//calc mass
-			_pMass = _pDensity * _pVolume;
-			
-			dLength = _pLength * drawFactor;
-			dWidth = _pWidth * drawFactor;
-			dDepth = _pDepth * drawFactor;
-			dOffset = dWidth * 0.5;
-			
-			_pRotation = r;
+			_pOmega = o;
 			_pColor = c;
-
+			
 			mcBar = new Sprite();
 			this.addChild(mcBar);
-			drawBar();
 			
 			var mcRound:Sprite = new Sprite();
 			this.addChild(mcRound);
 			mcRound.graphics.beginFill(0x000000);
 			mcRound.graphics.drawCircle(0, 0, 3);
 			mcRound.graphics.endFill();
+			
+			updateSize();
+			pPhi = r;
 		}
 		
+		/* ----------------------------------------------------------------- */
+
 		private function drawBar():void
 		{
+			dLength = _pLength * drawFactor;
+			dWidth = _pWidth * drawFactor;
+			dDepth = _pDepth * drawFactor;
+			dOffset = dWidth * 0.5;
+			
 			mcBar.graphics.clear();
-			mcBar.graphics.lineStyle(2,0x000000,1.0,false);
+			mcBar.graphics.lineStyle(2, 0x000000, 1.0, false);
 			mcBar.graphics.beginFill(pColor, 0.5);
 			mcBar.graphics.drawRect(-dOffset, -dOffset, dWidth, dLength);
 		}
-		
+
+		public function reset(l:Number, r:Number, o:Number):void
+		{
+			pLength = l;
+			pOmega = o;
+			
+			FucoLogger.debug(Geom.degrees(-this.rotation));
+			FucoLogger.debug(r);
+			
+			if(Geom.degrees(-this.rotation) > r + 180){
+				r = r + 360;
+			}
+			
+			TweenMax.to(this, 1, {pPhi:r, ease:Elastic.easeOut});
+		}
+
 		public function setPosition(p:Pendulum):void
 		{
 			this.y = p.dLength - (2 * p.dOffset);
 		}
-		
-		public function calcLenght():void
+
+		public function updateSize():void
 		{
-			
+			// calc volume
+			_pVolume = _pLength * _pWidth * _pDepth;
+
+			// calc mass
+			_pMass = _pDensity * _pVolume;
+
+			drawBar();
 		}
 
-		public function calcMass():void
+		public function updateMass():void
 		{
-			
+			// calc volume
+			_pVolume = _pMass / _pDensity;
+			// calc length
+			_pLength = _pVolume / (_pWidth * _pDepth);
+
+			drawBar();
 		}
-		
-//		public function get pWidth():Number {
-//			return _pWidth;
-//		}
-//		
-//		public function set pWidth(w:Number):void {
-//			_pWidth = w;
-//			_pOffset = w/2;
-//			
-//			drawBar();
-//		}
-//		
-//		public function get pLength():Number {
-//			return _pLength;
-//		}
-//		
-//		public function set pLength(h:Number):void {
-//			_pLength = h;
-//			
-//			drawBar();
-//		}
-//		
-//		public function get pOffset():Number {
-//			return _pOffset;
-//		}
-//
-//		public function set pOffset(n:Number):void {
-//			_pOffset = n;
-//		}
+
+		/* ----------------------------------------------------------------- */
+
+		public function get pPhi():Number {
+			return _pPhi;
+		}
+
+		public function set pPhi(r:Number):void {
+			_pPhi = Geom.degrees(r);
+			this.rotation = -_pPhi;
+		}
+
+		public function get pOmega():Number {
+			return _pOmega;
+		}
+
+		public function set pOmega(i:Number):void {
+			_pOmega = i;
+		}
+
+		public function get pLength():Number {
+			return _pLength;
+		}
+
+		public function set pLength(l:Number):void {
+			_pLength = l;
+
+			updateSize();
+		}
+
+		public function get pMass():Number {
+			return _pMass;
+		}
+
+		public function set pMass(m:Number):void {
+			_pMass = m;
+
+			updateMass();
+		}
 
 		public function get pColor():Number {
 			return _pColor;
