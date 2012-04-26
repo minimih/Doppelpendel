@@ -5,13 +5,14 @@
  */
 package ch.zhaw.doppelpendel
 {
-	import ch.futurecom.log.FucoLogger;
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.ControlEvent;
-	import ch.zhaw.doppelpendel.event.PendulumEvent;
+	import ch.zhaw.doppelpendel.event.MenuEvent;
 	import ch.zhaw.doppelpendel.event.StageEvent;
+	import ch.zhaw.doppelpendel.event.SystemEvent;
 	import ch.zhaw.doppelpendel.gui.Background;
 	import ch.zhaw.doppelpendel.gui.Controls;
+	import ch.zhaw.doppelpendel.gui.MenuBar;
 	import ch.zhaw.doppelpendel.gui.PendulumSystem;
 	import ch.zhaw.doppelpendel.gui.element.Pendulum;
 
@@ -20,34 +21,18 @@ package ch.zhaw.doppelpendel
 
 	public class Doppelpendel extends EventDispatcher
 	{
-		// singleton
-		private static var _instance:Doppelpendel = new Doppelpendel();
-
 		private var _main:Main;
 
 		private var background:Background;
 		private var system:PendulumSystem;
 		private var controls:Controls;
+		
+		private var menuBar:MenuBar;
 
 		/* ---------------------------------------------------------------- */
 
-		public function Doppelpendel()
+		public function Doppelpendel(main:Main)
 		{
-			if ( _instance ) throw new Error("Doppelpendel can only be accessed through Doppelpendel.getInstance()");
-		}
-
-		// getInstance
-		public static function getInstance():Doppelpendel
-		{
-			return _instance;
-		}
-
-		/* ---------------------------------------------------------------- */
-
-		public function init(main:Main):void
-		{
-			FucoLogger.debug("Doppelpendel.init");
-
 			_main = main;
 
 			// add bg
@@ -55,35 +40,49 @@ package ch.zhaw.doppelpendel
 			main.addChild(background);
 
 			// add system
-			system = new PendulumSystem(xml.system);
+			system = new PendulumSystem();
 			main.addChild(system);
 
 			controls = new Controls();
 			main.addChild(controls);
-
+			
+			//create the menubar
+			menuBar = new MenuBar();
+			
 			// set listeners
-			onUpdateControls();
-			system.addEventListener(PendulumEvent.UPDATE, onUpdateControls);
+			system.addEventListener(SystemEvent.UPDATE, onUpdateControls);
+			system.addEventListener(SystemEvent.RESET, onResetControls);
 			
 			controls.addEventListener(ControlEvent.START, onStartSystem);
 			controls.addEventListener(ControlEvent.STOP, onStopSystem);
 			controls.addEventListener(ControlEvent.RESET, onResetSystem);
 
 			controls.addEventListener(ControlEvent.UPDATE, onUpdateSystem);
+			
+			menuBar.addEventListener(MenuEvent.LOAD, onLoadFile);
 
 			// init stage resize listener
 			onStageResize();
 			StageUtils.stage.addEventListener(StageEvent.STAGERESIZE, onStageResize);
 		}
+		
+		/* ---------------------------------------------------------------- */	
 
-		/* ---------------------------------------------------------------- */
-
-		private function onUpdateControls(e:Event = null):void
+		private function onUpdateControls(e:SystemEvent):void
 		{
 			var arrPendulum:Vector.<Pendulum> = system.getPendulum();
 			for (var i:int = 0; i < arrPendulum.length; i++)
 			{
 				controls.updateControls(i, arrPendulum[i].pPhi, arrPendulum[i].pOmega, arrPendulum[i].pLength, arrPendulum[i].pMass);
+			}
+		}
+		
+		private function onResetControls(e:SystemEvent):void
+		{
+			var arrPendulum:Vector.<Pendulum> = system.getPendulum();
+			for (var i:int = 0; i < arrPendulum.length; i++)
+			{
+				controls.updateControls(i, arrPendulum[i].rPhi, arrPendulum[i].rOmega, arrPendulum[i].rLength, arrPendulum[i].rMass);
 			}
 		}
 
@@ -107,8 +106,16 @@ package ch.zhaw.doppelpendel
 		private function onUpdateSystem(e:Event):void
 		{
 			//controls.
-			system.updateSystem();
+			//system.updateSystem();
 		}
+
+		/* ---------------------------------------------------------------- */
+
+		private function onLoadFile(e:MenuEvent):void
+		{
+			var configUrl:String = e.args.file;
+			system.loadSystem(configUrl);
+		}	
 
 		/* ---------------------------------------------------------------- */
 
@@ -129,10 +136,6 @@ package ch.zhaw.doppelpendel
 
 		public function get main():Main {
 			return _main;
-		}
-
-		public function get xml():XML {
-			return main.xml;
 		}
 	}
 }

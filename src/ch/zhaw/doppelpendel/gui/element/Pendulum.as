@@ -5,13 +5,11 @@
  */
 package ch.zhaw.doppelpendel.gui.element
 {
-	import ch.futurecom.log.FucoLogger;
 	import ch.zhaw.doppelpendel.utils.Geom;
-
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Elastic;
-
 	import flash.display.Sprite;
+	import flash.events.Event;
 
 	public class Pendulum extends Sprite
 	{
@@ -37,32 +35,55 @@ package ch.zhaw.doppelpendel.gui.element
 		private var _pOmega:Number;
 
 		private var _pColor:Number;
-
+		
+		//reset stuff
+		private var _rPhi:Number;
+		private var _rOmega:Number;
+		private var _rLength:Number;
+		private var _rMass:Number;
+		
 		public function Pendulum(d:Number, l:Number, r:Number, o:Number, c:Number)
 		{
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+			
 			// display factor = 375;
 			drawFactor = 375;
 
 			_pDensity = d;
 
 			_pLength = l;
-			_pWidth = 0.04; // 4cm
-			_pDepth = 0.004; // 4mm
-			
+			_pWidth = 0.04;
+			// 4cm
+			_pDepth = 0.004;
+			// 4mm
+
 			_pOmega = o;
 			_pColor = c;
-			
+
 			mcBar = new Sprite();
 			this.addChild(mcBar);
-			
+
 			var mcRound:Sprite = new Sprite();
 			this.addChild(mcRound);
 			mcRound.graphics.beginFill(0x000000);
 			mcRound.graphics.drawCircle(0, 0, 3);
 			mcRound.graphics.endFill();
-			
+
 			updateSize();
 			pPhi = r;
+		}
+		
+		private function onRemovedFromStage(e:Event = null):void
+		{
+			removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+			
+			while(true){
+				try{
+					this.removeChildAt(0);
+				}catch(error:Error){
+					return;
+				}
+			}
 		}
 		
 		/* ----------------------------------------------------------------- */
@@ -73,7 +94,7 @@ package ch.zhaw.doppelpendel.gui.element
 			dWidth = _pWidth * drawFactor;
 			dDepth = _pDepth * drawFactor;
 			dOffset = dWidth * 0.5;
-			
+
 			mcBar.graphics.clear();
 			mcBar.graphics.lineStyle(2, 0x000000, 1.0, false);
 			mcBar.graphics.beginFill(pColor, 0.5);
@@ -85,13 +106,16 @@ package ch.zhaw.doppelpendel.gui.element
 			pLength = l;
 			pOmega = o;
 			
-			FucoLogger.debug(Geom.degrees(-this.rotation));
-			FucoLogger.debug(r);
+			_rLength = l;
+			_rPhi = r;
+			_rOmega = o;
+			_rMass = pMass;
 			
-			if(Geom.degrees(-this.rotation) > r + 180){
+			if (Geom.degrees(-this.rotation) > r + 180)
+			{
 				r = r + 360;
 			}
-			
+
 			TweenMax.to(this, 1, {pPhi:r, ease:Elastic.easeOut});
 		}
 
@@ -166,6 +190,24 @@ package ch.zhaw.doppelpendel.gui.element
 
 		public function set pColor(n:Number):void {
 			_pColor = n;
+		}
+		
+		/* ----------------------------------------------------------------- */
+		
+		public function get rPhi():Number {
+			return _rPhi;
+		}
+		
+		public function get rOmega():Number {
+			return _rOmega;
+		}
+		
+		public function get rLength():Number {
+			return _rLength;
+		}
+		
+		public function get rMass():Number {
+			return _rMass;
 		}
 	}
 }

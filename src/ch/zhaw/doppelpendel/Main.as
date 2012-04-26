@@ -2,7 +2,6 @@
 {
 	import ch.futurecom.debug.FucoStats;
 	import ch.futurecom.log.FucoLogger;
-	import ch.futurecom.net.loader.FucoURLLoader;
 	import ch.futurecom.system.contextmenu.CustomContextMenu;
 	import ch.futurecom.utils.PathUtils;
 	import ch.futurecom.utils.StageUtils;
@@ -11,13 +10,10 @@
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
-	import flash.events.ErrorEvent;
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
-	import flash.events.SecurityErrorEvent;
 	
 	// set SWF width, height, framerate and bg color
-	[SWF(width="1024", height="768", frameRate="60", backgroundColor="#ffffff")]
+	[SWF(width="1024", height="768", frameRate="40", backgroundColor="#ffffff")]
 
 	public class Main extends Sprite
 	{
@@ -26,16 +22,9 @@
 
 		// debugging
 		public static var DEBUG:Boolean = true;
-		public static var STATS:Boolean = true;
+		public static var STATS:Boolean = false;
 
 		/* ----------------------------------------------------------------- */
-		
-		// imported values
-		private var xmlURL:String;
-
-		// xml stuff
-		private var _xml:XML;
-		private var xmlLoader:FucoURLLoader;
 		
 		public function Main()
 		{
@@ -95,62 +84,8 @@
 			onStageResize();
 			stage.addEventListener(Event.RESIZE, onStageResize);
 			
-			loadXML();
-		}
-		
-		/* ----------------------------------------------------------------- */
-
-		private function loadXML():void
-		{
-			xmlURL = PathUtils.baseURL + "_xml/config.xml";
-			FucoLogger.debug("Main.loadXML: " + xmlURL);
-
-			xmlLoader = new FucoURLLoader();
-			xmlLoader.disableCache = true;
-			xmlLoader.addEventListener(Event.COMPLETE, onXMLLoaded);
-			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, onXMLLoadError);
-			xmlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onXMLLoadError);
-			xmlLoader.addEventListener(ErrorEvent.ERROR, onXMLLoadError);
-			xmlLoader.loadURL(xmlURL);
-		}
-
-		private function onXMLLoadError(e:ErrorEvent):void
-		{
-			cleanXMLLoader();
-			FucoLogger.fatal("Main.onXMLLoadError. " + e.text);
-		}
-
-		private function onXMLLoaded(e:Event):void
-		{
-			_xml = xmlLoader.xmlData();
-			cleanXMLLoader();
-			
-			start();
-		}
-
-		/* ---------------------------------------------------------------- */
-
-		private function cleanXMLLoader():void
-		{
-			if (xmlLoader != null)
-			{
-				xmlLoader.removeEventListener(Event.COMPLETE, onXMLLoaded);
-				xmlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onXMLLoadError);
-				xmlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onXMLLoadError);
-				xmlLoader.removeEventListener(ErrorEvent.ERROR, onXMLLoadError);
-				xmlLoader = null;
-			}
-		}
-
-		/* ----------------------------------------------------------------- */
-
-		private function start():void
-		{
-			FucoLogger.debug("Main.start");
-
-			// call the model
-			var model:Doppelpendel = Doppelpendel.getInstance();
-			model.init(this);
+			// create the model
+			new Doppelpendel(this);
 		}
 		
 		/* ----------------------------------------------------------------- */
@@ -161,12 +96,6 @@
 			StageUtils.stageHeight = stage.stageHeight;
 
 			stage.dispatchEvent(new StageEvent(StageEvent.STAGERESIZE));
-		}
-		
-		/* ----------------------------------------------------------------- */
-
-		public function get xml():XML {
-			return _xml;
 		}
 	}
 }

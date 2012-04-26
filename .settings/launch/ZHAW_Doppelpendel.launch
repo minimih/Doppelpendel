@@ -24,7 +24,7 @@
 <stringAttribute key="PUBLISHER_ID" value=""/>
 <booleanAttribute key="START_SWF_ENABLED" value="true"/>
 <stringAttribute key="START_SWF_LOCATION" value="bin/doppelpendel.swf"/>
-<stringAttribute key="START_SWF_WITH" value="External SWF Viewer"/>
+<stringAttribute key="START_SWF_WITH" value="AIR Debug Launcher"/>
 <booleanAttribute key="USE_PROJECT_COMPILER_ARGUMENTS" value="true"/>
 <booleanAttribute key="USE_SWF_SELECTED" value="true"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
