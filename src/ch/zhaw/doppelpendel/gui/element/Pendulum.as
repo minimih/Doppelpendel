@@ -17,11 +17,11 @@ package ch.zhaw.doppelpendel.gui.element
 
 		private var drawFactor:Number;
 
-		private var dLength:Number;
+		public var dLength:Number;
 		private var dWidth:Number;
 		private var dDepth:Number;
 		private var dOffset:Number;
-
+		
 		private var _pDensity:Number;
 		private var _pMass:Number;
 
@@ -56,21 +56,23 @@ package ch.zhaw.doppelpendel.gui.element
 			// 4cm
 			_pDepth = 0.004;
 			// 4mm
-
+			
+			_pPhi = Geom.degToRad(r);
 			_pOmega = o;
+			
 			_pColor = c;
 
 			mcBar = new Sprite();
 			this.addChild(mcBar);
 
-			var mcRound:Sprite = new Sprite();
-			this.addChild(mcRound);
-			mcRound.graphics.beginFill(0x000000);
-			mcRound.graphics.drawCircle(0, 0, 3);
-			mcRound.graphics.endFill();
-
+			var mcCenter:Sprite = new Sprite();
+			this.addChild(mcCenter);
+			mcCenter.graphics.beginFill(0x000000);
+			mcCenter.graphics.drawCircle(0, 0, 3);
+			mcCenter.graphics.endFill();
+			
 			updateSize();
-			pPhi = r;
+			updateRotation();
 		}
 		
 		private function onRemovedFromStage(e:Event = null):void
@@ -105,25 +107,37 @@ package ch.zhaw.doppelpendel.gui.element
 		{
 			pLength = l;
 			pOmega = o;
+			pPhi = Geom.degToRad(r);
 			
 			_rLength = l;
 			_rPhi = r;
 			_rOmega = o;
 			_rMass = pMass;
 			
-			if (Geom.degrees(-this.rotation) > r + 180)
+			if (Geom.realDeg(-this.rotation) > r + 180)
 			{
 				r = r + 360;
 			}
-
-			TweenMax.to(this, 1, {pPhi:r, ease:Elastic.easeOut});
+			
+			TweenMax.to(this, 1, {rotation:Geom.realDeg(r), ease:Elastic.easeOut});
 		}
 
-		public function setPosition(p:Pendulum):void
+		public function setPosition(parentP:Pendulum):void
 		{
-			this.y = p.dLength - (2 * p.dOffset);
+			this.y = parentP.dLength - (2 * parentP.dOffset);
 		}
-
+		
+		public function updateRotation(parentP:Pendulum = null):void
+		{
+			var pRotation:Number;
+			if(parentP){
+				pRotation = Geom.radToDeg(pPhi - parentP.pPhi);
+			}else{
+				pRotation = Geom.radToDeg(pPhi);
+			}
+			this.rotation = -Geom.realDeg(pRotation);
+		}
+		
 		public function updateSize():void
 		{
 			// calc volume
@@ -144,24 +158,23 @@ package ch.zhaw.doppelpendel.gui.element
 
 			drawBar();
 		}
-
+		
 		/* ----------------------------------------------------------------- */
-
+		
 		public function get pPhi():Number {
 			return _pPhi;
 		}
 
 		public function set pPhi(r:Number):void {
-			_pPhi = Geom.degrees(r);
-			this.rotation = -_pPhi;
+			_pPhi = r;
 		}
 
 		public function get pOmega():Number {
 			return _pOmega;
 		}
 
-		public function set pOmega(i:Number):void {
-			_pOmega = i;
+		public function set pOmega(n:Number):void {
+			_pOmega = n;
 		}
 
 		public function get pLength():Number {

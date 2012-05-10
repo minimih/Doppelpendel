@@ -114,6 +114,9 @@ package ch.zhaw.doppelpendel
 		private function onLoadFile(e:MenuEvent):void
 		{
 			var configUrl:String = e.args.file;
+			
+			controls.resetControls();
+			
 			system.loadSystem(configUrl);
 		}	
 

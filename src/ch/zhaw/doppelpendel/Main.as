@@ -22,7 +22,7 @@
 
 		// debugging
 		public static var DEBUG:Boolean = true;
-		public static var STATS:Boolean = false;
+		public static var STATS:Boolean = true;
 
 		/* ----------------------------------------------------------------- */
 		

@@ -7,7 +7,7 @@ package ch.zhaw.doppelpendel.utils
 {
 	public class Geom
 	{
-		public static function degrees(deg:Number):Number
+		public static function realDeg(deg:Number):Number
 		{
 			deg = deg % 360;
 
@@ -17,6 +17,17 @@ package ch.zhaw.doppelpendel.utils
 			}
 
 			return deg;
+		}
+		
+		public static function radToDeg(rad:Number):Number
+		{
+			return rad * 180/Math.PI;
+			
+		}
+		
+		public static function degToRad(deg:Number):Number
+		{
+			return deg * Math.PI/180;
 		}
 	}
 }

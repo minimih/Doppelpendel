@@ -125,9 +125,7 @@ package ch.zhaw.doppelpendel.gui
 
 		private function onReset():void
 		{
-			setFormEnabled(true);
-			btnStartStop.reset();
-
+			resetControls();
 			dispatchEvent(new ControlEvent(ControlEvent.RESET));
 		}
 
@@ -137,7 +135,13 @@ package ch.zhaw.doppelpendel.gui
 		}
 
 		/* ----------------------------------------------------------------- */
-
+		
+		public function resetControls():void
+		{
+			setFormEnabled(true);
+			btnStartStop.reset();
+		}
+		
 		public function updateControls(id:int, p:Number, o:Number, l:Number, m:Number):void
 		{
 			if(id == 0){
