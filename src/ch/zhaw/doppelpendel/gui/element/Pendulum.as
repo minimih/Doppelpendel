@@ -6,17 +6,13 @@
 package ch.zhaw.doppelpendel.gui.element
 {
 	import ch.zhaw.doppelpendel.utils.Geom;
-
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Elastic;
-
 	import flash.display.Sprite;
 	import flash.events.Event;
 
 	public class Pendulum extends Sprite
 	{
-		private var parentPendulum:Pendulum;
-		
 		private var mcBar:Sprite;
 
 		private var drawFactor:Number;
@@ -41,15 +37,14 @@ package ch.zhaw.doppelpendel.gui.element
 		private var _pColor:Number;
 		
 		//reset stuff
+		private var _rPhi:Number;
 		private var _rOmega:Number;
 		private var _rLength:Number;
 		private var _rMass:Number;
 		
-		public function Pendulum(d:Number, l:Number, r:Number, o:Number, c:Number, p:Pendulum = null)
+		public function Pendulum(d:Number, l:Number, r:Number, o:Number, c:Number)
 		{
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-			
-			parentPendulum = p;
 			
 			// display factor = 375;
 			drawFactor = 375;
@@ -115,6 +110,7 @@ package ch.zhaw.doppelpendel.gui.element
 			pPhi = Geom.degToRad(r);
 			
 			_rLength = l;
+			_rPhi = r;
 			_rOmega = o;
 			_rMass = pMass;
 			
@@ -123,7 +119,7 @@ package ch.zhaw.doppelpendel.gui.element
 				r = r + 360;
 			}
 			
-			TweenMax.to(this, 1, {rotation:Geom.realDeg(rPhi), ease:Elastic.easeOut});
+			TweenMax.to(this, 1, {rotation:Geom.realDeg(r), ease:Elastic.easeOut});
 		}
 
 		public function setPosition(parentP:Pendulum):void
@@ -131,9 +127,15 @@ package ch.zhaw.doppelpendel.gui.element
 			this.y = parentP.dLength - (2 * parentP.dOffset);
 		}
 		
-		public function updateRotation():void
+		public function updateRotation(parentP:Pendulum = null):void
 		{
-			this.rotation = -Geom.realDeg(rPhi);
+			var pRotation:Number;
+			if(parentP){
+				pRotation = Geom.radToDeg(pPhi - parentP.pPhi);
+			}else{
+				pRotation = Geom.radToDeg(pPhi);
+			}
+			this.rotation = -Geom.realDeg(pRotation);
 		}
 		
 		public function updateSize():void
@@ -206,10 +208,7 @@ package ch.zhaw.doppelpendel.gui.element
 		/* ----------------------------------------------------------------- */
 		
 		public function get rPhi():Number {
-			if(parentPendulum)
-				return Geom.radToDeg(pPhi - parentPendulum.pPhi);
-
-			return Geom.radToDeg(pPhi);
+			return _rPhi;
 		}
 		
 		public function get rOmega():Number {

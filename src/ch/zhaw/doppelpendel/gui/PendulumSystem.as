@@ -113,29 +113,24 @@ package ch.zhaw.doppelpendel.gui
 
 			if (xmlPendulum.length() == 2)
 			{
-				var currentP:Pendulum;
-				
 				for (var i:int = 0; i < xmlPendulum.length(); i++)
 				{
+					var currentP:Pendulum = new Pendulum(density, xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].omega, xmlPendulum[i].@color);
+					arrPendulum.push(currentP);
+
 					if (i == 0)
 					{
-						currentP = new Pendulum(density, xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].omega, xmlPendulum[i].@color);
 						mcFixpoint.addChild(currentP);
 					}
 					else
 					{
 						var parentP:Pendulum = arrPendulum[i - 1];
-						
-						currentP = new Pendulum(density, xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].omega, xmlPendulum[i].@color, parentP);
 						parentP.addChild(currentP);
-
+						
 						// set y for parentPendulum
 						currentP.setPosition(parentP);
 					}
-
-					arrPendulum.push(currentP);
 				}
-
 				switch(xmlPendulum.length())
 				{
 					case 1:
@@ -162,7 +157,7 @@ package ch.zhaw.doppelpendel.gui
 			}
 			else
 			{
-				// AlertWindow
+				//AlertWindow
 				// system not supported
 			}
 
@@ -271,7 +266,7 @@ package ch.zhaw.doppelpendel.gui
 			p2.pPhi = modRadian(p2.pPhi + dPhi2 * dt);
 
 			p1.updateRotation();
-			p2.updateRotation();
+			p2.updateRotation(p1);
 			//			
 			// p2.x = p1.x + p1.dLength * Math.sin(p1.pPhi);
 			// p2.y = p1.y + p1.dLength * Math.cos(p1.pPhi);
