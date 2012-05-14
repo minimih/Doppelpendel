@@ -1,6 +1,6 @@
 /**
- * @class MouseDevice
- * 
+ * @class MenuBar
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -27,9 +27,17 @@
  * 
  * @author mih
  */
-package ch.zhaw.doppelpendel.hid
+package ch.zhaw.doppelpendel.gui
 {
-	public class MouseDevice implements IInputDevice
+	import flash.events.EventDispatcher;
+
+	public class AlertWindow extends EventDispatcher
 	{
+		public function AlertWindow()
+		{
+			
+		}
+		
+		
 	}
 }

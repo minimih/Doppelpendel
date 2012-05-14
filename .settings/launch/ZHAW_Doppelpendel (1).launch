@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<launchConfiguration type="com.powerflasher.fdt.ui.MobileApplicationGroup">
-<stringAttribute key="ADL_DESCRIPTOR_FILE" value="bin/ZHAW_Doppelpendel-app.xml"/>
-<intAttribute key="AIR_VIEWER_CONF" value="1"/>
-<stringAttribute key="ARGUMENTS" value="-static-link-runtime-shared-libraries=true&#10;-target-player={playerVersion}&#10;-library-path+=&quot;{flexSDK}/frameworks/locale/en_US&quot;&#10;-default-size=550,400"/>
-<booleanAttribute key="CLEAR_DATA" value="false"/>
-<intAttribute key="DEBUG_VIA" value="0"/>
+<launchConfiguration type="com.powerflasher.fdt.ui.MxmlcGroup">
+<stringAttribute key="APP_ARGUMENTS" value=""/>
+<stringAttribute key="ARGUMENTS" value=""/>
 <booleanAttribute key="DISABLE_COMPILE_PROCESS" value="false"/>
-<booleanAttribute key="INSTALL_APPLICATION" value="true"/>
+<booleanAttribute key="KILL_PREVIOUS_VIEWER" value="true"/>
 <stringAttribute key="LAUNCHER_DEPENDENCIES" value="[Self]"/>
-<intAttribute key="LAUNCH_METHOD" value="0"/>
-<stringAttribute key="MAIN_CLASS" value="src/ch/zhaw/doppelpendel/ZHAW_Doppelpendel.as"/>
-<intAttribute key="PACKAGE_METHOD" value="0"/>
+<stringAttribute key="MAIN_CLASS" value="src/ch/zhaw/doppelpendel/Main.as"/>
+<stringAttribute key="OUTPUT" value="bin/ZHAW_Doppelpendel.swf"/>
 <booleanAttribute key="PASS_CP" value="true"/>
-<booleanAttribute key="PASS_EXTERNS" value="false"/>
+<booleanAttribute key="PASS_EXTERNS" value="true"/>
 <booleanAttribute key="PASS_MAIN_CLASS" value="true"/>
 <booleanAttribute key="PASS_RSLS" value="false"/>
 <booleanAttribute key="PASS_SWCS" value="true"/>
@@ -21,8 +17,9 @@
 <stringAttribute key="POST_COMPILE_ANT" value=""/>
 <stringAttribute key="PRE_COMPILE_ANT" value=""/>
 <stringAttribute key="PROJECT_NAME" value="ZHAW_Doppelpendel"/>
-<stringAttribute key="START_SWF_WITH" value="AIR Debug Launcher"/>
-<stringAttribute key="TARGET_PLATFORM" value="AirDesktop"/>
+<booleanAttribute key="START_SWF_ENABLED" value="true"/>
+<stringAttribute key="START_SWF_LOCATION" value="bin/ZHAW_Doppelpendel.swf"/>
+<stringAttribute key="START_SWF_WITH" value="Adobe Flash Player"/>
 <booleanAttribute key="USE_PROJECT_COMPILER_ARGUMENTS" value="true"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/ZHAW_Doppelpendel"/>

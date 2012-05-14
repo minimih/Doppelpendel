@@ -1,5 +1,8 @@
 /**
- * @class MouseDevice
+ * @class IODE
+ * 
+ * This part of the sourcecode is adapted to AS3 from the www.MyPhysicsLab.com physics simulation applet.
+ * Copyright (c) 2001  Erik Neumann
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +30,28 @@
  * 
  * @author mih
  */
-package ch.zhaw.doppelpendel.hid
+package ch.zhaw.doppelpendel.solver
 {
-	public class MouseDevice implements IInputDevice
+	public interface IODESolver
 	{
+		
+		/* 
+		 * defines the equations of the diff eq.
+		 * input is the current variables in array 'x'.
+		 * output is change rates for each diffeq in array 'change'.
+		 */
+		function evaluate(x:Vector.<Number>, change:Vector.<Number>):void;
+		
+		/* 
+		 * returns the array of state variables associated with this diff eq
+   		 */
+		function getVars():Vector.<Number>;
+		function setVars(v:Vector.<Number>):void;
+
+		/* returns array of booleans corresponding to the state variables.
+		 * If true, then the variable is calculated by the ode solver.
+		 * If false, then the variable is not modified by the ode solver.
+		 */
+		function getCalc():Vector.<Boolean>;
 	}
 }

@@ -1,17 +1,44 @@
 /**
  * @class PendulumSystem
  * 
- * @author 		mih
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * 
+ * Contact Information:
+ * ZHAW - Zurich University of Applied Sciences
+ * School of Engineering
+ * Lagerstrasse 41
+ * Postfach
+ * 8021 Zurich 
+ * 
+ * Michael Hoehn (mih) - hoehnmic@students.zhaw.ch
+ * Stefan Hauenstein (haui) - hauenst@students.zhaw.ch
+ * 
+ * @author mih
  */
 package ch.zhaw.doppelpendel.gui
 {
-	import ch.futurecom.utils.StageUtils;
 	import ch.futurecom.log.FucoLogger;
 	import ch.futurecom.net.loader.FucoURLLoader;
 	import ch.futurecom.utils.PathUtils;
+	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.StageEvent;
 	import ch.zhaw.doppelpendel.event.SystemEvent;
 	import ch.zhaw.doppelpendel.gui.element.Pendulum;
+	import ch.zhaw.doppelpendel.solver.IODE;
+	import ch.zhaw.doppelpendel.solver.PendulumSolver;
+	import ch.zhaw.doppelpendel.solver.RungeKutta;
 
 	import flash.display.Sprite;
 	import flash.events.ErrorEvent;
@@ -24,24 +51,21 @@ package ch.zhaw.doppelpendel.gui
 	public class PendulumSystem extends AssetPendulum
 	{
 		private var mcFixpoint:Sprite;
-
 		private var xmlLoader:FucoURLLoader;
 		private var xmlData:XMLList;
 		private var xmlPendulum:XMLList;
-
 		private var gravity:Number;
 		private var density:Number;
-
 		private var arrPendulum:Vector.<Pendulum>;
-
 		private var p1:Pendulum;
 		private var p2:Pendulum;
-
 		private var dPhi1:Number;
 		private	var dPhi2:Number;
-
 		private var dt:Number;
+		private var time
 		private var timer:Timer;
+		
+		private var odeSolver:IODE;
 
 		public function PendulumSystem()
 		{
@@ -97,7 +121,6 @@ package ch.zhaw.doppelpendel.gui
 		}
 
 		/* ----------------------------------------------------------------- */
-
 		/**
 		 * Sets up the Pendulum System
 		 * depending on the Config file
@@ -114,7 +137,7 @@ package ch.zhaw.doppelpendel.gui
 			if (xmlPendulum.length() == 2)
 			{
 				var currentP:Pendulum;
-				
+
 				for (var i:int = 0; i < xmlPendulum.length(); i++)
 				{
 					if (i == 0)
@@ -125,7 +148,7 @@ package ch.zhaw.doppelpendel.gui
 					else
 					{
 						var parentP:Pendulum = arrPendulum[i - 1];
-						
+
 						currentP = new Pendulum(density, xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].omega, xmlPendulum[i].@color, parentP);
 						parentP.addChild(currentP);
 
@@ -141,12 +164,10 @@ package ch.zhaw.doppelpendel.gui
 					case 1:
 						p1 = arrPendulum[0];
 						dPhi1 = 0;
-
 						break;
 					case 2:
 						p1 = arrPendulum[0];
 						p2 = arrPendulum[1];
-
 						dPhi1 = 0;
 						dPhi2 = 0;
 						break;
@@ -167,6 +188,8 @@ package ch.zhaw.doppelpendel.gui
 			}
 
 			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
+
+			odeSolver = new RungeKutta(new PendulumSolver(p1, p2));
 		}
 
 		private function clearSystem():void
@@ -190,14 +213,12 @@ package ch.zhaw.doppelpendel.gui
 		}
 
 		/* ----------------------------------------------------------------- */
-
 		public function getPendulum():Vector.<Pendulum>
 		{
 			return arrPendulum;
 		}
 
 		/* ----------------------------------------------------------------- */
-
 		public function startSystem():void
 		{
 			timer.start();
@@ -227,31 +248,11 @@ package ch.zhaw.doppelpendel.gui
 
 		public function updateSystem(e:ErrorEvent):void
 		{
-
+			
 		}
 
 		/* ----------------------------------------------------------------- */
-
-		private function advance():void
-		{
-			// var theta_new:Number
-			// var phi_new:Number;
-
-			dPhi1 += (dt * (
-			-(p1.pMass + p2.pMass) * gravity * Math.sin(p1.pPhi) / p1.pLength + p2.pMass * gravity * Math.cos(p1.pPhi - p2.pPhi) * Math.sin(p2.pPhi) / p1.pLength - p2.pMass * Math.pow(dPhi1, 2) * Math.sin(2 * (p1.pPhi - p2.pPhi)) / 2 - p2.pMass * Math.sin(p1.pPhi - p2.pPhi) * Math.pow(dPhi2, 2) * p2.pLength / p1.pLength
-			) / (p1.pMass + p2.pMass * Math.pow(Math.sin(p1.pPhi - p2.pPhi), 2)) - p1.pOmega * dPhi1
-			);
-
-			dPhi2 += (dt * (
-			(p1.pMass + p2.pMass) * gravity * Math.cos(p1.pPhi) * Math.sin(p1.pPhi - p2.pPhi) / p2.pLength + (p1.pMass + p2.pMass) * Math.sin(p1.pPhi - p2.pPhi) * Math.pow(dPhi1, 2) * p1.pLength / p2.pLength + p2.pMass * Math.pow(dPhi2, 2) * Math.sin(2 * (p1.pPhi - p2.pPhi)) / 2
-			) / (p1.pMass + p2.pMass * Math.pow(Math.sin(p1.pPhi - p2.pPhi), 2)) - p2.pOmega * dPhi2
-			);
-
-
-
-
-		}
-
+		
 		private function modRadian(rad:Number):Number
 		{
 			while (rad > Math.PI)
@@ -278,13 +279,9 @@ package ch.zhaw.doppelpendel.gui
 		}
 
 		/* ----------------------------------------------------------------- */
-
 		private function onRedraw(e:TimerEvent):void
 		{
-			// arrPendulum[0].pPhi += 15;
-			// arrPendulum[1].pPhi -= 20.4;
-
-			advance();
+			odeSolver.step(dt);
 			reDraw();
 
 			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
