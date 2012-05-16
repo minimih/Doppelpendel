@@ -32,7 +32,6 @@
  */
 package ch.zhaw.doppelpendel.solver
 {
-	import ch.futurecom.log.FucoLogger;
 	public class RungeKutta implements IODE
 	{
 		private var ode : IODESolver;
@@ -64,11 +63,11 @@ package ch.zhaw.doppelpendel.solver
 
 			if ((inp == null) || (inp.length != n))
 			{
-				inp = new Vector.<Number>(n);
-				k1 = new Vector.<Number>(n);
-				k2 = new Vector.<Number>(n);
-				k3 = new Vector.<Number>(n);
-				k4 = new Vector.<Number>(n);
+				inp = new Vector.<Number>(n, true);
+				k1 = new Vector.<Number>(n, true);
+				k2 = new Vector.<Number>(n, true);
+				k3 = new Vector.<Number>(n, true);
+				k4 = new Vector.<Number>(n, true);
 			}
 
 			var i : int;
@@ -111,7 +110,6 @@ package ch.zhaw.doppelpendel.solver
 				}
 			}
 			
-			FucoLogger.debug("RK4: " + vars.toString());
 			ode.setVars(vars);
 		}
 	}

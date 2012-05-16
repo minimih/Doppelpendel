@@ -32,13 +32,10 @@ package ch.zhaw.doppelpendel.gui
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.MenuEvent;
 
-	import flash.desktop.NativeApplication;
 	import flash.display.NativeMenu;
 	import flash.display.NativeMenuItem;
-	import flash.display.NativeWindow;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.filesystem.File;
 	import flash.net.FileFilter;
 
 	public class MenuBar extends EventDispatcher
@@ -49,14 +46,7 @@ package ch.zhaw.doppelpendel.gui
 		{
 			//set Menu
 			var root:NativeMenu = new NativeMenu(); 
-			if (NativeApplication.supportsMenu) 
-			{ 
-			    NativeApplication.nativeApplication.menu = root; 
-			} 
-			else if (NativeWindow.supportsMenu) 
-			{ 
-			    StageUtils.stage.nativeWindow.menu = root;
-			}
+		    StageUtils.stage.nativeWindow.menu = root;
 			
 			var fileMenu:NativeMenu = new NativeMenu();			
 			var loadMenuItem:NativeMenuItem = new NativeMenuItem("Load Configuration");

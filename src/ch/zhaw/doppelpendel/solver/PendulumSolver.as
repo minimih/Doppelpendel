@@ -33,7 +33,8 @@
 package ch.zhaw.doppelpendel.solver
 {
 	import ch.futurecom.log.FucoLogger;
-	import ch.zhaw.doppelpendel.gui.element.Pendulum;
+	import ch.zhaw.doppelpendel.system.PendulumSystem;
+	import ch.zhaw.doppelpendel.system.element.Pendulum;
 
 	public class PendulumSolver implements IODESolver
 	{
@@ -48,6 +49,21 @@ package ch.zhaw.doppelpendel.solver
 		/**
 		 * Creates a new PendulumSolver
 		 * 
+		 
+		 */
+		public function PendulumSolver(p1:Pendulum, p2:Pendulum, g:Number)
+		{
+			this.p1 = p1;
+			this.p2 = p2;
+
+			gravity = g;
+
+			reset();
+		}
+
+		/** 
+		 * 	reset Pendulum
+		 * 	
 		 * 	the variables are:
 		 * 		0,1,2,3:  theta1,theta1',theta2,theta2'
 		 * 		
@@ -56,18 +72,13 @@ package ch.zhaw.doppelpendel.solver
 		 * 	vars[2] = theta2
 		 * 	vars[3] = theta2'
 		 */
-		public function PendulumSolver(p1:Pendulum, p2:Pendulum)
+		public function reset():void
 		{
-			this.p1 = p1;
-			this.p2 = p2;
-
-			gravity = 9.81;
-
 			var numVars:Number = 4;
-
+			
 			vars = new Vector.<Number>(numVars, true);
 			calc = new Vector.<Boolean>(numVars, true);
-
+			
 			// set init vars
 			vars[0] = p1.pPhi;
 			vars[1] = p1.pOmega;
@@ -143,8 +154,6 @@ package ch.zhaw.doppelpendel.solver
 
 		public function setVars(v:Vector.<Number>):void
 		{
-			FucoLogger.debug(v.toString());
-
 			p1.pPhi = v[0];
 			p1.pOmega = v[1];
 			p2.pPhi = v[2];

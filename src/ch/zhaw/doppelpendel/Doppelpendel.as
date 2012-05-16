@@ -35,11 +35,11 @@ package ch.zhaw.doppelpendel {
 	import ch.zhaw.doppelpendel.event.SystemEvent;
 	import ch.zhaw.doppelpendel.gui.Background;
 	import ch.zhaw.doppelpendel.gui.Controls;
-	import ch.zhaw.doppelpendel.gui.PendulumSystem;
-	import ch.zhaw.doppelpendel.gui.element.Pendulum;
-
+	import ch.zhaw.doppelpendel.system.PendulumSystem;
+	import ch.zhaw.doppelpendel.system.element.Pendulum;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+
 
 	public class Doppelpendel extends EventDispatcher
 	{

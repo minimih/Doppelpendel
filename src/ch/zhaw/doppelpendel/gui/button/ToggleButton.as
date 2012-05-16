@@ -32,7 +32,7 @@ package ch.zhaw.doppelpendel.gui.button
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 
-	public class ToggleButton extends GenericButton implements IButton
+	public class ToggleButton extends ColorButton implements IButton
 	{
 		private var _isToggled:Boolean;
 

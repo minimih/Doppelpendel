@@ -34,6 +34,7 @@ package ch.zhaw.doppelpendel.solver
 {
 	public interface IODESolver
 	{
+		function reset():void;
 		
 		/* 
 		 * defines the equations of the diff eq.

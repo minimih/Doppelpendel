@@ -32,7 +32,7 @@ package ch.zhaw.doppelpendel.gui
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.ControlEvent;
 	import ch.zhaw.doppelpendel.event.StageEvent;
-	import ch.zhaw.doppelpendel.gui.button.GenericButton;
+	import ch.zhaw.doppelpendel.gui.button.ColorButton;
 	import ch.zhaw.doppelpendel.gui.button.ToggleButton;
 	import ch.zhaw.doppelpendel.gui.form.TextInput;
 	import com.greensock.TweenMax;
@@ -54,7 +54,7 @@ package ch.zhaw.doppelpendel.gui
 		private var mass2:TextInput;
 
 		private var btnStartStop:ToggleButton;
-		private var btnReset:GenericButton;
+		private var btnReset:ColorButton;
 
 		public function Controls()
 		{
@@ -115,7 +115,7 @@ package ch.zhaw.doppelpendel.gui
 			btnStartStop.setRollover();
 			btnStartStop.setOnClick(onStartStop);
 
-			btnReset = new GenericButton(mcControls.btn_reset);
+			btnReset = new ColorButton(mcControls.btn_reset);
 			btnReset.setLabel("Reset");
 			btnReset.setRollover();
 			btnReset.setOnClick(onReset);
