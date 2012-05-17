@@ -195,6 +195,15 @@ package ch.zhaw.doppelpendel.gui
 			mass2.enabled = b;
 		}
 
+		/* ----------------------------------------------------------------- */
+
+		public function getHeight():int
+		{
+			return mcBg.height;
+		}
+
+		/* ----------------------------------------------------------------- */
+
 		private function setSizeAndPosition():void
 		{
 			this.y = StageUtils.stageHeight - this.height;
@@ -202,8 +211,6 @@ package ch.zhaw.doppelpendel.gui
 			mcBg.width = StageUtils.stageWidth;
 			mcControls.x = Math.round(mcBg.width - mcControls.width) * 0.5;
 		}
-
-		/* ----------------------------------------------------------------- */
 
 		private function onStageResize(e:Event):void
 		{

@@ -29,9 +29,7 @@
  */
 package ch.zhaw.doppelpendel.system
 {
-	import ch.futurecom.log.FucoLogger;
 	import ch.futurecom.net.loader.FucoURLLoader;
-	import ch.futurecom.utils.PathUtils;
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.StageEvent;
 	import ch.zhaw.doppelpendel.event.SystemEvent;
@@ -42,16 +40,15 @@ package ch.zhaw.doppelpendel.system
 	import ch.zhaw.doppelpendel.system.element.Pendulum;
 
 	import flash.display.Sprite;
-	import flash.events.ErrorEvent;
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
-	import flash.events.SecurityErrorEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 
-
 	public class PendulumSystem extends AssetPendulum implements ISystem
 	{
+		private var marginTop:Number;
+		private var marginBottom:Number;
+		
 		private var mcFixpoint:Sprite;
 
 		private var xmlLoader:FucoURLLoader;
@@ -73,71 +70,47 @@ package ch.zhaw.doppelpendel.system
 
 		private var pendulumSolver:IODESolver;
 		private var odeSolver:IODE;
-
+		
 		public function PendulumSystem()
 		{
 			this.visible = false;
+			
 			mcFixpoint = this.mc_fixpoint;
 
 			// delta t
 			dt = 1.0 / StageUtils.stage.frameRate;
-
-			// init default system
-			var defaultSystemUrl:String = PathUtils.baseURL + "_config/default.idp";
-			loadSystem(defaultSystemUrl);
+			
+			marginTop = 0;
+			marginBottom = 0;
+			
+			// add listener
+			setSizeAndPosition();
+			StageUtils.stage.addEventListener(StageEvent.STAGERESIZE, onStageResize);
 		}
 
 		/* ----------------------------------------------------------------- */
 
-		public function loadSystem(url:String):void
+		public function setMargin(marginTop:Number, marginBottom:Number):void
 		{
-			clearSystem();
-
-			FucoLogger.debug("PendulumSystem.loadSystem: " + url);
-
-			xmlLoader = new FucoURLLoader();
-			xmlLoader.addEventListener(Event.COMPLETE, onSystemLoaded);
-			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, onloadSystemError);
-			xmlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onloadSystemError);
-			xmlLoader.addEventListener(ErrorEvent.ERROR, onloadSystemError);
-			xmlLoader.loadURL(url);
+			this.marginTop = marginTop;
+			this.marginBottom = marginBottom;
+			
+			setSizeAndPosition();
 		}
-
-		private function onloadSystemError(e:ErrorEvent):void
-		{
-			cleanSystemLoader();
-			FucoLogger.fatal("PendulumSystem.onXMLLoadError. " + e.text);
-
-			// TODO show error
-		}
-
-		private function onSystemLoaded(e:Event):void
-		{
-			xmlData = xmlLoader.xmlData().system;
-			cleanSystemLoader();
-
-			setupSystem();
-		}
-
-		private function cleanSystemLoader():void
-		{
-			if (xmlLoader != null)
-			{
-				xmlLoader.removeEventListener(Event.COMPLETE, onSystemLoaded);
-				xmlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onloadSystemError);
-				xmlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onloadSystemError);
-				xmlLoader.removeEventListener(ErrorEvent.ERROR, onloadSystemError);
-				xmlLoader = null;
-			}
-		}
-
+		
 		/* ----------------------------------------------------------------- */
+		
 		/**
 		 * Sets up the Pendulum System
 		 * depending on the Config file
 		 */
-		private function setupSystem():void
+		public function setupSystem(xml:XML):void
 		{
+			clearSystem();
+			
+			//set xmlData
+			xmlData = xml.system;
+			
 			// set gravity
 			gravity = xmlData.@gravity;
 			density = xmlData.@density;
@@ -145,63 +118,61 @@ package ch.zhaw.doppelpendel.system
 			xmlPendulum = xmlData.pendulum;
 			arrPendulum = new Vector.<Pendulum>();
 
-			if (xmlPendulum.length() == 2)
-			{
-				var currentP:Pendulum;
-
-				for (var i:int = 0; i < xmlPendulum.length(); i++)
-				{
-					if (i == 0)
-					{
-						currentP = new Pendulum(density, xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].@omega, xmlPendulum[i].@color);
-						mcFixpoint.addChild(currentP);
-					}
-					else
-					{
-						var parentP:Pendulum = arrPendulum[i - 1];
-
-						currentP = new Pendulum(density, xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].@omega, xmlPendulum[i].@color, parentP);
-						parentP.addChild(currentP);
-
-						// set y for parentPendulum
-						currentP.setPosition(parentP);
-					}
-
-					arrPendulum.push(currentP);
-				}
-
-				switch(xmlPendulum.length())
-				{
-					case 1:
-						p1 = arrPendulum[0];
-						dPhi1 = 0;
-						break;
-					case 2:
-						p1 = arrPendulum[0];
-						p2 = arrPendulum[1];
-						dPhi1 = 0;
-						dPhi2 = 0;
-						break;
-				}
-
-				// setup timer
-				timer = new Timer(dt * 1000);
-				timer.addEventListener(TimerEvent.TIMER, onRedraw);
-
-				// resize stage and set visible
-				stage.dispatchEvent(new StageEvent(StageEvent.STAGERESIZE));
-				this.visible = true;
-			}
-			else
+			if (xmlPendulum.length() != 2)
 			{
 				// AlertWindow
 				// system not supported
 				return;
 			}
+			
+			var currentP:Pendulum;
 
+			for (var i:int = 0; i < xmlPendulum.length(); i++)
+			{
+				if (i == 0)
+				{
+					currentP = new Pendulum(density, xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].@omega, xmlPendulum[i].@color);
+					mcFixpoint.addChild(currentP);
+				}
+				else
+				{
+					var parentP:Pendulum = arrPendulum[i - 1];
+
+					currentP = new Pendulum(density, xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].@omega, xmlPendulum[i].@color, parentP);
+					parentP.addChild(currentP);
+
+					// set y for parentPendulum
+					currentP.setPosition(parentP);
+				}
+
+				arrPendulum.push(currentP);
+			}
+
+			switch(xmlPendulum.length())
+			{
+				case 1:
+					p1 = arrPendulum[0];
+					dPhi1 = 0;
+					break;
+				case 2:
+					p1 = arrPendulum[0];
+					p2 = arrPendulum[1];
+					dPhi1 = 0;
+					dPhi2 = 0;
+					break;
+			}
+
+			// setup timer
+			timer = new Timer(dt * 1000);
+			timer.addEventListener(TimerEvent.TIMER, onRedraw);
+
+			// resize stage and set visible
+			setSizeAndPosition();
+			this.visible = true;
+			
 			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
 
-			pendulumSolver = new PendulumSolver(p1,p2,gravity);
+			pendulumSolver = new PendulumSolver(p1, p2, gravity);
 			odeSolver = new RungeKutta(pendulumSolver);
 		}
 
@@ -223,7 +194,7 @@ package ch.zhaw.doppelpendel.system
 				mcFixpoint.removeChild(arrPendulum[0]);
 				arrPendulum = null;
 			}
-			
+
 			odeSolver = null;
 			pendulumSolver = null;
 		}
@@ -251,6 +222,9 @@ package ch.zhaw.doppelpendel.system
 		public function stopSystem():void
 		{
 			timer.stop();
+			
+			pendulumSolver.reset();
+			
 			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
 		}
 
@@ -265,7 +239,7 @@ package ch.zhaw.doppelpendel.system
 
 			dPhi1 = 0;
 			dPhi2 = 0;
-			
+
 			pendulumSolver.reset();
 
 			dispatchEvent(new SystemEvent(SystemEvent.RESET));
@@ -273,6 +247,20 @@ package ch.zhaw.doppelpendel.system
 
 		public function updateSystem():void
 		{
+		}
+
+		public function getSystemSize():Number
+		{
+			var sSize:Number = 0;
+			try
+			{
+				sSize = 2* (p1.dLength + p2.dLength);
+			}
+			catch(error:Error)
+			{
+				//nothing
+			}
+			return sSize;
 		}
 
 		/* ----------------------------------------------------------------- */
@@ -307,6 +295,33 @@ package ch.zhaw.doppelpendel.system
 			reDraw();
 
 			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
+		}
+
+		/* ----------------------------------------------------------------- */
+
+		private function setSizeAndPosition():void
+		{
+			var sw:int = StageUtils.stageWidth;
+			var sh:int = (StageUtils.stageHeight - marginTop - marginBottom);
+			
+			//reset scale
+			this.scaleX = this.scaleY = 1;
+			
+			// set scale
+			var stageSize:int = Math.min(sw, sh);
+			if (getSystemSize() > stageSize)
+			{
+				this.scaleX = this.scaleY = (stageSize / getSystemSize());
+			}
+
+			// set pos
+			this.x = sw * 0.5;
+			this.y = marginTop + (sh * 0.5);
+		}
+
+		private function onStageResize(e:Event):void
+		{
+			setSizeAndPosition();
 		}
 	}
 }

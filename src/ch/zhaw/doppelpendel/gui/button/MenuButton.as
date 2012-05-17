@@ -1,6 +1,6 @@
 /**
- * @class ISystem
- * 
+ * @class MenuButton
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -27,20 +27,38 @@
  * 
  * @author mih
  */
-package ch.zhaw.doppelpendel.system
+package ch.zhaw.doppelpendel.gui.button
 {
-	import flash.events.IEventDispatcher;
+	import flash.display.MovieClip;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
 
-	public interface ISystem extends IEventDispatcher
-	{
-		function setupSystem(xml:XML):void
+	public class MenuButton extends GenericButton implements IButton
+	{	
+		private var _isToggled:Boolean;
+		
+		protected var tfLabel:TextField;
+			
+		public function MenuButton(mcAsset:MovieClip, setButtonArea:MovieClip = null, setHiClip:MovieClip = null)
+		{
+			super(mcAsset, setButtonArea, setHiClip);
+			
+			tfLabel = asset.tf_label;
+			tfLabel.mouseEnabled = false;
+		}
 
-		function startSystem():void;
+		/* ----------------------------------------------------------------- */
+		
+		public function setLabel(s:String, hasMinSize:Boolean = false):void
+		{
+			tfLabel.autoSize = TextFieldAutoSize.LEFT;
+			tfLabel.text = s;
 
-		function stopSystem():void;
-
-		function resetSystem():void;
-
-		function updateSystem():void;
+			// set buttonsize
+			var btnWidth:int = Math.ceil(2 * tfLabel.x + tfLabel.width);
+			if (!hasMinSize || btnWidth > mcButton.width)
+				mcButton.width = btnWidth;
+				mcHi.width = btnWidth;
+		}
 	}
 }

@@ -27,19 +27,26 @@
  * 
  * @author mih
  */
-package ch.zhaw.doppelpendel {
+package ch.zhaw.doppelpendel
+{
+	import ch.futurecom.log.FucoLogger;
+	import ch.futurecom.net.loader.FucoURLLoader;
+	import ch.futurecom.utils.PathUtils;
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.ControlEvent;
 	import ch.zhaw.doppelpendel.event.MenuEvent;
-	import ch.zhaw.doppelpendel.event.StageEvent;
 	import ch.zhaw.doppelpendel.event.SystemEvent;
 	import ch.zhaw.doppelpendel.gui.Background;
 	import ch.zhaw.doppelpendel.gui.Controls;
+	import ch.zhaw.doppelpendel.gui.MenuBar;
 	import ch.zhaw.doppelpendel.system.PendulumSystem;
 	import ch.zhaw.doppelpendel.system.element.Pendulum;
+
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-
+	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
 
 	public class Doppelpendel extends EventDispatcher
 	{
@@ -48,8 +55,10 @@ package ch.zhaw.doppelpendel {
 		private var background:Background;
 		private var system:PendulumSystem;
 		private var controls:Controls;
+
+		private var menuBar:MenuBar;
 		
-		//private var menuBar:MenuBar;
+		private var xmlLoader:FucoURLLoader;
 
 		/* ---------------------------------------------------------------- */
 
@@ -67,28 +76,73 @@ package ch.zhaw.doppelpendel {
 
 			controls = new Controls();
 			main.addChild(controls);
+
+			// create the menubar
+			menuBar = new MenuBar();
+			main.addChild(menuBar);
 			
-			//create the menubar
-			//menuBar = new MenuBar();
-			
+			//repos system
+			system.setMargin(menuBar.getHeight(), controls.getHeight());
+
 			// set listeners
 			system.addEventListener(SystemEvent.UPDATE, onUpdateControls);
 			system.addEventListener(SystemEvent.RESET, onResetControls);
-			
+
 			controls.addEventListener(ControlEvent.START, onStartSystem);
 			controls.addEventListener(ControlEvent.STOP, onStopSystem);
 			controls.addEventListener(ControlEvent.RESET, onResetSystem);
 
 			controls.addEventListener(ControlEvent.UPDATE, onUpdateSystem);
-			
-			//menuBar.addEventListener(MenuEvent.LOAD, onLoadFile);
 
-			// init stage resize listener
-			onStageResize();
-			StageUtils.stage.addEventListener(StageEvent.STAGERESIZE, onStageResize);
+			menuBar.addEventListener(MenuEvent.LOAD, onLoadFile);
+			
+			//load default xml
+			var defaultSystemUrl:String = PathUtils.baseURL + "_config/default.idp";
+			loadSystemData(defaultSystemUrl);
 		}
 		
-		/* ---------------------------------------------------------------- */	
+		/* ---------------------------------------------------------------- */
+
+		public function loadSystemData(url:String):void
+		{
+			FucoLogger.debug("PendulumSystem.loadSystem: " + url);
+
+			xmlLoader = new FucoURLLoader();
+			xmlLoader.addEventListener(Event.COMPLETE, onSystemDataLoaded);
+			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, onloadSystemDataError);
+			xmlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onloadSystemDataError);
+			xmlLoader.addEventListener(ErrorEvent.ERROR, onloadSystemDataError);
+			xmlLoader.loadURL(url);
+		}
+
+		private function onloadSystemDataError(e:ErrorEvent):void
+		{
+			cleanSystemDataLoader();
+			FucoLogger.fatal("PendulumSystem.onXMLLoadError. " + e.text);
+			// TODO show error
+		}
+
+		private function onSystemDataLoaded(e:Event):void
+		{
+			var xml:XML = xmlLoader.xmlData();
+			cleanSystemDataLoader();
+
+			system.setupSystem(xml);
+		}
+
+		private function cleanSystemDataLoader():void
+		{
+			if (xmlLoader != null)
+			{
+				xmlLoader.removeEventListener(Event.COMPLETE, onSystemDataLoaded);
+				xmlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onloadSystemDataError);
+				xmlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onloadSystemDataError);
+				xmlLoader.removeEventListener(ErrorEvent.ERROR, onloadSystemDataError);
+				xmlLoader = null;
+			}
+		}
+
+		/* ---------------------------------------------------------------- */
 
 		private function onUpdateControls(e:SystemEvent):void
 		{
@@ -98,7 +152,7 @@ package ch.zhaw.doppelpendel {
 				controls.updateControls(i, arrPendulum[i].pPhi, arrPendulum[i].pOmega, arrPendulum[i].pLength, arrPendulum[i].pMass);
 			}
 		}
-		
+
 		private function onResetControls(e:SystemEvent):void
 		{
 			var arrPendulum:Vector.<Pendulum> = system.getPendulum();
@@ -127,34 +181,28 @@ package ch.zhaw.doppelpendel {
 
 		private function onUpdateSystem(e:Event):void
 		{
-			//controls.
-			//system.updateSystem();
+			// controls.
+			// system.updateSystem();
 		}
 
 		/* ---------------------------------------------------------------- */
 
 		private function onLoadFile(e:MenuEvent):void
 		{
-			var configUrl:String = e.args.file;
-			
 			controls.resetControls();
-			
-			system.loadSystem(configUrl);
-		}	
+			system.setupSystem((e.args.xml as XML));
+		}
 
 		/* ---------------------------------------------------------------- */
 
-		private function onStageResize(event:Event = null):void
+		public function getSystemAreaWidth():Number
 		{
-			var sw:Number = StageUtils.stage.stageWidth;
-			var sh:Number = StageUtils.stage.stageHeight;
+			return StageUtils.stage.stageWidth;
+		}
 
-			StageUtils.stageWidth = sw;
-			StageUtils.stageHeight = sh;
-
-			// calc pos
-			system.x = sw * 0.5;
-			system.y = (sh - controls.height) * 0.5;
+		public function getSystemAreaHeight():Number
+		{
+			return (StageUtils.stage.stageHeight - menuBar.getHeight() - controls.getHeight());
 		}
 
 		/* ---------------------------------------------------------------- */

@@ -31,56 +31,100 @@ package ch.zhaw.doppelpendel.gui
 {
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.MenuEvent;
+	import ch.zhaw.doppelpendel.event.StageEvent;
+	import ch.zhaw.doppelpendel.gui.button.MenuButton;
 
-	import flash.display.NativeMenu;
-	import flash.display.NativeMenuItem;
+	import flash.display.Sprite;
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
+	import flash.events.IOErrorEvent;
 	import flash.net.FileFilter;
+	import flash.net.FileReference;
 
-	public class MenuBar extends EventDispatcher
+	public class MenuBar extends AssetMenuBar
 	{
-		private var file:File;
-		
+		private var mcBg:Sprite;
+
+		private var file:FileReference;
+
 		public function MenuBar()
 		{
-			//set Menu
-			var root:NativeMenu = new NativeMenu(); 
-		    StageUtils.stage.nativeWindow.menu = root;
+			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		}
+
+		private function onAddedToStage(e:Event = null):void
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+
+			mcBg = this.mc_bg;
+
+			initMenu();
+
+			// add listener
+			setSizeAndPosition();
+			StageUtils.stage.addEventListener(StageEvent.STAGERESIZE, onStageResize);
+		}
+
+		private function initMenu():void
+		{
+			// set Menu
+			var mcLoadMenu:LibMenu = new LibMenu();
+			this.addChild(mcLoadMenu);
 			
-			var fileMenu:NativeMenu = new NativeMenu();			
-			var loadMenuItem:NativeMenuItem = new NativeMenuItem("Load Configuration");
-			loadMenuItem.addEventListener(Event.SELECT, onLoadFile); 
-			
-			var exitMenuItem:NativeMenuItem = new NativeMenuItem("Exit");
-			exitMenuItem.addEventListener(Event.SELECT, onExit); 
-			
-			root.addSubmenu(fileMenu, "File");
-			fileMenu.addItem(loadMenuItem);
-			fileMenu.addItem(exitMenuItem);
-			
+			var loadMenuBtn:MenuButton = new MenuButton(mcLoadMenu);
+			loadMenuBtn.setLabel("Load Configuration");
+			loadMenuBtn.setRollover();
+			loadMenuBtn.setOnClick(onLoadFile);
+
 			// set FileReference
-			file = new File();
-			file.addEventListener(Event.SELECT, onFileSelected);	
+			file = new FileReference();
+			file.addEventListener(Event.SELECT, onFileSelected);
+			file.addEventListener(Event.COMPLETE, onLoadComplete);
+			file.addEventListener(IOErrorEvent.IO_ERROR, onError);
 		}
-		
+
 		/* ----------------------------------------------------------------- */
-		
-		private function onLoadFile(e:Event):void
+
+		private function onLoadFile():void
 		{
-			file.browseForOpen("Load Pendulum Configuration", [new FileFilter("Pendulum Configuration File (idp)", "*.idp")]);
+			file.browse([new FileFilter("Pendulum Configuration File (idp)", "*.idp")]);
 		}
-		
-		private function onExit(e:Event):void
-		{
-			NativeApplication.nativeApplication.exit();
-		}
-		
+
 		/* ----------------------------------------------------------------- */
 
 		private function onFileSelected(e:Event):void
 		{
-			dispatchEvent(new MenuEvent(MenuEvent.LOAD, {file:file.nativePath}));
+			file.load();
+		}
+
+		private function onLoadComplete(e:Event):void
+		{
+			var loadedXml:XML = new XML(file.data);
+			dispatchEvent(new MenuEvent(MenuEvent.LOAD, {xml:loadedXml}));
+		}
+
+		private function onError(e:ErrorEvent = null):void
+		{
+			dispatchEvent(new MenuEvent(MenuEvent.ERROR));
+		}
+
+		/* ----------------------------------------------------------------- */
+
+		public function getHeight():int
+		{
+			return mcBg.height;
+		}
+
+		/* ----------------------------------------------------------------- */
+
+		private function setSizeAndPosition():void
+		{
+			mc_bg.width = StageUtils.stageWidth;
+		}
+
+		private function onStageResize(e:Event):void
+		{
+			setSizeAndPosition();
 		}
 	}
 }

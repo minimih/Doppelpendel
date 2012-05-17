@@ -38,10 +38,10 @@ package ch.zhaw.doppelpendel.gui.button
 
 	public class ColorButton extends GenericButton implements IButton
 	{		
-		private var tfLabel:TextField;
+		protected var tfLabel:TextField;
 		
-		private var rolloverLo:Object;
-		private var rolloverHi:Object;
+		protected var rolloverLo:Object;
+		protected var rolloverHi:Object;
 
 		public function ColorButton(mcAsset:MovieClip, setButtonArea:MovieClip = null, setHiClip:MovieClip = null)
 		{

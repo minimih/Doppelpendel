@@ -27,7 +27,8 @@
  * 
  * @author mih
  */
-package ch.zhaw.doppelpendel.gui {
+package ch.zhaw.doppelpendel.gui
+{
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.StageEvent;
 
@@ -35,14 +36,17 @@ package ch.zhaw.doppelpendel.gui {
 	import flash.display.Sprite;
 	import flash.events.Event;
 
-	public class Background extends Sprite {
-		private var mcBg : Sprite;
+	public class Background extends Sprite
+	{
+		private var mcBg:Sprite;
 
-		public function Background() {
+		public function Background()
+		{
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 
-		private function onAddedToStage(e : Event = null) : void {
+		private function onAddedToStage(e:Event = null):void
+		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 
 			// add listener
@@ -51,18 +55,19 @@ package ch.zhaw.doppelpendel.gui {
 		}
 
 		/* ----------------------------------------------------------------- */
-		
-		private function setSizeAndPosition() : void {
-			var bmp : BitmapData = new LibBg();
 
-			var tilesWidth : int = Math.ceil(StageUtils.stageWidth / bmp.width);
-			var tilesHeight : int = Math.ceil(StageUtils.stageHeight / bmp.height);
+		private function setSizeAndPosition():void
+		{
+			var bmp:BitmapData = new LibBg();
+
+			var tilesWidth:int = Math.ceil(StageUtils.stageWidth / bmp.width);
+			var tilesHeight:int = Math.ceil(StageUtils.stageHeight / bmp.height);
 
 			tilesWidth += tilesWidth % 2;
 			tilesHeight += tilesHeight % 2;
 
-			var bgWidth : int = tilesWidth * bmp.width;
-			var bgHeight : int = tilesHeight * bmp.height;
+			var bgWidth:int = tilesWidth * bmp.width;
+			var bgHeight:int = tilesHeight * bmp.height;
 
 			mcBg = new Sprite();
 			mcBg.graphics.beginBitmapFill(bmp);
@@ -76,8 +81,9 @@ package ch.zhaw.doppelpendel.gui {
 		}
 
 		/* ----------------------------------------------------------------- */
-		
-		private function onStageResize(e : Event) : void {
+
+		private function onStageResize(e:Event):void
+		{
 			setSizeAndPosition();
 		}
 	}

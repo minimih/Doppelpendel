@@ -10,6 +10,7 @@ package ch.zhaw.doppelpendel.event
 	public class MenuEvent extends Event
 	{
 		public static const LOAD:String = "load";
+		public static const ERROR:String = "error";
 
 		private var _arguments:Object;
 		
