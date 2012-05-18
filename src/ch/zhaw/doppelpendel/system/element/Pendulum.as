@@ -94,9 +94,11 @@ package ch.zhaw.doppelpendel.system.element
 
 			var mcCenter:Sprite = new Sprite();
 			this.addChild(mcCenter);
+
 			mcCenter.graphics.beginFill(0x000000);
 			mcCenter.graphics.drawCircle(0, 0, 3);
 			mcCenter.graphics.endFill();
+			mcCenter.cacheAsBitmap = true;
 
 			updateSize();
 			updateRotation();
@@ -121,6 +123,9 @@ package ch.zhaw.doppelpendel.system.element
 			mcBar.graphics.lineStyle(2, 0x000000, 1.0, false);
 			mcBar.graphics.beginFill(pColor, 0.5);
 			mcBar.graphics.drawRect(-dOffset, -dOffset, dWidth, dLength);
+			mcBar.cacheAsBitmap = true;
+			
+			this.cacheAsBitmap = true;
 		}
 
 		public function reset(l:Number, r:Number, o:Number):void
@@ -179,12 +184,12 @@ package ch.zhaw.doppelpendel.system.element
 
 		public function enableMouseControl():void
 		{
-			mcBar.addEventListener(MouseEvent.MOUSE_DOWN, onDragStart);
+			this.addEventListener(MouseEvent.MOUSE_DOWN, onDragStart);
 		}
 
 		public function disableMouseControl():void
 		{
-			mcBar.removeEventListener(MouseEvent.MOUSE_DOWN, onDragStart);
+			this.removeEventListener(MouseEvent.MOUSE_DOWN, onDragStart);
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onDragStop);
 			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onRotateEvent);
 		}

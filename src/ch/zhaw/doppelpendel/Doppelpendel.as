@@ -30,8 +30,8 @@
 package ch.zhaw.doppelpendel
 {
 	import ch.futurecom.net.loader.FucoURLLoader;
-	import ch.futurecom.utils.PathUtils;
 	import ch.futurecom.utils.StageUtils;
+	import ch.zhaw.doppelpendel.data.SystemData;
 	import ch.zhaw.doppelpendel.event.ControlEvent;
 	import ch.zhaw.doppelpendel.event.MenuEvent;
 	import ch.zhaw.doppelpendel.event.SystemEvent;
@@ -42,11 +42,8 @@ package ch.zhaw.doppelpendel
 	import ch.zhaw.doppelpendel.system.element.Pendulum;
 	import ch.zhaw.doppelpendel.utils.Geom;
 
-	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.events.IOErrorEvent;
-	import flash.events.SecurityErrorEvent;
 
 	public class Doppelpendel extends EventDispatcher
 	{
@@ -96,48 +93,8 @@ package ch.zhaw.doppelpendel
 
 			menuBar.addEventListener(MenuEvent.LOAD, onLoadFile);
 			
-			//load default xml
-			var defaultSystemUrl:String = PathUtils.baseURL + "_config/default.idp";
-			loadSystemData(defaultSystemUrl);
-		}
-		
-		/* ---------------------------------------------------------------- */
-
-		public function loadSystemData(url:String):void
-		{
-			xmlLoader = new FucoURLLoader();
-			xmlLoader.addEventListener(Event.COMPLETE, onSystemDataLoaded);
-			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, onloadSystemDataError);
-			xmlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onloadSystemDataError);
-			xmlLoader.addEventListener(ErrorEvent.ERROR, onloadSystemDataError);
-			xmlLoader.loadURL(url);
-		}
-
-		private function onloadSystemDataError(e:ErrorEvent):void
-		{
-			cleanSystemDataLoader();
-			
-			// TODO show Alert Window
-		}
-
-		private function onSystemDataLoaded(e:Event):void
-		{
-			var xml:XML = xmlLoader.xmlData();
-			cleanSystemDataLoader();
-
-			system.setupSystem(xml);
-		}
-
-		private function cleanSystemDataLoader():void
-		{
-			if (xmlLoader != null)
-			{
-				xmlLoader.removeEventListener(Event.COMPLETE, onSystemDataLoaded);
-				xmlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onloadSystemDataError);
-				xmlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onloadSystemDataError);
-				xmlLoader.removeEventListener(ErrorEvent.ERROR, onloadSystemDataError);
-				xmlLoader = null;
-			}
+			//get default system data
+			system.setupSystem(SystemData.defaultData());
 		}
 
 		/* ---------------------------------------------------------------- */
