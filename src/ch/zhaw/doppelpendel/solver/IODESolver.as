@@ -1,8 +1,8 @@
 /**
  * @class IODE
  * 
- * This part of the sourcecode is adapted to AS3 from the www.MyPhysicsLab.com physics simulation applet.
- * Copyright (c) 2001  Erik Neumann
+ * This part of the sourcecode is adapted from the www.MyPhysicsLab.com physics
+ * simulation applet by Erik Neumann to ActionScript 3.
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,12 +42,16 @@ package ch.zhaw.doppelpendel.solver
 		 * output is change rates for each diffeq in array 'change'.
 		 */
 		function evaluate(x:Vector.<Number>, change:Vector.<Number>):void;
-		
+
+		/*
+		 * updates the solver
+		 */		
+		function update():void;
+
 		/* 
 		 * returns the array of state variables associated with this diff eq
    		 */
 		function getVars():Vector.<Number>;
-		function setVars(v:Vector.<Number>):void;
 
 		/* returns array of booleans corresponding to the state variables.
 		 * If true, then the variable is calculated by the ode solver.

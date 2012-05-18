@@ -36,20 +36,23 @@ package ch.zhaw.doppelpendel.system.element
 
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 
 	public class Pendulum extends Sprite
 	{
 		private var parentPendulum:Pendulum;
-		
+
 		private var mcBar:Sprite;
 
 		private var drawFactor:Number;
 
-		public var dLength:Number;
+		private var onMouseRotate:Function;
+
+		private var _dLength:Number;
 		private var dWidth:Number;
 		private var dDepth:Number;
 		private var dOffset:Number;
-		
+
 		private var _pDensity:Number;
 		private var _pMass:Number;
 
@@ -63,18 +66,13 @@ package ch.zhaw.doppelpendel.system.element
 		private var _pOmega:Number;
 
 		private var _pColor:Number;
-		
-		//reset stuff
-		private var _rOmega:Number;
-		private var _rLength:Number;
-		private var _rMass:Number;
-		
+
 		public function Pendulum(d:Number, l:Number, r:Number, o:Number, c:Number, p:Pendulum = null)
 		{
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-			
+
 			parentPendulum = p;
-			
+
 			// display factor = 375;
 			drawFactor = 375;
 
@@ -85,10 +83,10 @@ package ch.zhaw.doppelpendel.system.element
 			_pWidth = 0.04;
 			// 4mm
 			_pDepth = 0.004;
-			
+
 			_pPhi = Geom.degToRad(r);
 			_pOmega = o;
-			
+
 			_pColor = c;
 
 			mcBar = new Sprite();
@@ -99,24 +97,17 @@ package ch.zhaw.doppelpendel.system.element
 			mcCenter.graphics.beginFill(0x000000);
 			mcCenter.graphics.drawCircle(0, 0, 3);
 			mcCenter.graphics.endFill();
-			
+
 			updateSize();
 			updateRotation();
 		}
-		
+
 		private function onRemovedFromStage(e:Event = null):void
 		{
 			removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-			
-			while(true){
-				try{
-					this.removeChildAt(0);
-				}catch(error:Error){
-					return;
-				}
-			}
+			disableMouseControl();
 		}
-		
+
 		/* ----------------------------------------------------------------- */
 
 		private function drawBar():void
@@ -137,24 +128,27 @@ package ch.zhaw.doppelpendel.system.element
 			pLength = l;
 			pOmega = o;
 			pPhi = Geom.degToRad(r);
-			
-			_rLength = l;
-			_rOmega = o;
-			_rMass = pMass;
-			
-			TweenMax.to(this, 0.75, {shortRotation:{rotation:-rPhi}, ease:Cubic.easeInOut});
+
+			TweenMax.to(this, 0.75, {shortRotation:{rotation:-rPhi}, ease:Cubic.easeInOut, onUpdate:updatePosition});
 		}
 
-		public function setPosition(parentP:Pendulum):void
+		private function updatePosition():void
 		{
-			this.y = parentP.dLength - (2 * parentP.dOffset);
+			if (parentPendulum)
+			{
+				var len:Number = parentPendulum.dLength - (2 * parentPendulum.dOffset);
+				var rad:Number = Geom.degToRad(-parentPendulum.rotation);
+				this.x = parentPendulum.x + len * Math.sin(rad);
+				this.y = parentPendulum.y + len * Math.cos(rad);
+			}
 		}
-		
+
 		public function updateRotation():void
 		{
+			updatePosition();
 			this.rotation = -Geom.realDeg(rPhi);
 		}
-		
+
 		public function updateSize():void
 		{
 			// calc volume
@@ -175,9 +169,45 @@ package ch.zhaw.doppelpendel.system.element
 
 			drawBar();
 		}
-		
+
 		/* ----------------------------------------------------------------- */
-		
+
+		public function setMouseControl(callback:Function):void
+		{
+			onMouseRotate = callback;
+		}
+
+		public function enableMouseControl():void
+		{
+			mcBar.addEventListener(MouseEvent.MOUSE_DOWN, onDragStart);
+		}
+
+		public function disableMouseControl():void
+		{
+			mcBar.removeEventListener(MouseEvent.MOUSE_DOWN, onDragStart);
+			stage.removeEventListener(MouseEvent.MOUSE_UP, onDragStop);
+			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onRotateEvent);
+		}
+
+		private function onDragStart(e:MouseEvent):void
+		{
+			stage.addEventListener(MouseEvent.MOUSE_UP, onDragStop);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, onRotateEvent);
+		}
+
+		private function onDragStop(e:MouseEvent):void
+		{
+			stage.removeEventListener(MouseEvent.MOUSE_UP, onDragStop);
+			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onRotateEvent);
+		}
+
+		private function onRotateEvent(e:MouseEvent):void
+		{
+			onMouseRotate(this);
+		}
+
+		/* ----------------------------------------------------------------- */
+
 		public function get pPhi():Number {
 			return _pPhi;
 		}
@@ -221,26 +251,21 @@ package ch.zhaw.doppelpendel.system.element
 		public function set pColor(n:Number):void {
 			_pColor = n;
 		}
-		
-		/* ----------------------------------------------------------------- */
-		
-		public function get rPhi():Number {
-			if(parentPendulum)
-				return Geom.radToDeg(pPhi - parentPendulum.pPhi);
 
+		/* ----------------------------------------------------------------- */
+
+		public function get dLength():Number {
+			return _dLength;
+		}
+
+		public function set dLength(l:Number):void {
+			_dLength = l;
+		}
+
+		/* ----------------------------------------------------------------- */
+
+		public function get rPhi():Number {
 			return Geom.radToDeg(pPhi);
-		}
-		
-		public function get rOmega():Number {
-			return _rOmega;
-		}
-		
-		public function get rLength():Number {
-			return _rLength;
-		}
-		
-		public function get rMass():Number {
-			return _rMass;
 		}
 	}
 }

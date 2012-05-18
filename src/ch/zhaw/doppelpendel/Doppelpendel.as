@@ -29,7 +29,6 @@
  */
 package ch.zhaw.doppelpendel
 {
-	import ch.futurecom.log.FucoLogger;
 	import ch.futurecom.net.loader.FucoURLLoader;
 	import ch.futurecom.utils.PathUtils;
 	import ch.futurecom.utils.StageUtils;
@@ -41,6 +40,7 @@ package ch.zhaw.doppelpendel
 	import ch.zhaw.doppelpendel.gui.MenuBar;
 	import ch.zhaw.doppelpendel.system.PendulumSystem;
 	import ch.zhaw.doppelpendel.system.element.Pendulum;
+	import ch.zhaw.doppelpendel.utils.Geom;
 
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
@@ -80,7 +80,7 @@ package ch.zhaw.doppelpendel
 			// create the menubar
 			menuBar = new MenuBar();
 			main.addChild(menuBar);
-			
+
 			//repos system
 			system.setMargin(menuBar.getHeight(), controls.getHeight());
 
@@ -105,8 +105,6 @@ package ch.zhaw.doppelpendel
 
 		public function loadSystemData(url:String):void
 		{
-			FucoLogger.debug("PendulumSystem.loadSystem: " + url);
-
 			xmlLoader = new FucoURLLoader();
 			xmlLoader.addEventListener(Event.COMPLETE, onSystemDataLoaded);
 			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, onloadSystemDataError);
@@ -118,8 +116,8 @@ package ch.zhaw.doppelpendel
 		private function onloadSystemDataError(e:ErrorEvent):void
 		{
 			cleanSystemDataLoader();
-			FucoLogger.fatal("PendulumSystem.onXMLLoadError. " + e.text);
-			// TODO show error
+			
+			// TODO show Alert Window
 		}
 
 		private function onSystemDataLoaded(e:Event):void
@@ -149,7 +147,7 @@ package ch.zhaw.doppelpendel
 			var arrPendulum:Vector.<Pendulum> = system.getPendulum();
 			for (var i:int = 0; i < arrPendulum.length; i++)
 			{
-				controls.updateControls(i, arrPendulum[i].pPhi, arrPendulum[i].pOmega, arrPendulum[i].pLength, arrPendulum[i].pMass);
+				controls.updateControls(i, Geom.radToDeg(arrPendulum[i].pPhi), arrPendulum[i].pOmega, arrPendulum[i].pLength, arrPendulum[i].pMass);
 			}
 		}
 
@@ -158,7 +156,7 @@ package ch.zhaw.doppelpendel
 			var arrPendulum:Vector.<Pendulum> = system.getPendulum();
 			for (var i:int = 0; i < arrPendulum.length; i++)
 			{
-				controls.updateControls(i, arrPendulum[i].rPhi, arrPendulum[i].rOmega, arrPendulum[i].rLength, arrPendulum[i].rMass);
+				controls.updateControls(i, Geom.radToDeg(arrPendulum[i].pPhi), arrPendulum[i].pOmega, arrPendulum[i].pLength, arrPendulum[i].pMass);
 			}
 		}
 

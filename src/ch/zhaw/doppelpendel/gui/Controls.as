@@ -35,7 +35,9 @@ package ch.zhaw.doppelpendel.gui
 	import ch.zhaw.doppelpendel.gui.button.ColorButton;
 	import ch.zhaw.doppelpendel.gui.button.ToggleButton;
 	import ch.zhaw.doppelpendel.gui.form.TextInput;
+
 	import com.greensock.TweenMax;
+
 	import flash.display.MovieClip;
 	import flash.events.Event;
 

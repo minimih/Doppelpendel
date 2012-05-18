@@ -1,8 +1,8 @@
 /**
  * @class PendulumSolver
  * 
- * This part of the sourcecode is adapted to AS3 from the www.MyPhysicsLab.com physics simulation applet.
- * Copyright (c) 2001  Erik Neumann
+ * This part of the sourcecode is adapted from the www.MyPhysicsLab.com physics
+ * simulation applet by Erik Neumann to ActionScript 3.
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,15 +32,15 @@
  */
 package ch.zhaw.doppelpendel.solver
 {
-	import ch.futurecom.log.FucoLogger;
-	import ch.zhaw.doppelpendel.system.PendulumSystem;
 	import ch.zhaw.doppelpendel.system.element.Pendulum;
 
 	public class PendulumSolver implements IODESolver
 	{
 		private var p1:Pendulum;
 		private var p2:Pendulum;
+		
 		private var gravity:Number;
+		
 		// variables for Diff Eqn positions and velocities
 		private var vars:Vector.<Number>;
 		// calc vector = whether variables are calculated by ode solver
@@ -49,7 +49,9 @@ package ch.zhaw.doppelpendel.solver
 		/**
 		 * Creates a new PendulumSolver
 		 * 
-		 
+		 * @param p1 Pendulum 1
+		 * @param p2 Pendulum 2
+		 * @param g gravity
 		 */
 		public function PendulumSolver(p1:Pendulum, p2:Pendulum, g:Number)
 		{
@@ -146,23 +148,38 @@ package ch.zhaw.doppelpendel.solver
 			num = num / (L2 * (2 * m1 + m2 - m2 * Math.cos(2 * (th1 - th2))));
 			change[3] = num;
 		}
-
+		
 		public function getVars():Vector.<Number>
 		{
 			return vars;
 		}
 
-		public function setVars(v:Vector.<Number>):void
-		{
-			p1.pPhi = v[0];
-			p1.pOmega = v[1];
-			p2.pPhi = v[2];
-			p2.pOmega = v[3];
-		}
-
 		public function getCalc():Vector.<Boolean>
 		{
 			return calc;
+		}
+		
+		/**
+		 * Updates the attached Pendulum p1 and p2
+		 */
+		public function update():void
+		{
+			p1.pPhi = calcRad(vars[0]);
+			p1.pOmega = vars[1];
+			p2.pPhi = calcRad(vars[2]);
+			p2.pOmega = vars[3];
+		}
+		
+		/**
+		 * converts rad values to the interval [0, PI]
+		 * 
+		 * @param rad rad value to calculate
+		 * @return rad in iterval [0, PI]
+		 */
+		private function calcRad(rad:Number):Number
+		{
+			rad = rad % (2 * Math.PI);
+			return (2 * Math.PI + rad) % (2 * Math.PI);
 		}
 	}
 }

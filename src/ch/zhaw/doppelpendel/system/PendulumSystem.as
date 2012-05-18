@@ -29,7 +29,6 @@
  */
 package ch.zhaw.doppelpendel.system
 {
-	import ch.futurecom.net.loader.FucoURLLoader;
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.StageEvent;
 	import ch.zhaw.doppelpendel.event.SystemEvent;
@@ -42,17 +41,16 @@ package ch.zhaw.doppelpendel.system
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.TimerEvent;
+	import flash.geom.Point;
 	import flash.utils.Timer;
 
 	public class PendulumSystem extends AssetPendulum implements ISystem
 	{
 		private var marginTop:Number;
 		private var marginBottom:Number;
-		
+
 		private var mcFixpoint:Sprite;
 
-		private var xmlLoader:FucoURLLoader;
-		private var xmlData:XMLList;
 		private var xmlPendulum:XMLList;
 
 		private var gravity:Number;
@@ -70,19 +68,19 @@ package ch.zhaw.doppelpendel.system
 
 		private var pendulumSolver:IODESolver;
 		private var odeSolver:IODE;
-		
+
 		public function PendulumSystem()
 		{
 			this.visible = false;
-			
+
 			mcFixpoint = this.mc_fixpoint;
 
 			// delta t
 			dt = 1.0 / StageUtils.stage.frameRate;
-			
+
 			marginTop = 0;
 			marginBottom = 0;
-			
+
 			// add listener
 			setSizeAndPosition();
 			StageUtils.stage.addEventListener(StageEvent.STAGERESIZE, onStageResize);
@@ -90,32 +88,37 @@ package ch.zhaw.doppelpendel.system
 
 		/* ----------------------------------------------------------------- */
 
+		/**
+		 * Sets the margin top and bottom for the Pendulum System
+		 * 
+		 * @param marginTop
+		 * @param marginBottom
+		 */
 		public function setMargin(marginTop:Number, marginBottom:Number):void
 		{
 			this.marginTop = marginTop;
 			this.marginBottom = marginBottom;
-			
+
 			setSizeAndPosition();
 		}
-		
+
 		/* ----------------------------------------------------------------- */
-		
+
 		/**
 		 * Sets up the Pendulum System
-		 * depending on the Config file
+		 * depending on the config xml
+		 * 
+		 * @param xml pendulum config xml
 		 */
 		public function setupSystem(xml:XML):void
 		{
 			clearSystem();
-			
-			//set xmlData
-			xmlData = xml.system;
-			
-			// set gravity
-			gravity = xmlData.@gravity;
-			density = xmlData.@density;
 
-			xmlPendulum = xmlData.pendulum;
+			// set gravity
+			gravity = xml.system.@gravity;
+			density = xml.system.@density;
+
+			xmlPendulum = xml.system.pendulum;
 			arrPendulum = new Vector.<Pendulum>();
 
 			if (xmlPendulum.length() != 2)
@@ -124,7 +127,7 @@ package ch.zhaw.doppelpendel.system
 				// system not supported
 				return;
 			}
-			
+
 			var currentP:Pendulum;
 
 			for (var i:int = 0; i < xmlPendulum.length(); i++)
@@ -139,10 +142,7 @@ package ch.zhaw.doppelpendel.system
 					var parentP:Pendulum = arrPendulum[i - 1];
 
 					currentP = new Pendulum(density, xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].@omega, xmlPendulum[i].@color, parentP);
-					parentP.addChild(currentP);
-
-					// set y for parentPendulum
-					currentP.setPosition(parentP);
+					mcFixpoint.addChild(currentP);
 				}
 
 				arrPendulum.push(currentP);
@@ -169,13 +169,21 @@ package ch.zhaw.doppelpendel.system
 			// resize stage and set visible
 			setSizeAndPosition();
 			this.visible = true;
-			
+
+			// enable mouse drag and drop
+			setupMouseControl();
+			enableMouseControl();
+
 			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
 
 			pendulumSolver = new PendulumSolver(p1, p2, gravity);
 			odeSolver = new RungeKutta(pendulumSolver);
 		}
 
+		/**
+		 * Clears the Pendulum System.
+		 * removes all elements and stops the timer
+		 */
 		private function clearSystem():void
 		{
 			this.visible = false;
@@ -191,12 +199,74 @@ package ch.zhaw.doppelpendel.system
 			// clear pendulum
 			if (arrPendulum)
 			{
-				mcFixpoint.removeChild(arrPendulum[0]);
+				for (var i:int = 0; i < arrPendulum.length; i++)
+				{
+					mcFixpoint.removeChild(arrPendulum[i]);
+				}
 				arrPendulum = null;
 			}
 
 			odeSolver = null;
 			pendulumSolver = null;
+		}
+
+		/* ----------------------------------------------------------------- */
+
+		public function startSystem():void
+		{
+			// disable mouse drag and drop
+			disableMouseControl();
+
+			pendulumSolver.reset();
+			timer.start();
+
+			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
+		}
+
+		public function stopSystem():void
+		{
+			timer.stop();
+
+			// enable mouse drag and drop
+			enableMouseControl();
+
+			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
+		}
+
+		public function resetSystem():void
+		{
+			timer.stop();
+
+			for (var i:int = 0; i < xmlPendulum.length(); i++)
+			{
+				arrPendulum[i].reset(xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].@omega);
+			}
+
+			dPhi1 = 0;
+			dPhi2 = 0;
+
+			// enable mouse drag and drop
+			enableMouseControl();
+
+			dispatchEvent(new SystemEvent(SystemEvent.RESET));
+		}
+
+		public function updateSystem():void
+		{
+		}
+
+		public function getSystemSize():Number
+		{
+			var sSize:Number = 0;
+			try
+			{
+				sSize = 2 * (p1.dLength + p2.dLength);
+			}
+			catch(error:Error)
+			{
+				// nothing
+			}
+			return sSize;
 		}
 
 		/* ----------------------------------------------------------------- */
@@ -213,78 +283,47 @@ package ch.zhaw.doppelpendel.system
 
 		/* ----------------------------------------------------------------- */
 
-		public function startSystem():void
+		/**
+		 * setup of the drag and drop control for the pendulum 
+		 */
+		private function setupMouseControl():void
 		{
-			timer.start();
-			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
+			p1.setMouseControl(onMouseControlUpdate);
+			p2.setMouseControl(onMouseControlUpdate);
 		}
 
-		public function stopSystem():void
+		/**
+		 * enables drag and drop for the pendulum 
+		 */
+		private function enableMouseControl():void
 		{
-			timer.stop();
-			
-			pendulumSolver.reset();
-			
-			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
+			p1.enableMouseControl();
+			p2.enableMouseControl();
 		}
 
-		public function resetSystem():void
+		/**
+		 * disables drag and drop for the pendulum 
+		 */
+		private function disableMouseControl():void
 		{
-			timer.stop();
-
-			for (var i:int = 0; i < xmlPendulum.length(); i++)
-			{
-				arrPendulum[i].reset(xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].@omega);
-			}
-
-			dPhi1 = 0;
-			dPhi2 = 0;
-
-			pendulumSolver.reset();
-
-			dispatchEvent(new SystemEvent(SystemEvent.RESET));
+			p1.disableMouseControl();
+			p2.disableMouseControl();
 		}
 
-		public function updateSystem():void
+		private function onMouseControlUpdate(p:Pendulum):void
 		{
-		}
+			var pendulumPoint:Point = new Point(p.x, p.y);
+			pendulumPoint = localToGlobal(pendulumPoint);
 
-		public function getSystemSize():Number
-		{
-			var sSize:Number = 0;
-			try
-			{
-				sSize = 2* (p1.dLength + p2.dLength);
-			}
-			catch(error:Error)
-			{
-				//nothing
-			}
-			return sSize;
-		}
+			var mousePoint:Point = new Point(this.mouseX, this.mouseY);
+			mousePoint = localToGlobal(mousePoint);
 
-		/* ----------------------------------------------------------------- */
-
-		private function modRadian(rad:Number):Number
-		{
-			while (rad > Math.PI)
-			{
-				rad -= 2 * Math.PI;
-			}
-			while (rad <= -Math.PI)
-			{
-				rad += 2 * Math.PI;
-			}
-			return rad;
-		}
-
-		private function reDraw():void
-		{
-			p1.pPhi = modRadian(p1.pPhi + dPhi1 * dt);
-			p2.pPhi = modRadian(p2.pPhi + dPhi2 * dt);
+			p.pPhi = (2 * Math.PI + Math.atan2(mousePoint.x - pendulumPoint.x, mousePoint.y - pendulumPoint.y)) % (2 * Math.PI);
 
 			p1.updateRotation();
 			p2.updateRotation();
+
+			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
 		}
 
 		/* ----------------------------------------------------------------- */
@@ -292,21 +331,27 @@ package ch.zhaw.doppelpendel.system
 		private function onRedraw(e:TimerEvent):void
 		{
 			odeSolver.step(dt);
-			reDraw();
+			pendulumSolver.update();
+
+			p1.updateRotation();
+			p2.updateRotation();
 
 			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
 		}
 
 		/* ----------------------------------------------------------------- */
 
+		/**
+		 * calculates the size of the system and scales it to fit in the stage
+		 */
 		private function setSizeAndPosition():void
 		{
 			var sw:int = StageUtils.stageWidth;
 			var sh:int = (StageUtils.stageHeight - marginTop - marginBottom);
-			
-			//reset scale
+
+			// reset scale
 			this.scaleX = this.scaleY = 1;
-			
+
 			// set scale
 			var stageSize:int = Math.min(sw, sh);
 			if (getSystemSize() > stageSize)

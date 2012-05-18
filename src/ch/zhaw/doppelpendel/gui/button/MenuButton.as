@@ -35,8 +35,6 @@ package ch.zhaw.doppelpendel.gui.button
 
 	public class MenuButton extends GenericButton implements IButton
 	{	
-		private var _isToggled:Boolean;
-		
 		protected var tfLabel:TextField;
 			
 		public function MenuButton(mcAsset:MovieClip, setButtonArea:MovieClip = null, setHiClip:MovieClip = null)

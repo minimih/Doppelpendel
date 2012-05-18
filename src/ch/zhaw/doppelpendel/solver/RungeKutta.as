@@ -1,8 +1,8 @@
 /**
  * @class RungeKutta
  * 
- * This part of the sourcecode is adapted to AS3 from the www.MyPhysicsLab.com physics simulation applet.
- * Copyright (c) 2001  Erik Neumann
+ * This part of the sourcecode is adapted from the www.MyPhysicsLab.com physics
+ * simulation applet by Erik Neumann to ActionScript 3.
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,12 +41,18 @@ package ch.zhaw.doppelpendel.solver
 		private var k3 : Vector.<Number>;
 		private var k4 : Vector.<Number>;
 
+		/** 
+		 * Creates Runge-Kutta for solving ordinary differential equations.
+		 * 
+		 * @param ode Differential equation
+		 */ 
 		public function RungeKutta(ode : IODESolver)
 		{
 			this.ode = ode;
 		}
 
-		/** Runge-Kutta method for solving ordinary differential equations.
+		/** 
+		 * Runge-Kutta method for solving ordinary differential equations.
 		 * 
 		 * Calculates the values of the variables at time t+h
 		 * t = last time value
@@ -54,7 +60,7 @@ package ch.zhaw.doppelpendel.solver
 		 * vars = array of variables
 		 * n = number of variables in x array
 		 * 
-		 * @param h StepSize
+		 * @param h: step size (dt)
 		 */
 		public function step(h : Number) : void
 		{
@@ -101,6 +107,7 @@ package ch.zhaw.doppelpendel.solver
 
 			// determine which vars should be modified (calculated)
 			var calc : Vector.<Boolean> = ode.getCalc();
+			
 			// modify the variables
 			for (i = 0; i < n; i++)
 			{
@@ -109,8 +116,6 @@ package ch.zhaw.doppelpendel.solver
 					vars[i] = vars[i] + (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]) * h / 6;
 				}
 			}
-			
-			ode.setVars(vars);
 		}
 	}
 }
