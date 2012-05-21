@@ -84,8 +84,10 @@ package ch.zhaw.doppelpendel.gui.form
 			
 			if(b){
 				frame.alpha = 1;
+				backFill.alpha = 0.25;
 			}else{
-				frame.alpha = 0.5;				
+				frame.alpha = 0.5;
+				backFill.alpha = 0.1;
 			}
 			
 			back.visible = b;

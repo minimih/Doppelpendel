@@ -32,7 +32,7 @@
  */
 package ch.zhaw.doppelpendel.solver
 {
-	import ch.zhaw.doppelpendel.system.element.Pendulum;
+	import ch.zhaw.doppelpendel.pendulum.element.Pendulum;
 
 	public class PendulumSolver implements IODESolver
 	{

@@ -12,6 +12,6 @@
 		color in hex
 		-->
 		<pendulum length="0.5" phi="90" omega="0" color="0xFF0000" />
-		<pendulum length="0.35" phi="180" omega="0" color="0xFFFF00" />
+		<pendulum length="0.35" phi="180" omega="0" color="0x00FF00" />
 	</system>
 </data>

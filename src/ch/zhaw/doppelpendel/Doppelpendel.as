@@ -29,33 +29,31 @@
  */
 package ch.zhaw.doppelpendel
 {
-	import ch.futurecom.net.loader.FucoURLLoader;
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.data.SystemData;
 	import ch.zhaw.doppelpendel.event.ControlEvent;
 	import ch.zhaw.doppelpendel.event.MenuEvent;
 	import ch.zhaw.doppelpendel.event.SystemEvent;
 	import ch.zhaw.doppelpendel.gui.Background;
-	import ch.zhaw.doppelpendel.gui.Controls;
 	import ch.zhaw.doppelpendel.gui.MenuBar;
-	import ch.zhaw.doppelpendel.system.PendulumSystem;
-	import ch.zhaw.doppelpendel.system.element.Pendulum;
-	import ch.zhaw.doppelpendel.utils.Geom;
+	import ch.zhaw.doppelpendel.pendulum.PendulumControl;
+	import ch.zhaw.doppelpendel.pendulum.PendulumSystem;
 
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 
 	public class Doppelpendel extends EventDispatcher
 	{
 		private var _main:Main;
 
+		// set pendulum to 2
+		private const pendulumSystemSize:int = 2;
+
 		private var background:Background;
+
 		private var system:PendulumSystem;
-		private var controls:Controls;
+		private var control:PendulumControl;
 
 		private var menuBar:MenuBar;
-
-		private var xmlLoader:FucoURLLoader;
 
 		/* ---------------------------------------------------------------- */
 
@@ -68,49 +66,39 @@ package ch.zhaw.doppelpendel
 			main.addChild(background);
 
 			// add system
-			system = new PendulumSystem();
+			system = new PendulumSystem(pendulumSystemSize);
 			main.addChild(system);
 
-			controls = new Controls();
-			main.addChild(controls);
+			control = new PendulumControl(pendulumSystemSize);
+			main.addChild(control);
 
 			// create the menubar
 			menuBar = new MenuBar();
 			main.addChild(menuBar);
 
 			// repos system
-			system.setMargin(menuBar.getHeight(), controls.getHeight());
+			system.setMargin(menuBar.getHeight(), control.getHeight());
 
 			// set listeners
 			system.addEventListener(SystemEvent.UPDATE, onUpdateControls);
 
-			controls.addEventListener(ControlEvent.START, onStartSystem);
-			controls.addEventListener(ControlEvent.STOP, onStopSystem);
-			controls.addEventListener(ControlEvent.RESET, onResetSystem);
-
-			controls.addEventListener(ControlEvent.UPDATE, onUpdateSystem);
+			control.addEventListener(ControlEvent.START, onStartSystem);
+			control.addEventListener(ControlEvent.STOP, onStopSystem);
+			control.addEventListener(ControlEvent.RESET, onResetSystem);
+			control.addEventListener(ControlEvent.UPDATE, onUpdateSystem);
 
 			menuBar.addEventListener(MenuEvent.LOAD, onLoadFile);
 
 			// get default system data
-			system.setupSystem(SystemData.defaultData());
+			setupSystem(SystemData.defaultData());
 		}
 
 		/* ---------------------------------------------------------------- */
 
 		private function onUpdateControls(e:SystemEvent):void
 		{
-			var p1:Pendulum = system.getP1();
-			controls.phi1 = Geom.radToDeg(p1.pPhi);
-			controls.omega1 = p1.pOmega;
-			controls.length1 = p1.pLength;
-			controls.mass1 = p1.pMass;
-
-			var p2:Pendulum = system.getP2();
-			controls.phi2 = Geom.radToDeg(p2.pPhi);
-			controls.omega2 = p2.pOmega;
-			controls.length2 = p2.pLength;
-			controls.mass2 = p2.pMass;
+			var val:Array = system.getValuesAsArray();
+			control.setValuesAsArray(val);
 		}
 
 		/* ---------------------------------------------------------------- */
@@ -132,26 +120,21 @@ package ch.zhaw.doppelpendel
 
 		private function onUpdateSystem(e:ControlEvent):void
 		{
-			var p1:Pendulum = system.getP1();
-			var p2:Pendulum = system.getP2();
+			var val:Array = control.getValuesAsArray();
 
 			switch(e.args.update)
 			{
 				case ControlEvent.ROTATION:
-					p1.pPhi = Geom.degToRad(controls.phi1);
-					p2.pPhi = Geom.degToRad(controls.phi2);
+					system.setPhiAsArray(val);
 					break;
 				case ControlEvent.OMEGA:
-					p1.pOmega = controls.omega1;
-					p2.pOmega = controls.omega2;
+					system.setOmegaAsArray(val);
 					break;
 				case ControlEvent.LENGTH:
-					p1.pLength = controls.length1;
-					p2.pLength = controls.length2;
+					system.setLengthAsArray(val);
 					break;
 				case ControlEvent.MASS:
-					p1.pMass = controls.mass1;
-					p2.pMass = controls.mass2;
+					system.setMassAsArray(val);
 					break;
 			}
 
@@ -162,8 +145,18 @@ package ch.zhaw.doppelpendel
 
 		private function onLoadFile(e:MenuEvent):void
 		{
-			controls.resetControls();
-			system.setupSystem((e.args.xml as XML));
+			var xml:XML = (e.args.xml as XML);
+			setupSystem(xml);
+		}
+
+		/* ---------------------------------------------------------------- */
+
+		private function setupSystem(xml:XML):void
+		{
+			control.resetControls();
+			control.setupControlColor(xml);
+
+			system.setupSystem(xml);
 		}
 
 		/* ---------------------------------------------------------------- */
@@ -175,7 +168,7 @@ package ch.zhaw.doppelpendel
 
 		public function getSystemAreaHeight():Number
 		{
-			return (StageUtils.stage.stageHeight - menuBar.getHeight() - controls.getHeight());
+			return (StageUtils.stage.stageHeight - menuBar.getHeight() - control.getHeight());
 		}
 
 		/* ---------------------------------------------------------------- */
