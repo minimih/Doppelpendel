@@ -50,8 +50,8 @@ package ch.zhaw.doppelpendel
 		public static const VERSION:String = "1.0.0";
 
 		// debugging
-		public static var DEBUG:Boolean = true;
-		public static var STATS:Boolean = true;
+		public static var DEBUG:Boolean = false;
+		public static var STATS:Boolean = false;
 
 		/* ----------------------------------------------------------------- */
 		

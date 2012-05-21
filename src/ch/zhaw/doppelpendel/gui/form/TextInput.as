@@ -43,6 +43,11 @@ package ch.zhaw.doppelpendel.gui.form
 	
 		private var _enabled:Boolean;
 
+		private var _isNumericInput:Boolean;
+
+		private var _minValue:Number = -Number.MAX_VALUE;
+		private var _maxValue:Number = Number.MAX_VALUE;
+
 		public function TextInput(target:MovieClip) 
 		{
 			theClip = target;
@@ -62,6 +67,13 @@ package ch.zhaw.doppelpendel.gui.form
 		
 		private function onChange(...args):void
 		{
+			if(isNumericInput){
+				var num:Number = Number(tfInput.text);
+				if(num <= _minValue || num >= _maxValue){
+					return;
+				}
+			}
+			
 			dispatchEvent(new Event(Event.CHANGE));
 		}
 
@@ -142,6 +154,26 @@ package ch.zhaw.doppelpendel.gui.form
 		public function get selectable():Boolean
 		{
 			return tfInput.selectable;
+		}
+		
+		/* ----------------------------------------------------------------- */
+		
+		public function set isNumericInput(b:Boolean):void {
+			_isNumericInput = b;
+		}
+
+		public function get isNumericInput():Boolean {
+			return _isNumericInput;
+		}
+		
+		public function set minValue(n:Number):void
+		{
+			_minValue = n;
+		}
+		
+		public function set maxValue(n:Number):void
+		{
+			_maxValue = n;
 		}
 	}
 }

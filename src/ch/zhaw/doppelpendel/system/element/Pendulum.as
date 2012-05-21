@@ -133,10 +133,15 @@ package ch.zhaw.doppelpendel.system.element
 			pLength = l;
 			pOmega = o;
 			pPhi = Geom.degToRad(r);
-
+			
+			update();
+		}
+		
+		public function update():void
+		{
 			TweenMax.to(this, 0.75, {shortRotation:{rotation:-rPhi}, ease:Cubic.easeInOut, onUpdate:updatePosition});
 		}
-
+		
 		private function updatePosition():void
 		{
 			if (parentPendulum)
@@ -146,6 +151,7 @@ package ch.zhaw.doppelpendel.system.element
 				this.x = parentPendulum.x + len * Math.sin(rad);
 				this.y = parentPendulum.y + len * Math.cos(rad);
 			}
+			
 		}
 
 		public function updateRotation():void

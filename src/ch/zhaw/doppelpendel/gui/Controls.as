@@ -29,6 +29,7 @@
  */
 package ch.zhaw.doppelpendel.gui
 {
+	import ch.futurecom.utils.Delegate;
 	import ch.futurecom.utils.StageUtils;
 	import ch.zhaw.doppelpendel.event.ControlEvent;
 	import ch.zhaw.doppelpendel.event.StageEvent;
@@ -46,14 +47,14 @@ package ch.zhaw.doppelpendel.gui
 		private var mcControls:MovieClip;
 		private var mcBg:MovieClip;
 
-		private var phi1:TextInput;
-		private var phi2:TextInput;
-		private var omega1:TextInput;
-		private var omega2:TextInput;
-		private var length1:TextInput;
-		private var length2:TextInput;
-		private var mass1:TextInput;
-		private var mass2:TextInput;
+		private var tPhi1:TextInput;
+		private var tPhi2:TextInput;
+		private var tOmega1:TextInput;
+		private var tOmega2:TextInput;
+		private var tLength1:TextInput;
+		private var tLength2:TextInput;
+		private var tMass1:TextInput;
+		private var tMass2:TextInput;
 
 		private var btnStartStop:ToggleButton;
 		private var btnReset:ColorButton;
@@ -79,37 +80,49 @@ package ch.zhaw.doppelpendel.gui
 
 		private function initControls():void
 		{
-			phi1 = new TextInput(mcControls.inp_phi_1);
-			phi1.maxLength = 10;
-			phi1.restrict = "0-9.";
+			tPhi1 = new TextInput(mcControls.inp_phi_1);
+			tPhi1.isNumericInput = true;
+			tPhi1.maxLength = 10;
+			tPhi1.restrict = "0-9.";
 
-			phi2 = new TextInput(mcControls.inp_phi_2);
-			phi2.maxLength = 10;
-			phi2.restrict = "0-9.";
+			tPhi2 = new TextInput(mcControls.inp_phi_2);
+			tPhi2.isNumericInput = true;
+			tPhi2.maxLength = 10;
+			tPhi2.restrict = "0-9.";
 
-			omega1 = new TextInput(mcControls.inp_omega_1);
-			omega1.maxLength = 10;
-			omega1.restrict = "0-9.";
+			tOmega1 = new TextInput(mcControls.inp_omega_1);
+			tOmega1.isNumericInput = true;
+			tOmega1.maxLength = 10;
+			tOmega1.restrict = "\\-0-9.";
 
-			omega2 = new TextInput(mcControls.inp_omega_2);
-			omega2.maxLength = 10;
-			omega2.restrict = "0-9.";
+			tOmega2 = new TextInput(mcControls.inp_omega_2);
+			tOmega2.isNumericInput = true;
+			tOmega2.maxLength = 10;
+			tOmega2.restrict = "\\-0-9.";
 
-			length1 = new TextInput(mcControls.inp_length_1);
-			length1.maxLength = 10;
-			length1.restrict = "0-9.";
+			tLength1 = new TextInput(mcControls.inp_length_1);
+			tLength1.isNumericInput = true;
+			tLength1.minValue = 0;
+			tLength1.maxLength = 10;
+			tLength1.restrict = "0-9.";
 
-			length2 = new TextInput(mcControls.inp_length_2);
-			length2.maxLength = 10;
-			length2.restrict = "0-9.";
+			tLength2 = new TextInput(mcControls.inp_length_2);
+			tLength2.isNumericInput = true;
+			tLength2.minValue = 0;
+			tLength2.maxLength = 10;
+			tLength2.restrict = "0-9.";
 
-			mass1 = new TextInput(mcControls.inp_mass_1);
-			mass1.maxLength = 10;
-			mass1.restrict = "0-9.";
+			tMass1 = new TextInput(mcControls.inp_mass_1);
+			tMass1.isNumericInput = true;
+			tMass1.minValue = 0;
+			tMass1.maxLength = 10;
+			tMass1.restrict = "0-9.";
 
-			mass2 = new TextInput(mcControls.inp_mass_2);
-			mass2.maxLength = 10;
-			mass2.restrict = "0-9.";
+			tMass2 = new TextInput(mcControls.inp_mass_2);
+			tMass2.isNumericInput = true;
+			tMass2.minValue = 0;
+			tMass2.maxLength = 10;
+			tMass2.restrict = "0-9.";
 
 			// set buttons
 			btnStartStop = new ToggleButton(mcControls.btn_start);
@@ -123,20 +136,22 @@ package ch.zhaw.doppelpendel.gui
 			btnReset.setOnClick(onReset);
 
 			// add eventlisteners
-			// phi1.addEventListener(Event.CHANGE, onUpdatePhi);
-			// phi2.addEventListener(Event.CHANGE, onUpdatePhi);
-			// omega1.addEventListener(Event.CHANGE, onUpdateOmega);
-			// omega2.addEventListener(Event.CHANGE, onUpdateOmega);
-			// length1.addEventListener(Event.CHANGE, onUpdateLength);
-			// length2.addEventListener(Event.CHANGE, onUpdateLength);
-			// mass1.addEventListener(Event.CHANGE, onUpdateMass);
-			// mass2.addEventListener(Event.CHANGE, onUpdateMass);
+			tPhi1.addEventListener(Event.CHANGE, Delegate.create(onUpdate, ControlEvent.ROTATION));
+			tPhi2.addEventListener(Event.CHANGE, Delegate.create(onUpdate, ControlEvent.ROTATION));
+			tOmega1.addEventListener(Event.CHANGE, Delegate.create(onUpdate, ControlEvent.OMEGA));
+			tOmega2.addEventListener(Event.CHANGE, Delegate.create(onUpdate, ControlEvent.OMEGA));
+			tLength1.addEventListener(Event.CHANGE, Delegate.create(onUpdate, ControlEvent.LENGTH));
+			tLength2.addEventListener(Event.CHANGE, Delegate.create(onUpdate, ControlEvent.LENGTH));
+			tMass1.addEventListener(Event.CHANGE, Delegate.create(onUpdate, ControlEvent.MASS));
+			tMass2.addEventListener(Event.CHANGE, Delegate.create(onUpdate, ControlEvent.MASS));
 		}
+
+		/* ----------------------------------------------------------------- */
 
 		private function onStartStop():void
 		{
 			TweenMax.killAll();
-			
+
 			if (btnStartStop.isToggled)
 			{
 				setFormEnabled(false);
@@ -155,46 +170,29 @@ package ch.zhaw.doppelpendel.gui
 			dispatchEvent(new ControlEvent(ControlEvent.RESET));
 		}
 
-		private function onUpdate(e:Event):void
+		private function onUpdate(type:String, e:Event):void
 		{
-			dispatchEvent(new ControlEvent(ControlEvent.UPDATE));
+			dispatchEvent(new ControlEvent(ControlEvent.UPDATE, {update:type}));
 		}
 
 		/* ----------------------------------------------------------------- */
-		
+
 		public function resetControls():void
 		{
 			setFormEnabled(true);
 			btnStartStop.reset();
 		}
-		
-		public function updateControls(id:int, p:Number, o:Number, l:Number, m:Number):void
-		{
-			if(id == 0){
-				phi1.text = p.toFixed(3);
-				omega1.text = o.toFixed(3);
-				length1.text = l.toFixed(3);
-				mass1.text = m.toFixed(3);
-			}else if(id == 1){
-				phi2.text = p.toFixed(3);
-				omega2.text = o.toFixed(3);
-				length2.text = l.toFixed(3);
-				mass2.text = m.toFixed(3);
-			}
-		}
-
-		/* ----------------------------------------------------------------- */
 
 		private function setFormEnabled(b:Boolean):void
 		{
-			phi1.enabled = b;
-			phi2.enabled = b;
-			omega1.enabled = b;
-			omega2.enabled = b;
-			length1.enabled = b;
-			length2.enabled = b;
-			mass1.enabled = b;
-			mass2.enabled = b;
+			tPhi1.enabled = b;
+			tPhi2.enabled = b;
+			tOmega1.enabled = b;
+			tOmega2.enabled = b;
+			tLength1.enabled = b;
+			tLength2.enabled = b;
+			tMass1.enabled = b;
+			tMass2.enabled = b;
 		}
 
 		/* ----------------------------------------------------------------- */
@@ -217,6 +215,72 @@ package ch.zhaw.doppelpendel.gui
 		private function onStageResize(e:Event):void
 		{
 			setSizeAndPosition();
+		}
+
+		/* ----------------------------------------------------------------- */
+
+		public function get phi1():Number {
+			return Number(tPhi1.text);
+		}
+		
+		public function set phi1(n:Number):void {
+			tPhi1.text = n.toFixed(4);
+		}
+
+		public function get phi2():Number {
+			return Number(tPhi2.text);
+		}
+		
+		public function set phi2(n:Number):void {
+			tPhi2.text = n.toFixed(4);
+		}
+		
+		public function get omega1():Number {
+			return Number(tOmega1.text);
+		}
+		
+		public function set omega1(n:Number):void {
+			tOmega1.text = n.toFixed(4);
+		}
+
+		public function get omega2():Number {
+			return Number(tOmega2.text);
+		}
+		
+		public function set omega2(n:Number):void {
+			tOmega2.text = n.toFixed(4);
+		}
+		
+		public function get length1():Number {
+			return Number(tLength1.text);
+		}
+		
+		public function set length1(n:Number):void {
+			tLength1.text = n.toFixed(4);
+		}
+
+		public function get length2():Number {
+			return Number(tLength2.text);
+		}
+		
+		public function set length2(n:Number):void {
+			tLength2.text = n.toFixed(4);
+		}
+		
+		public function get mass1():Number {
+			return Number(tMass1.text);
+		}
+		
+		public function set mass1(n:Number):void {
+			tMass1.text = n.toFixed(4);
+		}
+		
+		public function get mass2():Number {
+			return Number(tMass2.text);
+		}
+		
+		public function set mass2(n:Number):void {
+			tMass2.text = n.toFixed(4);
 		}
 	}
 }

@@ -39,8 +39,14 @@ package ch.zhaw.doppelpendel.event
 		public static const START:String = "start";
 		public static const STOP:String = "stop";
 		public static const RESET:String = "reset";
+		
 		public static const UPDATE:String = "update";
 		
+		public static const ROTATION:String = "rotation";
+		public static const OMEGA:String = "omega";
+		public static const LENGTH:String = "length";
+		public static const MASS:String = "mass";
+
 		private var _arguments:Object;
 		
 		public function ControlEvent(type:String, args:Object = null) {

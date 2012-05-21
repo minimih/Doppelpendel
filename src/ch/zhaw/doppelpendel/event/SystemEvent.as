@@ -37,7 +37,6 @@ package ch.zhaw.doppelpendel.event
 	public class SystemEvent extends Event
 	{
 		public static const UPDATE:String = "update";
-		public static const RESET:String = "reset";
 
 		public function SystemEvent(type:String)
 		{

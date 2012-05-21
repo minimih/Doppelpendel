@@ -54,7 +54,7 @@ package ch.zhaw.doppelpendel
 		private var controls:Controls;
 
 		private var menuBar:MenuBar;
-		
+
 		private var xmlLoader:FucoURLLoader;
 
 		/* ---------------------------------------------------------------- */
@@ -78,12 +78,11 @@ package ch.zhaw.doppelpendel
 			menuBar = new MenuBar();
 			main.addChild(menuBar);
 
-			//repos system
+			// repos system
 			system.setMargin(menuBar.getHeight(), controls.getHeight());
 
 			// set listeners
 			system.addEventListener(SystemEvent.UPDATE, onUpdateControls);
-			system.addEventListener(SystemEvent.RESET, onResetControls);
 
 			controls.addEventListener(ControlEvent.START, onStartSystem);
 			controls.addEventListener(ControlEvent.STOP, onStopSystem);
@@ -92,8 +91,8 @@ package ch.zhaw.doppelpendel
 			controls.addEventListener(ControlEvent.UPDATE, onUpdateSystem);
 
 			menuBar.addEventListener(MenuEvent.LOAD, onLoadFile);
-			
-			//get default system data
+
+			// get default system data
 			system.setupSystem(SystemData.defaultData());
 		}
 
@@ -101,43 +100,62 @@ package ch.zhaw.doppelpendel
 
 		private function onUpdateControls(e:SystemEvent):void
 		{
-			var arrPendulum:Vector.<Pendulum> = system.getPendulum();
-			for (var i:int = 0; i < arrPendulum.length; i++)
-			{
-				controls.updateControls(i, Geom.radToDeg(arrPendulum[i].pPhi), arrPendulum[i].pOmega, arrPendulum[i].pLength, arrPendulum[i].pMass);
-			}
-		}
+			var p1:Pendulum = system.getP1();
+			controls.phi1 = Geom.radToDeg(p1.pPhi);
+			controls.omega1 = p1.pOmega;
+			controls.length1 = p1.pLength;
+			controls.mass1 = p1.pMass;
 
-		private function onResetControls(e:SystemEvent):void
-		{
-			var arrPendulum:Vector.<Pendulum> = system.getPendulum();
-			for (var i:int = 0; i < arrPendulum.length; i++)
-			{
-				controls.updateControls(i, Geom.radToDeg(arrPendulum[i].pPhi), arrPendulum[i].pOmega, arrPendulum[i].pLength, arrPendulum[i].pMass);
-			}
+			var p2:Pendulum = system.getP2();
+			controls.phi2 = Geom.radToDeg(p2.pPhi);
+			controls.omega2 = p2.pOmega;
+			controls.length2 = p2.pLength;
+			controls.mass2 = p2.pMass;
 		}
 
 		/* ---------------------------------------------------------------- */
 
-		private function onStartSystem(e:Event):void
+		private function onStartSystem(e:ControlEvent):void
 		{
 			system.startSystem();
 		}
 
-		private function onStopSystem(e:Event):void
+		private function onStopSystem(e:ControlEvent):void
 		{
 			system.stopSystem();
 		}
 
-		private function onResetSystem(e:Event):void
+		private function onResetSystem(e:ControlEvent):void
 		{
 			system.resetSystem();
 		}
 
-		private function onUpdateSystem(e:Event):void
+		private function onUpdateSystem(e:ControlEvent):void
 		{
-			// controls.
-			// system.updateSystem();
+			var p1:Pendulum = system.getP1();
+			var p2:Pendulum = system.getP2();
+
+			switch(e.args.update)
+			{
+				case ControlEvent.ROTATION:
+					p1.pPhi = Geom.degToRad(controls.phi1);
+					p2.pPhi = Geom.degToRad(controls.phi2);
+					break;
+				case ControlEvent.OMEGA:
+					p1.pOmega = controls.omega1;
+					p2.pOmega = controls.omega2;
+					break;
+				case ControlEvent.LENGTH:
+					p1.pLength = controls.length1;
+					p2.pLength = controls.length2;
+					break;
+				case ControlEvent.MASS:
+					p1.pMass = controls.mass1;
+					p2.pMass = controls.mass2;
+					break;
+			}
+
+			system.updateSystem();
 		}
 
 		/* ---------------------------------------------------------------- */

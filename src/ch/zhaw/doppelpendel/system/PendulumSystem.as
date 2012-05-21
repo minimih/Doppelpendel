@@ -49,6 +49,8 @@ package ch.zhaw.doppelpendel.system
 		private var marginTop:Number;
 		private var marginBottom:Number;
 
+		private var pendulumNum:int;
+
 		private var mcFixpoint:Sprite;
 
 		private var xmlPendulum:XMLList;
@@ -57,6 +59,7 @@ package ch.zhaw.doppelpendel.system
 		private var density:Number;
 
 		private var arrPendulum:Vector.<Pendulum>;
+		
 		private var p1:Pendulum;
 		private var p2:Pendulum;
 
@@ -80,6 +83,8 @@ package ch.zhaw.doppelpendel.system
 
 			marginTop = 0;
 			marginBottom = 0;
+			
+			pendulumNum = 2;
 
 			// add listener
 			setSizeAndPosition();
@@ -121,7 +126,7 @@ package ch.zhaw.doppelpendel.system
 			xmlPendulum = xml.system.pendulum;
 			arrPendulum = new Vector.<Pendulum>();
 
-			if (xmlPendulum.length() != 2)
+			if (xmlPendulum.length() != pendulumNum)
 			{
 				// AlertWindow
 				// system not supported
@@ -130,7 +135,7 @@ package ch.zhaw.doppelpendel.system
 
 			var currentP:Pendulum;
 
-			for (var i:int = 0; i < xmlPendulum.length(); i++)
+			for (var i:int = 0; i < pendulumNum; i++)
 			{
 				if (i == 0)
 				{
@@ -148,19 +153,10 @@ package ch.zhaw.doppelpendel.system
 				arrPendulum.push(currentP);
 			}
 
-			switch(xmlPendulum.length())
-			{
-				case 1:
-					p1 = arrPendulum[0];
-					dPhi1 = 0;
-					break;
-				case 2:
-					p1 = arrPendulum[0];
-					p2 = arrPendulum[1];
-					dPhi1 = 0;
-					dPhi2 = 0;
-					break;
-			}
+			p1 = arrPendulum[0];
+			p2 = arrPendulum[1];
+			dPhi1 = 0;
+			dPhi2 = 0;
 
 			// setup timer
 			timer = new Timer(dt * 1000);
@@ -199,7 +195,7 @@ package ch.zhaw.doppelpendel.system
 			// clear pendulum
 			if (arrPendulum)
 			{
-				for (var i:int = 0; i < arrPendulum.length; i++)
+				for (var i:int = 0; i < pendulumNum; i++)
 				{
 					mcFixpoint.removeChild(arrPendulum[i]);
 				}
@@ -237,22 +233,28 @@ package ch.zhaw.doppelpendel.system
 		{
 			timer.stop();
 
-			for (var i:int = 0; i < xmlPendulum.length(); i++)
+			for (var i:int = 0; i < pendulumNum; i++)
 			{
 				arrPendulum[i].reset(xmlPendulum[i].@length, xmlPendulum[i].@phi, xmlPendulum[i].@omega);
 			}
 
 			dPhi1 = 0;
 			dPhi2 = 0;
+			
+			setSizeAndPosition();
 
 			// enable mouse drag and drop
 			enableMouseControl();
 
-			dispatchEvent(new SystemEvent(SystemEvent.RESET));
+			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
 		}
 
 		public function updateSystem():void
 		{
+			p1.update();
+			p2.update();
+			
+			setSizeAndPosition();
 		}
 
 		public function getSystemSize():Number
@@ -270,15 +272,15 @@ package ch.zhaw.doppelpendel.system
 		}
 
 		/* ----------------------------------------------------------------- */
-
-		public function getPendulum():Vector.<Pendulum>
+		
+		public function getP1():Pendulum
 		{
-			return arrPendulum;
+			return p1;
 		}
 
-		public function getGravity():Vector.<Pendulum>
+		public function getP2():Pendulum
 		{
-			return arrPendulum;
+			return p2;
 		}
 
 		/* ----------------------------------------------------------------- */

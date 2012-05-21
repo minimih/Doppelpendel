@@ -20,8 +20,8 @@ package ch.zhaw.doppelpendel.data
 					omega in rad*s^(-1)
 					color in hex
 					-->
-					<pendulum length="0.65" phi="180" omega="0" color="0xFF0000" />
-					<pendulum length="0.35" phi="180" omega="0.1" color="0xFFFF00" />
+					<pendulum length="0.65" phi="0" omega="0" color="0xFF0000" />
+					<pendulum length="0.35" phi="0" omega="0" color="0xFFFF00" />
 				</system>
 			</data>;
 			
