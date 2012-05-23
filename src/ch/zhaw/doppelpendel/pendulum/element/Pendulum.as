@@ -40,11 +40,12 @@ package ch.zhaw.doppelpendel.pendulum.element
 
 	public class Pendulum extends Sprite
 	{
+		// display factor = 375;
+		private const drawFactor:int = 375;
+
 		private var parentPendulum:Pendulum;
 
 		private var mcBar:Sprite;
-
-		private var drawFactor:Number;
 
 		private var onMouseRotate:Function;
 
@@ -53,14 +54,14 @@ package ch.zhaw.doppelpendel.pendulum.element
 		private var dDepth:Number;
 		private var dOffset:Number;
 
-		private var _pDensity:Number;
-		private var _pMass:Number;
+		private var pDensity:Number;
 
 		private var _pLength:Number;
 		private var _pWidth:Number;
 		private var _pDepth:Number;
 
 		private var _pVolume:Number;
+		private var _pMass:Number;
 
 		private var _pPhi:Number;
 		private var _pOmega:Number;
@@ -71,35 +72,37 @@ package ch.zhaw.doppelpendel.pendulum.element
 		{
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 
-			parentPendulum = p;
-
-			// display factor = 375;
-			drawFactor = 375;
-
-			_pDensity = d;
-
-			_pLength = l;
-			// 4cm
-			_pWidth = 0.04;
-			// 4mm
-			_pDepth = 0.004;
-
-			_pPhi = Geom.degToRad(r);
-			_pOmega = o;
-
-			_pColor = c;
-
+			// add bar
 			mcBar = new Sprite();
 			this.addChild(mcBar);
 
+			// add center
 			var mcCenter:Sprite = new Sprite();
 			this.addChild(mcCenter);
 
+			// draw center
 			mcCenter.graphics.beginFill(0x000000);
 			mcCenter.graphics.drawCircle(0, 0, 3);
 			mcCenter.graphics.endFill();
 			mcCenter.cacheAsBitmap = true;
 
+			// set vars
+			parentPendulum = p;
+			pDensity = d;
+
+			// 4cm
+			_pWidth = 0.04;
+			// 4mm
+			_pDepth = 0.004;
+
+			pLength = l;
+
+			pPhi = Geom.degToRad(r);
+			pOmega = o;
+
+			pColor = c;
+
+			// update size and rotation
 			updateSize();
 			updateRotation();
 		}
@@ -124,7 +127,7 @@ package ch.zhaw.doppelpendel.pendulum.element
 			mcBar.graphics.beginFill(pColor, 0.5);
 			mcBar.graphics.drawRect(-dOffset, -dOffset, dWidth, dLength);
 			mcBar.cacheAsBitmap = true;
-			
+
 			this.cacheAsBitmap = true;
 		}
 
@@ -133,15 +136,15 @@ package ch.zhaw.doppelpendel.pendulum.element
 			pLength = l;
 			pOmega = o;
 			pPhi = Geom.degToRad(r);
-			
+
 			update();
 		}
-		
+
 		public function update():void
 		{
 			TweenMax.to(this, 0.75, {shortRotation:{rotation:-rPhi}, ease:Cubic.easeInOut, onUpdate:updatePosition});
 		}
-		
+
 		private function updatePosition():void
 		{
 			if (parentPendulum)
@@ -151,7 +154,6 @@ package ch.zhaw.doppelpendel.pendulum.element
 				this.x = parentPendulum.x + len * Math.sin(rad);
 				this.y = parentPendulum.y + len * Math.cos(rad);
 			}
-			
 		}
 
 		public function updateRotation():void
@@ -166,7 +168,7 @@ package ch.zhaw.doppelpendel.pendulum.element
 			_pVolume = _pLength * _pWidth * _pDepth;
 
 			// calc mass
-			_pMass = _pDensity * _pVolume;
+			_pMass = pDensity * _pVolume;
 
 			drawBar();
 		}
@@ -174,7 +176,7 @@ package ch.zhaw.doppelpendel.pendulum.element
 		public function updateMass():void
 		{
 			// calc volume
-			_pVolume = _pMass / _pDensity;
+			_pVolume = _pMass / pDensity;
 			// calc length
 			_pLength = _pVolume / (_pWidth * _pDepth);
 
@@ -249,8 +251,10 @@ package ch.zhaw.doppelpendel.pendulum.element
 		}
 
 		public function set pLength(l:Number):void {
+			if (l <= 0)
+				l = 1;
+			
 			_pLength = l;
-
 			updateSize();
 		}
 
@@ -259,8 +263,10 @@ package ch.zhaw.doppelpendel.pendulum.element
 		}
 
 		public function set pMass(m:Number):void {
+			if (m <= 0)
+				m = 1;
+			
 			_pMass = m;
-
 			updateMass();
 		}
 

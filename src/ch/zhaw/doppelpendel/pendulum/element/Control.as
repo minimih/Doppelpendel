@@ -56,18 +56,21 @@ package ch.zhaw.doppelpendel.pendulum.element
 			// add phi
 			tPhi = new TextInput(asset.inp_phi);
 			tPhi.isNumericInput = true;
+			tPhi.fixPointLength = 3;
 			tPhi.maxLength = 10;
 			tPhi.restrict = "0-9.";
 			tPhi.tabIndex = Tabulator.getIndex();
 
 			tOmega = new TextInput(asset.inp_omega);
 			tOmega.isNumericInput = true;
+			tOmega.fixPointLength = 3;
 			tOmega.maxLength = 10;
 			tOmega.restrict = "\\-0-9.";
 			tOmega.tabIndex = Tabulator.getIndex();
 
 			tLength = new TextInput(asset.inp_length);
 			tLength.isNumericInput = true;
+			tLength.fixPointLength = 3;
 			tLength.minValue = 0;
 			tLength.maxLength = 10;
 			tLength.restrict = "0-9.";
@@ -75,6 +78,7 @@ package ch.zhaw.doppelpendel.pendulum.element
 
 			tMass = new TextInput(asset.inp_mass);
 			tMass.isNumericInput = true;
+			tMass.fixPointLength = 3;
 			tMass.minValue = 0;
 			tMass.maxLength = 10;
 			tMass.restrict = "0-9.";

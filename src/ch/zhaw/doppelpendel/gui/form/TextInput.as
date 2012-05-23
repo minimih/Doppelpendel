@@ -29,10 +29,15 @@
  */
 package ch.zhaw.doppelpendel.gui.form
 {
+	import flash.ui.Keyboard;
+	import flash.events.KeyboardEvent;
+	import com.adobe.utils.StringUtil;
+
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.FocusEvent;
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
 
@@ -45,8 +50,11 @@ package ch.zhaw.doppelpendel.gui.form
 
 		private var _isNumericInput:Boolean;
 
+		private var _fixPointLength:uint = 20;
 		private var _minValue:Number = -Number.MAX_VALUE;
 		private var _maxValue:Number = Number.MAX_VALUE;
+
+		private var _value:String;
 
 		public function TextInput(target:MovieClip)
 		{
@@ -55,28 +63,68 @@ package ch.zhaw.doppelpendel.gui.form
 			tfInput = theClip.tf_input as TextField;
 			tfInput.text = "";
 			tfInput.tabEnabled = true;
-			tfInput.addEventListener(Event.CHANGE, onChange);
+
+			tfInput.addEventListener(FocusEvent.FOCUS_IN, onFocusIn);
+			tfInput.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
+			tfInput.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		}
 
 		public function kill():void
 		{
-			tfInput.removeEventListener(Event.CHANGE, onChange);
+			tfInput.removeEventListener(FocusEvent.FOCUS_IN, onFocusIn);
+			tfInput.removeEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
+			tfInput.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		}
 
 		/* ----------------------------------------------------------------- */
 
-		private function onChange(...args):void
+		private function onFocusIn(e:Event):void
 		{
-			if (isNumericInput)
+			value = text;
+			tfInput.text = "";
+		}
+
+		private function onFocusOut(e:Event):void
+		{
+			if (isValidValue())
 			{
-				var num:Number = Number(tfInput.text);
-				if (num <= _minValue || num >= _maxValue)
-				{
-					return;
-				}
+				value = text;
 			}
 
+			text = value;
+			
 			dispatchEvent(new Event(Event.CHANGE));
+		}
+
+		private function onKeyDown(e:KeyboardEvent):void
+		{
+			if(e.keyCode == Keyboard.ENTER && isValidValue()){
+				dispatchEvent(new Event(Event.CHANGE));
+			}
+		}
+
+		/* ----------------------------------------------------------------- */
+		
+		private function isValidValue():Boolean
+		{
+			if (StringUtil.stringHasValue(text))
+			{
+				if (!(isNumericInput && !isNumericValue()))
+				{
+					return true;
+				}
+			}			
+			return false;
+		}
+		
+		private function isNumericValue():Boolean
+		{
+			var num:Number = Number(text);
+			if (isNaN(num) || num <= minValue || num >= maxValue)
+			{
+				return false;
+			}
+			return true;
 		}
 
 		/* ----------------------------------------------------------------- */
@@ -132,6 +180,11 @@ package ch.zhaw.doppelpendel.gui.form
 		/* ----------------------------------------------------------------- */
 
 		public function set text(val:String):void {
+			if (isNumericInput)
+			{
+				val = Number(val).toFixed(fixPointLength);
+			}
+
 			tfInput.text = val;
 		}
 
@@ -177,12 +230,36 @@ package ch.zhaw.doppelpendel.gui.form
 			return _isNumericInput;
 		}
 
+		public function set fixPointLength(n:uint):void {
+			_fixPointLength = n;
+		}
+
+		public function get fixPointLength():uint {
+			return _fixPointLength;
+		}
+
 		public function set minValue(n:Number):void {
 			_minValue = n;
 		}
 
+		public function get minValue():Number {
+			return _minValue;
+		}
+
 		public function set maxValue(n:Number):void {
 			_maxValue = n;
+		}
+
+		public function get maxValue():Number {
+			return _maxValue;
+		}
+
+		public function set value(val:String):void {
+			_value = val;
+		}
+
+		public function get value():String {
+			return _value;
 		}
 	}
 }
