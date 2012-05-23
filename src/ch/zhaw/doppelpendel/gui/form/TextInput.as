@@ -40,7 +40,7 @@ package ch.zhaw.doppelpendel.gui.form
 	{
 		private var theClip:MovieClip;
 		private var tfInput:TextField;
-	
+
 		private var _enabled:Boolean;
 
 		private var _isNumericInput:Boolean;
@@ -48,10 +48,10 @@ package ch.zhaw.doppelpendel.gui.form
 		private var _minValue:Number = -Number.MAX_VALUE;
 		private var _maxValue:Number = Number.MAX_VALUE;
 
-		public function TextInput(target:MovieClip) 
+		public function TextInput(target:MovieClip)
 		{
 			theClip = target;
-			
+
 			tfInput = theClip.tf_input as TextField;
 			tfInput.text = "";
 			tfInput.tabEnabled = true;
@@ -64,16 +64,18 @@ package ch.zhaw.doppelpendel.gui.form
 		}
 
 		/* ----------------------------------------------------------------- */
-		
+
 		private function onChange(...args):void
 		{
-			if(isNumericInput){
+			if (isNumericInput)
+			{
 				var num:Number = Number(tfInput.text);
-				if(num <= _minValue || num >= _maxValue){
+				if (num <= _minValue || num >= _maxValue)
+				{
 					return;
 				}
 			}
-			
+
 			dispatchEvent(new Event(Event.CHANGE));
 		}
 
@@ -81,22 +83,28 @@ package ch.zhaw.doppelpendel.gui.form
 
 		public function set enabled(b:Boolean):void {
 			_enabled = b;
-			
-			if(b){
+
+			if (b)
+			{
 				frame.alpha = 1;
 				backFill.alpha = 0.25;
-			}else{
+			}
+			else
+			{
 				frame.alpha = 0.5;
 				backFill.alpha = 0.1;
 			}
-			
+
 			back.visible = b;
-			
+
 			tfInput.selectable = b;
-			
-			if(b){
-				tfInput.type = TextFieldType.INPUT;				
-			}else{
+
+			if (b)
+			{
+				tfInput.type = TextFieldType.INPUT;
+			}
+			else
+			{
 				tfInput.type = TextFieldType.DYNAMIC;
 			}
 		}
@@ -104,62 +112,63 @@ package ch.zhaw.doppelpendel.gui.form
 		public function get enabled():Boolean {
 			return _enabled;
 		}
-		
-		public function get textField():TextField
-		{
+
+		public function get textField():TextField {
 			return tfInput;
 		}
 
-		public function get back():Sprite
-		{
+		public function get back():Sprite {
 			return theClip.mc_back as Sprite;
 		}
 
-		public function get backFill():Sprite
-		{
+		public function get backFill():Sprite {
 			return theClip.mc_fill as Sprite;
 		}
-		
-		public function get frame():Sprite
-		{
+
+		public function get frame():Sprite {
 			return theClip.mc_frame as Sprite;
 		}
 
-		public function set text(val:String):void
-		{
+		/* ----------------------------------------------------------------- */
+
+		public function set text(val:String):void {
 			tfInput.text = val;
 		}
 
-		public function get text():String
-		{
+		public function get text():String {
 			return tfInput.text;
 		}
 
-		public function set maxLength(val:int):void
-		{
+		public function set maxLength(val:int):void {
 			tfInput.maxChars = val;
 		}
 
-		public function get maxLength():int
-		{
+		public function get maxLength():int {
 			return tfInput.maxChars;
 		}
-		
+
 		public function set restrict(s:String):void {
 			tfInput.restrict = s;
 		}
-		
+
 		public function set selectable(val:Boolean):void {
 			tfInput.selectable = val;
 		}
-		
-		public function get selectable():Boolean
-		{
+
+		public function get selectable():Boolean {
 			return tfInput.selectable;
 		}
-		
+
+		public function set tabEnabled(val:Boolean):void {
+			tfInput.tabEnabled = val;
+		}
+
+		public function set tabIndex(val:int):void {
+			tfInput.tabIndex = val;
+		}
+
 		/* ----------------------------------------------------------------- */
-		
+
 		public function set isNumericInput(b:Boolean):void {
 			_isNumericInput = b;
 		}
@@ -167,14 +176,12 @@ package ch.zhaw.doppelpendel.gui.form
 		public function get isNumericInput():Boolean {
 			return _isNumericInput;
 		}
-		
-		public function set minValue(n:Number):void
-		{
+
+		public function set minValue(n:Number):void {
 			_minValue = n;
 		}
-		
-		public function set maxValue(n:Number):void
-		{
+
+		public function set maxValue(n:Number):void {
 			_maxValue = n;
 		}
 	}

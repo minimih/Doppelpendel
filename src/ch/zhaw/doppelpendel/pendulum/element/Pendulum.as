@@ -190,11 +190,13 @@ package ch.zhaw.doppelpendel.pendulum.element
 
 		public function enableMouseControl():void
 		{
+			this.buttonMode = true;
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onDragStart);
 		}
 
 		public function disableMouseControl():void
 		{
+			this.buttonMode = false;
 			this.removeEventListener(MouseEvent.MOUSE_DOWN, onDragStart);
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onDragStop);
 			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onRotateEvent);
