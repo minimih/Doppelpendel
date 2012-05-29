@@ -1,11 +1,17 @@
 \documentclass[12pt]{article}
-\usepackage{graphicx}
+
 \usepackage[ngerman]{babel}
+\usepackage[babel,german=swiss]{csquotes} % Schweizer
+
+\usepackage{amsmath}
+\usepackage{graphicx}
 \usepackage{array}
 \usepackage{fancyhdr}
-\usepackage{color}
+\usepackage{xcolor}
 \usepackage{graphicx}
-
+\usepackage{wrapfig}
+\usepackage{tabularx}
+\usepackage{float}
 \usepackage{natbib}
 
 \usepackage{fontspec,xltxtra,xunicode}
@@ -13,7 +19,7 @@
 \setromanfont[Mapping=tex-text]{Calibri}
 \setsansfont[Scale=MatchLowercase,Mapping=tex-text]{Gill Sans}
 \setmonofont[Scale=MatchLowercase]{Andale Mono}
-\linespread{1.8}
+\linespread{1.2}
 
 % PDF Einstellungen
 \usepackage[draft=false, debug=false]{hyperref}
@@ -40,11 +46,21 @@
 \setcounter{secnumdepth}{4}
 \setlength{\headheight}{15pt}
 
+% Paragraph
+\setlength\parindent{0pt} 
+\setlength{\parskip}{0.75em}
+
+% set graphics
+\graphicspath{{./images/}}
+\DeclareGraphicsExtensions{.png, .jpg}
+
+% set equation numbering
+\numberwithin{equation}{subsection}
+
 % No dots in TOC
 \makeatletter \renewcommand{\@dotsep}{10000} \makeatother
 
-\title{\vspace{-1cm}\linespread{1}\begin{flushleft}\normalsize{Zürcher Hochschule für Angewandte Wissenschaften\\Studiengang Informatik\\}\end{flushleft}\vspace{2cm}\Large{Projektarbeit: Doppelt inverses Pendel}\\\vspace{2cm}}
-%\includegraphics[scale=0.5]{title.png}
+\title{\vspace{-1cm}\linespread{1}\begin{flushleft}\normalsize{Zürcher Hochschule für Angewandte Wissenschaften\\Studiengang Informatik\\}\end{flushleft}\vspace{2cm}\Large{Projektarbeit: Doppelt inverses Pendel}\\\vspace{2cm} \includegraphics[scale=1]{title.png}\\\tiny{Bild: scienceworld.wolfram }}
 
 \author{Michael Höhn\\\href{mailto:hoehnmic@students.zhaw.ch}{hoehnmic@students.zhaw.ch} \and Stefan Hauenstein\\\href{mailto:hauenste@students.zhaw.ch}{hauenste@students.zhaw.ch}}
 
@@ -52,12 +68,12 @@
 
 % Titelseite
 \begin{document}
-
 \maketitle\thispagestyle{empty}
+
 \newpage
 
 \begin{abstract}
-Bei dieser Projektarbeit handelt es sich um die programmiertechnische Umsetzung eines inversen Doppelpendels.
+Bei dieser Projektarbeit handelt es sich um die programmiertechnische Umsetzung des Chaotischen Systems eines inversen Doppelpendels in ActionScript 3.
 \end{abstract}
 \newpage
 
@@ -67,33 +83,64 @@ Bei dieser Projektarbeit handelt es sich um die programmiertechnische Umsetzung 
 
 \section{Projektbeschreibung}
 \subsection{Danksagung}
-Wir danken Herrn Georg Brügger und Herrn Lukas Eppler für ihre wertvolle Unterstützung bei unserem Informatik Projekt.
+Wir möchten an dieser Stelle Herrn Georg Brügger und Herrn Lukas Eppler danken. Ohne ihre  Unterstützung und Anregungen wäre dieses Software Projekt nur schwer umsetzbar gewesen.
 
 \subsection{Aufgabenstellung durch den Experten}
 Das Schwingverhalten eines idealen „Doppelt Inversen Pendel“ soll untersucht und durch geeignete Physikalische und Mathematische Beziehungen nach gebildet werden. Physikalische Effekte wie Reibung und Luftwiderstand werden vernachlässigt, Abmessungen und Materialien müssen als Eingabegrössen variabel gestaltet werden.
+
 Der Vorgang wird in „Echtzeit“ am Bildschirm des PC's Graphisch dargestellt visualisiert.
+
 Zusätzliche Angaben des Verhaltens können auf der gleichen Bildschirmseite eingeblendet werden.
 
 \subsection{Motivation}
 Physikalische Eigenschaften mit einer Objekt Orientierten Programmiersprache umzusetzen reizte uns schon immer. Die  Aufgabenstellung ermöglichte uns das theoretisch gelernte aus dem Studienfach Numerik in Verbindung mit realen Physikalischen Grundlagen in einer praktischen Anwendung umzusetzen.
+
 Auch ermöglichte es die algebraischen Zusammenhänge aus vergangenen Vorlesungen besser zu verstehen und Lücken aufzufüllen.
 
 \subsection{Iterationsplan}
-
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\begin{tabularx}{\textwidth}{ |l|l|L| }
+	\hline
+	\textbf{Iteration} & \textbf{Termin}     & \textbf{Task}\\
+	\hline
+	1                  & Mi 04.04.2012       & \textbullet Physikalische Eigenschaften des Doppelpendels\\                       &                     & \textbullet Evaluierung der Programmiersprache\\	                   &                     & \textbullet Gleichungssystem aufstellen\\
+	\hline
+	2                  & Fr 27.04.2012       & \textbullet Grafische Benutzeroberfläche\\
+	                   &                     & \textbullet Programmierung des ersten Pendels\\	                   &                     & \textbullet Programmierung des zweiten Pendels\\	                   &                     & \textbullet Runge Kutta definieren\\
+	\hline
+	3                  & Mi 23.05.2012       & \textbullet Pendel einstellen\\	                   &                     & \textbullet Projektdokumentation\\	                   &                     & \textbullet Präsentation\\
+	\hline
+	4                  & Präsentationstermin & \textbullet Präsentation\\
+	                   &                     & \textbullet Projektdokumentation\\
+	\hline
+\end{tabularx}
 
 \subsection{Beteiligte Personen}
+\begin{tabularx}{\textwidth}{|X|X|}
+	\hline
+	\textbf{Funktion} & \textbf{Name} \\
+	\hline
+	Projekt Team      & Stefan Hauenstein \\
+	                  & Michael Höhn \\
+	\hline
+	Experte           & Georg Brügger\\
+	\hline
+	Scrum Master      & Lukas Eppler\\
+	\hline
+\end{tabularx}
 
-
+\newpage
 \section{Anforderungsanalyse}
 \subsection{Zielbestimmung}
 Es soll ein Programm entwickelt werden das die physikalischen und chaotischen Eigenschaften des inversen Doppelpendels grafisch darstellt.
-Die einzelnen Segmente des Pendels sollen durch die Usereingaben über Tastatur und/oder Maus einstellbar sein.
+
+Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur und/oder Maus einstellbar sein.
 
 \subsection{Zielbestimmung}
 \begin{itemize}
 	\item Die Umgebung des Doppelpendels soll als ideal gelten.
-	\item Das Ausgangsmaterial wird als Aluminium Stab definiert (Dichte 2,7 g/cm3)
-	\item Die Gravitation wird mit 9.8 definiert
+	\item Das Ausgangsmaterial wird als Aluminium Stab definiert (Dichte $2,7 [g/cm^3]$)
+	\item Die Gravitation wird mit $9.81 [m/s^2]$ definiert
 	\item Wegen der chaotischen Eigenschaft des Pendels können keine aussagenkräftigen Tests implementiert werden.
 \end{itemize}
 
@@ -110,22 +157,110 @@ Die einzelnen Segmente des Pendels sollen durch die Usereingaben über Tastatur 
 \subsection{Physikalische Zusammenhänge}
 
 \subsubsection{Kinematik des Doppelpendels}
+\begin{figure}[!h]
+	\begin{minipage}[!b]{0.4\textwidth}
+		\centering
+		\includegraphics[scale=1]{energy.png}
+		\caption{Energie im Pendel}
+		\label{fig:energy}
+	\end{minipage}
+	\begin{minipage}[!t]{\textwidth}
+		\vspace{0pt}\raggedright
+		$x$ = Horizontale Position des Massenschwerpunkts\\
+		$y$ = Vertikale Position des Massenschwerpunkts\\
+		$\theta$ = Winkel\\
+		$L$ = Pendellänge
+	\end{minipage}
+\end{figure}
+
 Ausgangslage für die Berechnung ist das obere Pendel. Das erste Pendel wird als $1$ definiert mit $x1$ und $y1$. Äquivalent dazu wird das zweite Pendel als $2$ definiert mit $x2$ und $y2$.
+
 Als erstes werden die einfachen trigonometrischen Gleichungen aufgestellt:
 
+\begin{tabularx}{\textwidth}{X X}
+	\begin{equation} \label{eq:energy:1_1}
+		x_1 = L_1\sin\theta_1
+	\end{equation}
+	&
+	\begin{equation} \label{eq:energy:1_2}
+		y_1 = -L_1\cos\theta_1
+	\end{equation}
+\end{tabularx}
 
+\begin{tabularx}{\textwidth}{X X}
+	\begin{equation} \label{eq:energy:2_1}
+		x_2 = x_1 + L_2\sin\theta_2
+	\end{equation}
+	&
+	\begin{equation} \label{eq:energy:2_2}
+		y_2 = y_1 - L_2\sin\theta_2
+	\end{equation}
+\end{tabularx}
+
+\
 und die erste (Geschwindigkeit) und zweite Ableitung (Beschleunigung) der Gleichung erstellt.
 
+\begin{tabularx}{\textwidth}{X X}
+	\begin{equation} \label{eq:energy:1_1}
+		x'_1 = L_1\sin\theta_1
+	\end{equation}
+	&
+	\begin{equation} \label{eq:energy:1_2}
+		y'_1 = -L_1\cos\theta_1
+	\end{equation}
+\end{tabularx}
+
+\begin{tabularx}{\textwidth}{X X}
+	\begin{equation} \label{eq:energy:2_1}
+		x_2 = x_1 + L_2\sin\theta_2
+	\end{equation}
+	&
+	\begin{equation} \label{eq:energy:2_2}
+		y_2 = y_1 - L_2\sin\theta_2
+	\end{equation}
+\end{tabularx}
+
+\begin{tabularx}{\textwidth}{X X}
+	\begin{equation} \label{eq:energy:1_1}
+		x_1 = L_1\sin\theta_1
+	\end{equation}
+	&
+	\begin{equation} \label{eq:energy:1_2}
+		y_1 = -L_1\cos\theta_1
+	\end{equation}
+\end{tabularx}
+
+\begin{tabularx}{\textwidth}{X X}
+	\begin{equation} \label{eq:energy:2_1}
+		x_2 = x_1 + L_2\sin\theta_2
+	\end{equation}
+	&
+	\begin{equation} \label{eq:energy:2_2}
+		y_2 = y_1 - L_2\sin\theta_2
+	\end{equation}
+\end{tabularx}
 
 \subsubsection{Kräfte im Doppelpendel}
 Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt.
 Folgende Variablen wurden definiert:
 
-T = Kraft im Pendel
-m = Masse
-g = Gravitations Konstante
+\begin{figure}[H]
+	\begin{minipage}[!b]{0.4\textwidth}
+		\centering
+		\includegraphics[scale=1]{force.png}
+		\caption{Kräfte im Pendel}
+		\label{fig:force}
+	\end{minipage}
+	\begin{minipage}[!t]{\textwidth}
+		\vspace{0pt}\raggedright
+		$T$ = Kraft im Pendel\\
+		$m$ = Masse\\
+		$g$ = Gravitations Konstante
+	\end{minipage}
+\end{figure}
 
 Auf Grundlage des Newton Gesetzes wurden folgende Gleichungen für das obere Pendel erstellt:
+
 \begin{equation} \label{eq:force:1_1}
 	m_1 x_1'' = -T_1\sin\theta_1 + T_2\sin\theta_2
 \end{equation}
@@ -221,6 +356,8 @@ Um die Fehlerkommulierten Abweichungen der Berechnung auf möglichst lange Zeit 
 Die Grafische Oberfläche wird als Skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Simulation des Pendels passt sich anhand der Fenstergrösse automatisch an.
 
 \newpage
+￼\listoffigures
+
 \bibliographystyle{plainnat}
 \bibliography{books}
 

@@ -8,8 +8,11 @@
 ~$*.DS_Store
 .DS_Store
 ._*
+
+#latex files
 *.aux
 *.log
 *.out
 *.synctex.gz
 *.toc
+*.lof
