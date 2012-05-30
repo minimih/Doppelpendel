@@ -16,3 +16,6 @@
 *.synctex.gz
 *.toc
 *.lof
+*.bbl
+*.blg
+*.lot

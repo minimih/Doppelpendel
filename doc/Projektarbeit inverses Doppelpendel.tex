@@ -3,16 +3,17 @@
 \usepackage[ngerman]{babel}
 \usepackage[babel,german=swiss]{csquotes} % Schweizer
 
-\usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{mathtools}
 \usepackage{array}
 \usepackage{fancyhdr}
 \usepackage{xcolor}
-\usepackage{graphicx}
 \usepackage{wrapfig}
 \usepackage{tabularx}
 \usepackage{float}
 \usepackage{natbib}
+\usepackage{parskip}
 
 \usepackage{fontspec,xltxtra,xunicode}
 \defaultfontfeatures{Mapping=tex-text}
@@ -20,6 +21,21 @@
 \setsansfont[Scale=MatchLowercase,Mapping=tex-text]{Gill Sans}
 \setmonofont[Scale=MatchLowercase]{Andale Mono}
 \linespread{1.2}
+
+% Definition der Seite
+\usepackage[paper=a4paper]{geometry} 
+
+% Header Layout
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Projektarbeit: Doppelt inverses Pendel}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.1pt}
+\renewcommand{\footrulewidth}{0.0pt}
+
+\setlength{\headheight}{15pt}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
 
 % PDF Einstellungen
 \usepackage[draft=false, debug=false]{hyperref}
@@ -34,18 +50,6 @@
     urlcolor=black
 }
 
-\usepackage[paper=a4paper]{geometry} 
-
-% Heading Layout
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{Projektarbeit: Doppelt inverses Pendel}
-\fancyfoot[C]{\thepage}
-\renewcommand{\headrulewidth}{0.1pt}
-\renewcommand{\footrulewidth}{0.0pt}
-\setcounter{secnumdepth}{4}
-\setlength{\headheight}{15pt}
-
 % Paragraph
 \setlength\parindent{0pt} 
 \setlength{\parskip}{0.75em}
@@ -58,7 +62,13 @@
 \numberwithin{equation}{subsection}
 
 % No dots in TOC
-\makeatletter \renewcommand{\@dotsep}{10000} \makeatother
+\makeatletter
+\renewcommand{\@dotsep}{10000}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+  {-3.25ex\@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries}}
+\makeatother
 
 \title{\vspace{-1cm}\linespread{1}\begin{flushleft}\normalsize{Zürcher Hochschule für Angewandte Wissenschaften\\Studiengang Informatik\\}\end{flushleft}\vspace{2cm}\Large{Projektarbeit: Doppelt inverses Pendel}\\\vspace{2cm} \includegraphics[scale=1]{title.png}\\\tiny{Bild: scienceworld.wolfram }}
 
@@ -83,7 +93,7 @@ Bei dieser Projektarbeit handelt es sich um die programmiertechnische Umsetzung 
 
 \section{Projektbeschreibung}
 \subsection{Danksagung}
-Wir möchten an dieser Stelle Herrn Georg Brügger und Herrn Lukas Eppler danken. Ohne ihre  Unterstützung und Anregungen wäre dieses Software Projekt nur schwer umsetzbar gewesen.
+Wir möchten an dieser Stelle Herrn Georg Brügger und Herrn Lukas Eppler danken, ohne ihre wertvolle Unterstützung und Anregungen wäre dieses Software Projekt nur schwer umsetzbar gewesen.
 
 \subsection{Aufgabenstellung durch den Experten}
 Das Schwingverhalten eines idealen „Doppelt Inversen Pendel“ soll untersucht und durch geeignete Physikalische und Mathematische Beziehungen nach gebildet werden. Physikalische Effekte wie Reibung und Luftwiderstand werden vernachlässigt, Abmessungen und Materialien müssen als Eingabegrössen variabel gestaltet werden.
@@ -99,19 +109,33 @@ Auch ermöglichte es die algebraischen Zusammenhänge aus vergangenen Vorlesunge
 
 \subsection{Iterationsplan}
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
-\begin{tabularx}{\textwidth}{ |l|l|L| }
+\begin{tabularx}{\textwidth}{|l|l|L|}
 	\hline
 	\textbf{Iteration} & \textbf{Termin}     & \textbf{Task}\\
 	\hline
-	1                  & Mi 04.04.2012       & \textbullet Physikalische Eigenschaften des Doppelpendels\\                       &                     & \textbullet Evaluierung der Programmiersprache\\	                   &                     & \textbullet Gleichungssystem aufstellen\\
+	1                  & Mi 04.04.2012       & \begin{itemize}
+													\item Physikalische Eigenschaften des Doppelpendels aufstellen
+													\item Evaluierung der Programmiersprache
+													\item Gleichungssystem aufstellen
+											   \end{itemize}\\
 	\hline
-	2                  & Fr 27.04.2012       & \textbullet Grafische Benutzeroberfläche\\
-	                   &                     & \textbullet Programmierung des ersten Pendels\\	                   &                     & \textbullet Programmierung des zweiten Pendels\\	                   &                     & \textbullet Runge Kutta definieren\\
+	2                  & Fr 27.04.2012       & \begin{itemize}
+													\item Grafische Benutzeroberfläche
+													\item Programmierung des ersten Pendels
+													\item Programmierung des zweiten Pendels
+													\item Runge Kutta definieren
+											   \end{itemize}\\
 	\hline
-	3                  & Mi 23.05.2012       & \textbullet Pendel einstellen\\	                   &                     & \textbullet Projektdokumentation\\	                   &                     & \textbullet Präsentation\\
+	3                  & Mi 23.05.2012       & \begin{itemize}
+													\item Pendel einstellen
+													\item Projektdokumentation
+													\item Präsentation
+											   \end{itemize}\\
 	\hline
-	4                  & Präsentationstermin & \textbullet Präsentation\\
-	                   &                     & \textbullet Projektdokumentation\\
+	4                  & Präsentationstermin & \begin{itemize}
+													\item Präsentation
+													\item Projektdokumentation
+											   \end{itemize}\\
 	\hline
 \end{tabularx}
 
@@ -153,8 +177,38 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 \end{itemize}
 
 \newpage
+\section{Umsetzung}
+\subsection{Verwendete Technologien}
+
+\subsubsection{ActionScript 3}
+Das Programm wird mittelsder Objektorientierten Sprache ActionScript 3 (AS3) und dem Flex SDK in der Eclipse Entwicklungsumgebung Programmiert. Das Programm ist dank dem Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
+Die Implementierung mittels Flex SDK und AS3 ist speziell empfehlenswert, da das Flex Framework speziell für die Animation ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
+
+\subsubsection{Nummerisches Verfahren}
+Um die Fehlerkomulierten Abweichungen der Berechnung auf möglichst lange Zeit klein zu halten wird das Numerische Verfahren von Runge-Kutta in der 4. Ordnung verwendet. Der Rechenaufwand für dieses Verfahren ist höher als bei anderen Verfahren wie z.B. dem Euler-Verfahren. Seine Genauigkeit auf grosse Zeitintervalle gleichen diesen Mehraufwand wieder aus.
+
+\paragraph{Runge-Kutta Verfahren 4. Ordnung}
+Das klassische Runge-Kutta-Verfahren (nach Carl Runge und Martin Wilhelm Kutta) ist ein spezielles explizites 4-stufiges Runge-Kutta-Verfahren zur numerischen Lösung von Anfangswertproblemen. Runge hat als erster (1895) ein mehrstufiges Verfahren angegeben und Kutta die allgemeine Form expliziter s-stufiger Verfahren.
+
+Das klassische Runge-Kutta-Verfahren verwendet den Ansatz, Ableitungen durch Differenzenquotienten zu approximieren. Die dabei bei nichtlinearen Funktionen notwendigerweise auftretenden können durch geeignete Kombinationen verschiedener Differenzquotienten reduziert werden. Das Runge-Kutta-Verfahren 4. Ordnung ist eine solche Kombination, die Diskretisierungsfehler bis zur dritten Ableitung kompensiert.
+
+\begin{align*}
+	y(t)' &= f(t,y(t)) \quad \text{mit} \quad y(0) = y_0
+	\\
+	\\
+	y^{k+1} &= y^k + h \left(\frac{1}{6}k_1 + \frac{2}{6}k_2 + \frac{2}{6}k_3 + \frac{1}{6}k_4 \right)
+	\\
+	\\
+	\text{mit} \quad k_1 &= f(t_k, y^k)\\
+	k_2 &= f\left(t_k + \frac{h}{2}, y^k + \frac{h}{2}k_1 \right)\\
+	k_3 &= f\left(t_k + \frac{h}{2}, y^k + \frac{h}{2}k_2 \right)\\
+	k_4 &= f\left(t_k + h, y^k + h k_3 \right)
+\end{align*}
+
+\newpage
 \section{Physikalische und Mathematische Zusammenhänge}
 \subsection{Physikalische Zusammenhänge}
+Um die Gleichungen des Ausgangsproblems zu definieren, muss man sich erst mit den physikalischen Eigenschaften eines Pendels beschäftigen. Kräfte welche aus der Bewegung entstehen  kombinieren sich mit Statischen. Kräfte des ersten Pendels beeinflussen die des Zweiten. Im Folgenden werden die Kinematik und die Kräfte des Doppelpendels zum gesuchten Ausgansproblem kombiniert.
 
 \subsubsection{Kinematik des Doppelpendels}
 \begin{figure}[!h]
@@ -173,114 +227,108 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 	\end{minipage}
 \end{figure}
 
-Ausgangslage für die Berechnung ist das obere Pendel. Das erste Pendel wird als $1$ definiert mit $x1$ und $y1$. Äquivalent dazu wird das zweite Pendel als $2$ definiert mit $x2$ und $y2$.
+Ausgangslage für die Berechnung ist das obere Pendel. Das erste Pendel wird als Subskript $1$ definiert mit $x_1$ und $y_1$. Äquivalent dazu wird das zweite Pendel als Subskript $2$ definiert mit $x_2$ und $y_2$.
 
 Als erstes werden die einfachen trigonometrischen Gleichungen aufgestellt:
 
-\begin{tabularx}{\textwidth}{X X}
-	\begin{equation} \label{eq:energy:1_1}
-		x_1 = L_1\sin\theta_1
-	\end{equation}
-	&
-	\begin{equation} \label{eq:energy:1_2}
-		y_1 = -L_1\cos\theta_1
-	\end{equation}
-\end{tabularx}
+\begin{equation} \label{eq:energy:1_1}
+	x_1 = L_1\sin\theta_1
+\end{equation}
+\begin{equation} \label{eq:energy:1_2}
+	y_1 = -L_1\cos\theta_1
+\end{equation}
 
-\begin{tabularx}{\textwidth}{X X}
-	\begin{equation} \label{eq:energy:2_1}
-		x_2 = x_1 + L_2\sin\theta_2
-	\end{equation}
-	&
-	\begin{equation} \label{eq:energy:2_2}
-		y_2 = y_1 - L_2\sin\theta_2
-	\end{equation}
-\end{tabularx}
+\begin{equation} \label{eq:energy:2_1}
+	x_2 = x_1 + L_2\sin\theta_2
+\end{equation}
+\begin{equation} \label{eq:energy:2_2}
+	y_2 = y_1 - L_2\cos\theta_2
+\end{equation}
 
-\
-und die erste (Geschwindigkeit) und zweite Ableitung (Beschleunigung) der Gleichung erstellt.
+Aus den trigonometrischen Gleichungen werden die erste und zweite Ableitung gebildet.
 
-\begin{tabularx}{\textwidth}{X X}
-	\begin{equation} \label{eq:energy:1_1}
-		x'_1 = L_1\sin\theta_1
-	\end{equation}
-	&
-	\begin{equation} \label{eq:energy:1_2}
-		y'_1 = -L_1\cos\theta_1
-	\end{equation}
-\end{tabularx}
+Erste Ableitung (Geschwindigkeit):
+\begin{equation} \label{eq:velocity:1_1}
+	x_1' = \theta_1' L_1\cos\theta_1
+\end{equation}
+\begin{equation} \label{eq:velocity:1_2}
+	y_1' = \theta_1' L_1\sin\theta_1
+\end{equation}
 
-\begin{tabularx}{\textwidth}{X X}
-	\begin{equation} \label{eq:energy:2_1}
-		x_2 = x_1 + L_2\sin\theta_2
-	\end{equation}
-	&
-	\begin{equation} \label{eq:energy:2_2}
-		y_2 = y_1 - L_2\sin\theta_2
-	\end{equation}
-\end{tabularx}
+\begin{equation} \label{eq:velocity:2_1}
+	x_2' = x_1' + \theta_2' L_2\cos\theta_2
+\end{equation}
+\begin{equation} \label{eq:velocity:2_2}
+	y_2' = y_1' + \theta_2' L_2\sin\theta_2
+\end{equation}
 
-\begin{tabularx}{\textwidth}{X X}
-	\begin{equation} \label{eq:energy:1_1}
-		x_1 = L_1\sin\theta_1
-	\end{equation}
-	&
-	\begin{equation} \label{eq:energy:1_2}
-		y_1 = -L_1\cos\theta_1
-	\end{equation}
-\end{tabularx}
+Zweite Ableitung (Beschleunigung):
+\begin{equation} \label{eq:acceleration:1_1}
+	x_1'' = -{\theta_1'}^2 L_1 \sin\theta_1 + \theta_1'' L_1 \cos\theta_1
+\end{equation}
+\begin{equation} \label{eq:acceleration:1_2}
+	y_1'' = {\theta_1'}^2 L_1 \cos\theta_1 + \theta_1'' L_1 \sin\theta_1
+\end{equation}
 
-\begin{tabularx}{\textwidth}{X X}
-	\begin{equation} \label{eq:energy:2_1}
-		x_2 = x_1 + L_2\sin\theta_2
-	\end{equation}
-	&
-	\begin{equation} \label{eq:energy:2_2}
-		y_2 = y_1 - L_2\sin\theta_2
-	\end{equation}
-\end{tabularx}
+\begin{equation} \label{eq:acceleration:2_1}
+	x_2'' = x_1'' - {\theta_2'}^2 L_2\sin\theta_2 + \theta_2'' L_2 \cos\theta_2
+\end{equation}
+\begin{equation} \label{eq:acceleration:2_2}
+	y_2'' = y_1'' + {\theta_2'}^2 L_2\cos\theta_2 + \theta_2'' L_2 \sin\theta_2
+\end{equation}
 
 \subsubsection{Kräfte im Doppelpendel}
-Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt.
-Folgende Variablen wurden definiert:
+Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt. Auf Grundlage des zweiten newtonschen Gesetzes $(F = m \cdot a)$ wurden folgende Gleichungen für das Pendel erstellt:
 
+Oberes Pendel:
 \begin{figure}[H]
-	\begin{minipage}[!b]{0.4\textwidth}
+	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
 		\includegraphics[scale=1]{force.png}
-		\caption{Kräfte im Pendel}
+		\caption{Kräfte im oberen Pendel}
 		\label{fig:force}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
 		\vspace{0pt}\raggedright
-		$T$ = Kraft im Pendel\\
-		$m$ = Masse\\
+		$T_1$ = Kraft im oberen Pendel\\
+		$m_1$ = Masse des oberen Pendels\\
 		$g$ = Gravitations Konstante
 	\end{minipage}
+	\\\\
+	\begin{equation} \label{eq:force:1_1}
+		m_1 x_1'' = -T_1\sin\theta_1 + T_2\sin\theta_2
+	\end{equation}
+	\begin{equation} \label{eq:force:1_2}
+		m_1 y_1'' = T_1\cos\theta_1 + T_1\cos\theta_2 - m_1 g
+	\end{equation}
 \end{figure}
 
-Auf Grundlage des Newton Gesetzes wurden folgende Gleichungen für das obere Pendel erstellt:
-
-\begin{equation} \label{eq:force:1_1}
-	m_1 x_1'' = -T_1\sin\theta_1 + T_2\sin\theta_2
-\end{equation}
-
-\begin{equation} \label{eq:force:1_2}
-	m_1 y_1'' = T_1\cos\theta_1 + T_1\cos\theta_2 - m_1 g
-\end{equation}
-
-und für das untere Pendel:
-\begin{equation} \label{eq:force:2_1}
-	m_2 x_2'' = -T_2\sin\theta_2
-\end{equation}
-
-\begin{equation} \label{eq:force:2_2}
-	m_2 y_2'' = T_2\cos\theta_2 - m_2 g
-\end{equation}
+Unteres Pendel:
+\begin{figure}[H]
+	\begin{minipage}[!b]{0.5\textwidth}
+		\centering
+		\includegraphics[scale=1]{force.png}
+		\caption{Kräfte im unteren Pendel}
+		\label{fig:force}
+	\end{minipage}
+	\begin{minipage}[!t]{\textwidth}
+		\vspace{0pt}\raggedright
+		$T_2$ = Kraft im unteren Pendel\\
+		$m_2$ = Masse des unteren Pendels\\
+		$g$ = Gravitations Konstante
+	\end{minipage}
+	\\\\
+	\begin{equation} \label{eq:force:2_1}
+		m_2 x_2'' = -T_2\sin\theta_2
+	\end{equation}
+	\begin{equation} \label{eq:force:2_2}
+		m_2 y_2'' = T_2\cos\theta_2 - m_2 g
+	\end{equation}
+\end{figure}
 
 \subsubsection{Umformen der Gleichungen}
-Um zu der entgültigen Differenziellen Gleichung für die Berechnung zu gelangen müssen die einzelnen Gleichungen algebraisch umgeformt werden.
-Angefangen bei den Kräftegleichungen. Gleichung (\ref{eq:force:2_1}) und (\ref{eq:force:2_2}) werden nach $T_2\sin\theta_2$ bzw.nach $T_2\cos\theta_2$ aufgelöst und in die Gleichungen (\ref{eq:force:1_1}) und (\ref{eq:force:1_2}) eingesetzt.
+Um zu der endgültigen Differenziellen Gleichung für die Berechnung zu gelangen müssen die einzelnen Gleichungen algebraisch umgeformt werden.
+Angefangen bei den Kräftegleichungen. Gleichung (\ref{eq:force:2_1}) und (\ref{eq:force:2_2}) werden nach $T_2\sin\theta_2$ bzw. nach $T_2\cos\theta_2$ aufgelöst und in die Gleichungen (\ref{eq:force:1_1}) und (\ref{eq:force:1_2}) eingesetzt.
 
 
 
@@ -341,22 +389,13 @@ Mittels des Runge-Kutta Verfahren kann eine Differenzialgleichung Numerisch appr
 Verwendet wird das Runge-Kutta Verfahren 4. Ordnung auch RK4 genannt.
 
 \newpage
-\section{Umsetzung}
-\subsection{Verwendete Technologien}
-\subsubsection{OO-Sprache AS3}
-Das Programm wird mittels Action Script 3 und dem Flex SDK in Eclipse Programmiert. Das Programm ist dank dem Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
-Die Implementierung mittels Flex und AS3 ist speziell empfehlenswert, da das Framework schon viele Methoden für die Animation von Sprites beinhaltet und es dadurch zu massiven Zeit Einsparung kommt.
-
-\subsubsection{Nummerisches Verfahren}
-Um die Fehlerkommulierten Abweichungen der Berechnung auf möglichst lange Zeit klein zu halten wird das Numerische Verfahren von Runge-Kutta in der 4. Ordnung verwendet. Der Rechenaufwand für dieses Verfahren ist höher als bei anderen Verfahren wie z.B. dem Euler-Verfahren. Seine Genauigkeit auf grosse Zeitintervalle gleichen diesen Mehraufwand wieder aus. Auf den Algorithmus des Verfahren wird in Kapitel \ref{cpt:rk} genauer  eingegangen.
-
-\newpage
 \section{Software}
 \subsection{Grafische Oberfläche}
 Die Grafische Oberfläche wird als Skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Simulation des Pendels passt sich anhand der Fenstergrösse automatisch an.
 
 \newpage
 ￼\listoffigures
+\listoftables
 
 \bibliographystyle{plainnat}
 \bibliography{books}
