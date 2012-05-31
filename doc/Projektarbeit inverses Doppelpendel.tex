@@ -14,6 +14,7 @@
 \usepackage{float}
 \usepackage{natbib}
 \usepackage{parskip}
+\usepackage{tocloft}
 
 \usepackage{fontspec,xltxtra,xunicode}
 \defaultfontfeatures{Mapping=tex-text}
@@ -61,13 +62,25 @@
 % set equation numbering
 \numberwithin{equation}{subsection}
 
-% No dots in TOC
 \makeatletter
-\renewcommand{\@dotsep}{10000}
 \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
   {-3.25ex\@plus -1ex \@minus -.2ex}%
   {1.5ex \@plus .2ex}%
   {\normalfont\normalsize\bfseries}}
+
+% fig source
+\newcommand{\figsourcefont}{\footnotesize}
+\newcommand{\figsource}[1]{%
+  \addtocontents{lof}{%
+    {\leftskip\cftfigindent
+     \advance\leftskip\cftfignumwidth
+     \rightskip\@tocrmarg
+     \figsourcefont#1\protect\par}%
+  }%
+ }
+
+% No dots in TOC
+\renewcommand{\@dotsep}{10000}
 \makeatother
 
 \title{\vspace{-1cm}\linespread{1}\begin{flushleft}\normalsize{Zürcher Hochschule für Angewandte Wissenschaften\\Studiengang Informatik\\}\end{flushleft}\vspace{2cm}\Large{Projektarbeit: Doppelt inverses Pendel}\\\vspace{2cm} \includegraphics[scale=1]{title.png}\\\tiny{Bild: scienceworld.wolfram }}
@@ -178,10 +191,18 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 
 \newpage
 \section{Umsetzung}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{function.png}
+	\caption{Funktionsweise des Doppelpendels}
+	\label{fig:function}
+\end{figure}
+
 \subsection{Verwendete Technologien}
 
 \subsubsection{ActionScript 3}
-Das Programm wird mittelsder Objektorientierten Sprache ActionScript 3 (AS3) und dem Flex SDK in der Eclipse Entwicklungsumgebung Programmiert. Das Programm ist dank dem Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
+Das Programm wird mittels der Objektorientierten Sprache ActionScript 3 (AS3) und dem Flex SDK in der Eclipse Entwicklungsumgebung Programmiert. Das Programm ist dank dem Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
 Die Implementierung mittels Flex SDK und AS3 ist speziell empfehlenswert, da das Flex Framework speziell für die Animation ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
 
 \subsubsection{Nummerisches Verfahren}
@@ -214,8 +235,9 @@ Um die Gleichungen des Ausgangsproblems zu definieren, muss man sich erst mit de
 \begin{figure}[!h]
 	\begin{minipage}[!b]{0.4\textwidth}
 		\centering
-		\includegraphics[scale=1]{energy.png}
-		\caption{Energie im Pendel}
+		\includegraphics[scale=1]{dbl_pendulum.png}
+		\caption{Doppelpendel}
+		\figsource{Quelle: www.myphysicslab.com}
 		\label{fig:energy}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
@@ -229,7 +251,7 @@ Um die Gleichungen des Ausgangsproblems zu definieren, muss man sich erst mit de
 
 Ausgangslage für die Berechnung ist das obere Pendel. Das erste Pendel wird als Subskript $1$ definiert mit $x_1$ und $y_1$. Äquivalent dazu wird das zweite Pendel als Subskript $2$ definiert mit $x_2$ und $y_2$.
 
-Als erstes werden die einfachen trigonometrischen Gleichungen aufgestellt:
+Als erstes werden die trigonometrischen Gleichungen aufgestellt:
 
 \begin{equation} \label{eq:energy:1_1}
 	x_1 = L_1\sin\theta_1
@@ -245,7 +267,7 @@ Als erstes werden die einfachen trigonometrischen Gleichungen aufgestellt:
 	y_2 = y_1 - L_2\cos\theta_2
 \end{equation}
 
-Aus den trigonometrischen Gleichungen werden die erste und zweite Ableitung gebildet.
+Danach wird aus den Gleichungen (\ref{eq:energy:1_1} - \ref{eq:energy:2_2}) die erste und zweite Ableitung gebildet.
 
 Erste Ableitung (Geschwindigkeit):
 \begin{equation} \label{eq:velocity:1_1}
@@ -278,15 +300,16 @@ Zweite Ableitung (Beschleunigung):
 \end{equation}
 
 \subsubsection{Kräfte im Doppelpendel}
-Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt. Auf Grundlage des zweiten newtonschen Gesetzes $(F = m \cdot a)$ wurden folgende Gleichungen für das Pendel erstellt:
+Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt. Auf Grundlage des zweiten newtonschen Gesetzes $(F = m \cdot a)$ können folgende Gleichungen für das Doppelpendel erstellt werden:
 
-Oberes Pendel:
+\paragraph{Oberes Pendel}
 \begin{figure}[H]
 	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
-		\includegraphics[scale=1]{force.png}
-		\caption{Kräfte im oberen Pendel}
-		\label{fig:force}
+		\includegraphics[scale=1]{dbl_pendulum_m1.png}
+		\caption{Kräfte im oberen Pendel\cite{pl_pendulum}}
+		\figsource{Quelle: www.myphysicslab.com}
+		\label{fig:force_1}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
 		\vspace{0pt}\raggedright
@@ -294,22 +317,24 @@ Oberes Pendel:
 		$m_1$ = Masse des oberen Pendels\\
 		$g$ = Gravitations Konstante
 	\end{minipage}
-	\\\\
-	\begin{equation} \label{eq:force:1_1}
-		m_1 x_1'' = -T_1\sin\theta_1 + T_2\sin\theta_2
-	\end{equation}
-	\begin{equation} \label{eq:force:1_2}
-		m_1 y_1'' = T_1\cos\theta_1 + T_1\cos\theta_2 - m_1 g
-	\end{equation}
 \end{figure}
 
-Unteres Pendel:
+Anhand von Abbildung \ref{fig:force_1} können die folgenden Gleichungen aufgestellt werden.
+\begin{equation} \label{eq:force:1_1}
+	m_1 x_1'' = -T_1\sin\theta_1 + T_2\sin\theta_2
+\end{equation}
+\begin{equation} \label{eq:force:1_2}
+	m_1 y_1'' = T_1\cos\theta_1 + T_1\cos\theta_2 - m_1 g
+\end{equation}
+
+\paragraph{Unteres Pendel}
 \begin{figure}[H]
 	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
-		\includegraphics[scale=1]{force.png}
+		\includegraphics[scale=1]{dbl_pendulum_m2.png}
 		\caption{Kräfte im unteren Pendel}
-		\label{fig:force}
+		\figsource{Quelle: www.myphysicslab.com}
+		\label{fig:force_2}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
 		\vspace{0pt}\raggedright
@@ -317,34 +342,53 @@ Unteres Pendel:
 		$m_2$ = Masse des unteren Pendels\\
 		$g$ = Gravitations Konstante
 	\end{minipage}
-	\\\\
-	\begin{equation} \label{eq:force:2_1}
-		m_2 x_2'' = -T_2\sin\theta_2
-	\end{equation}
-	\begin{equation} \label{eq:force:2_2}
-		m_2 y_2'' = T_2\cos\theta_2 - m_2 g
-	\end{equation}
 \end{figure}
+
+Anhand von Abbildung \ref{fig:force_2} können die folgenden Gleichungen aufgestellt werden.
+\begin{equation} \label{eq:force:2_1}
+	m_2 x_2'' = -T_2\sin\theta_2
+\end{equation}
+\begin{equation} \label{eq:force:2_2}
+	m_2 y_2'' = T_2\cos\theta_2 - m_2 g
+\end{equation}
 
 \subsubsection{Umformen der Gleichungen}
 Um zu der endgültigen Differenziellen Gleichung für die Berechnung zu gelangen müssen die einzelnen Gleichungen algebraisch umgeformt werden.
 Angefangen bei den Kräftegleichungen. Gleichung (\ref{eq:force:2_1}) und (\ref{eq:force:2_2}) werden nach $T_2\sin\theta_2$ bzw. nach $T_2\cos\theta_2$ aufgelöst und in die Gleichungen (\ref{eq:force:1_1}) und (\ref{eq:force:1_2}) eingesetzt.
+\begin{equation} \label{eq:dForce:1}
+	m_1 x_1'' = -T_1\sin\theta_1 - m_2 x_2''
+\end{equation}
+\begin{equation} \label{eq:dForce:2}
+	m_1 y_1'' = T_1\cos\theta_1 -m_2 y_2'' - m_2 g - m_1 g
+\end{equation}
 
-
-
-(4.17) wird mit $\cos\theta_1$ und (4.18) mit $\sin\theta_1$ erweitert und nach $T_1\sin\theta_1\cos\theta_1$ aufgelöst.
+Gleichung (\ref{eq:dForce:1}) wird mit $\cos\theta_1$ und Gleichung (\ref{eq:dForce:2}) mit $\sin\theta_1$ erweitert und nach $T_1\sin\theta_1\cos\theta_1$ aufgelöst.
+\begin{equation} \label{eq:thetaForce:1_1}
+	T_1\sin\theta_1\cos\theta_1 = -\cos\theta_1(m_1 x_1'' + m_2 x_2'')
+\end{equation}
+\begin{equation} \label{eq:thetaForce:1_2}
+	T_1\sin\theta_1\cos\theta_1 = \sin\theta_1(m_1 y_1'' + m_2 y_2'' + m_2 g + m_1 g)
+\end{equation}
 
 Daraus ergibt sich die erste Teil der Bewegungsgleichung.
+\begin{equation} \label{eq:motion:1}
+	\sin\theta_1(m_1 y_1'' + m_2 y_2'' + m_2 g + m_1 g) = -\cos\theta_1(m_1 x_1'' + m_2 x_2'')
+\end{equation}
 
+Um den zweiten Teil der Gleichung zu erhalten wird die Gleichung (\ref{eq:force:2_1}) mit $\cos\theta_2$ und die (\ref{eq:force:2_2}) mit $\sin\theta_2$ erweitert.
+\begin{equation} \label{eq:thetaForce:2_1}
+	T_2\sin\theta_2\cos\theta_2 = -\cos\theta_2(m_2 x_2'')
+\end{equation}
+\begin{equation} \label{eq:thetaForce:2_2}
+	T_2\sin\theta_2\cos\theta_2 = \sin\theta_2(m_2 y_2'' + m_2 g)
+\end{equation}
 
-Um den zweiten Teil der Gleichung zu erhalten wird die Gleichung (4.15) mit $\cos\theta_2$ und die (4.16) mit $\sin\theta_2$ erweitert.
+Der zweite Teil der Gleichung ergibt somit
+\begin{equation} \label{eq:motion:2}
+	\sin\theta_2(m_2 y_2'' + m_2 g) = -\cos\theta_2(m_2 x_2'')
+\end{equation}
 
-
-Der zweite Teil der Gleichung heisst somit
-
-
-$x_2''$, $x_2''$, $y_1''$ und $y_2''$ werden durch die Gleichungen (4.9 – 4.12) ersetzt und mit Hilfe des Lagrange-Formalismus nach $\theta_1''$ und $\theta_2''$ aufgelöst. 
-
+$x_2''$, $x_2''$, $y_1''$ und $y_2''$ werden durch die Gleichungen (\ref{eq:acceleration:1_1} – \ref{eq:acceleration:2_2}) ersetzt und mit Hilfe des Lagrange-Formalismus nach $\theta_1''$ und $\theta_2''$ aufgelöst.
 
 Die endgültige Bewegungsgleichung für das Doppelpendel lautet somit:
 \begin{equation} \label{eq:final:1}
@@ -352,20 +396,20 @@ Die endgültige Bewegungsgleichung für das Doppelpendel lautet somit:
 	{L_1(2m_1 + m_2 - m_2 \cos(2\theta_1 - 2\theta_2))}
 \end{equation}
 
-\begin{equation} \label{eq:final:1}
+\begin{equation} \label{eq:final:2}
 	\theta_2'' = \frac{2\sin(\theta_1 - \theta_2)({\theta_1'}^2 L_1(m_1 + m_2) + g(m_1 + m_2)\cos\theta_1 + {\theta_2'}^2 L_2 m_2 \cos(\theta_1 - \theta_2))}
 	{L_2 (2m_1 + m_2 - m_2 \cos(2 \theta_1 - 2\theta_2))}
 \end{equation}
 
 \subsection{Numerische Differentialgleichung}
-Die obige Bewegungsgleichung lässt sich aber noch nicht mittels des Runge-Kutta Algorithmus numerisch annähern. Um dies zu ermöglichen muss bedacht werden, dass die erste Ableitung von $\theta$ die Winkelgeschwindigkeit $\omega$ ist.
+Die Bewegungsgleichung (\ref{eq:final:1} und \ref{eq:final:2}) lässt sich aber noch nicht mittels des Runge-Kutta Algorithmus numerisch annähern. Um dies zu ermöglichen muss bedacht werden, dass die erste Ableitung von $\theta$ die Winkelgeschwindigkeit $\omega$ ist.
 
-Somit ist:
-$\theta_1' = \omega_1$
-und
-$\theta_2' = \omega_2$
+Daraus ergibt sich:
+\begin{equation*}
+	\theta_1' = \omega_1 \quad \text{und} \quad \theta_2' = \omega_2
+\end{equation*}
 
-und damit erhält man für den Runge-Kutta Algorithmus nun folgende Schlussgleichungen:
+damit erhält man für den Runge-Kutta Algorithmus folgende Schlussgleichungen:
 \begin{equation} \label{eq:rk:1}
 	\theta_1' = \omega_1
 \end{equation}
@@ -383,21 +427,17 @@ und damit erhält man für den Runge-Kutta Algorithmus nun folgende Schlussgleic
 	{L_2 (2m_1 + m_2 - m_2 \cos(2 \theta_1 - 2\theta_2))}
 \end{equation}
 
-\subsection{Numerisches Verfahren zur Berechnung der Lösung}
-\subsubsection{Runge-Kutta Algorithmus} \label{cpt:rk}
-Mittels des Runge-Kutta Verfahren kann eine Differenzialgleichung Numerisch approximiert werden. Das Verfahren eignet sich besonders gut für Berechnungen in einem Programm, da es sich um ein Iteratives Verfahren handelt und somit sehr einfach und Ressourcenschonend implementiert werden kann.
-Verwendet wird das Runge-Kutta Verfahren 4. Ordnung auch RK4 genannt.
-
 \newpage
 \section{Software}
 \subsection{Grafische Oberfläche}
 Die Grafische Oberfläche wird als Skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Simulation des Pendels passt sich anhand der Fenstergrösse automatisch an.
 
 \newpage
-￼\listoffigures
-\listoftables
-
 \bibliographystyle{plainnat}
 \bibliography{books}
+
+\newpage
+￼\listoffigures
+\listoftables
 
 \end{document}  
