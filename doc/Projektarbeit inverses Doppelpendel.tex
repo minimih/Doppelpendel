@@ -3,6 +3,8 @@
 \usepackage[ngerman]{babel}
 \usepackage[babel,german=swiss]{csquotes} % Schweizer
 
+\usepackage{natbib}
+
 \usepackage{graphicx}
 \usepackage{amsmath, amsthm, amssymb}
 \usepackage{mathtools}
@@ -12,7 +14,6 @@
 \usepackage{wrapfig}
 \usepackage{tabularx}
 \usepackage{float}
-\usepackage{natbib}
 \usepackage{parskip}
 \usepackage{tocloft}
 
@@ -307,7 +308,7 @@ Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt. Auf
 	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum_m1.png}
-		\caption{Kräfte im oberen Pendel\cite{pl_pendulum}}
+		\caption{Kräfte im oberen Pendel}
 		\figsource{Quelle: www.myphysicslab.com}
 		\label{fig:force_1}
 	\end{minipage}
@@ -433,11 +434,12 @@ damit erhält man für den Runge-Kutta Algorithmus folgende Schlussgleichungen:
 Die Grafische Oberfläche wird als Skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Simulation des Pendels passt sich anhand der Fenstergrösse automatisch an.
 
 \newpage
-\bibliographystyle{plainnat}
-\bibliography{books}
-
-\newpage
 ￼\listoffigures
 \listoftables
+
+\newpage
+\nocite{*}
+\bibliographystyle{plainnat}
+\bibliography{books}
 
 \end{document}  
