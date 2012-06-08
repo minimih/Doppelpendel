@@ -15,7 +15,6 @@
 \usepackage{tabularx}
 \usepackage{float}
 \usepackage{parskip}
-\usepackage{tocloft}
 
 \usepackage{fontspec,xltxtra,xunicode}
 \defaultfontfeatures{Mapping=tex-text}
@@ -68,23 +67,12 @@
   {-3.25ex\@plus -1ex \@minus -.2ex}%
   {1.5ex \@plus .2ex}%
   {\normalfont\normalsize\bfseries}}
-
-% fig source
-\newcommand{\figsourcefont}{\footnotesize}
-\newcommand{\figsource}[1]{%
-  \addtocontents{lof}{%
-    {\leftskip\cftfigindent
-     \advance\leftskip\cftfignumwidth
-     \rightskip\@tocrmarg
-     \figsourcefont#1\protect\par}%
-  }%
- }
-
+  
 % No dots in TOC
 \renewcommand{\@dotsep}{10000}
 \makeatother
 
-\title{\vspace{-1cm}\linespread{1}\begin{flushleft}\normalsize{Zürcher Hochschule für Angewandte Wissenschaften\\Studiengang Informatik\\}\end{flushleft}\vspace{2cm}\Large{Projektarbeit: Doppelt inverses Pendel}\\\vspace{2cm} \includegraphics[scale=1]{title.png}\\\tiny{Bild: scienceworld.wolfram }}
+\title{\vspace{-1cm}\linespread{1}\begin{flushleft}\normalsize{Zürcher Hochschule für Angewandte Wissenschaften\\Studiengang Informatik\\}\end{flushleft}\vspace{2cm}\Large{Projektarbeit: Doppelt inverses Pendel}\\\vspace{2cm} \includegraphics[scale=1]{title.png} \\ \tiny{Bild: Wolfram Research}}
 
 \author{Michael Höhn\\\href{mailto:hoehnmic@students.zhaw.ch}{hoehnmic@students.zhaw.ch} \and Stefan Hauenstein\\\href{mailto:hauenste@students.zhaw.ch}{hauenste@students.zhaw.ch}}
 
@@ -103,6 +91,7 @@ Bei dieser Projektarbeit handelt es sich um die programmiertechnische Umsetzung 
 
 % Inhaltsverzeichnis
 \tableofcontents
+
 \newpage
 
 \section{Projektbeschreibung}
@@ -237,8 +226,7 @@ Um die Gleichungen des Ausgangsproblems zu definieren, muss man sich erst mit de
 	\begin{minipage}[!b]{0.4\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum.png}
-		\caption{Doppelpendel}
-		\figsource{Quelle: www.myphysicslab.com}
+		\caption[Doppelpendel]{Doppelpendel \citep{neumannDp04}}
 		\label{fig:energy}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
@@ -308,8 +296,7 @@ Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt. Auf
 	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum_m1.png}
-		\caption{Kräfte im oberen Pendel}
-		\figsource{Quelle: www.myphysicslab.com}
+		\caption[Kräfte im oberen Pendel]{Kräfte im oberen Pendel \citep{neumannDp04}}
 		\label{fig:force_1}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
@@ -333,8 +320,7 @@ Anhand von Abbildung \ref{fig:force_1} können die folgenden Gleichungen aufgest
 	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum_m2.png}
-		\caption{Kräfte im unteren Pendel}
-		\figsource{Quelle: www.myphysicslab.com}
+		\caption[Kräfte im unteren Pendel]{Kräfte im unteren Pendel \citep{neumannDp04}}
 		\label{fig:force_2}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
