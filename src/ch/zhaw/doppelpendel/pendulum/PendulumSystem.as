@@ -123,7 +123,6 @@ package ch.zhaw.doppelpendel.pendulum
 
 			if (xmlPendulum.length() != systemSize)
 			{
-				// AlertWindow
 				// system not supported
 				return;
 			}
@@ -148,9 +147,6 @@ package ch.zhaw.doppelpendel.pendulum
 
 				arrPendulum[i] = currentP;
 			}
-
-			// p1 = arrPendulum[0];
-			// p2 = arrPendulum[1];
 
 			// setup timer
 			timer = new Timer(dt * 1000);
@@ -249,6 +245,8 @@ package ch.zhaw.doppelpendel.pendulum
 			}
 
 			setSizeAndPosition();
+			
+			dispatchEvent(new SystemEvent(SystemEvent.UPDATE));
 		}
 
 		public function getSystemSize():Number
