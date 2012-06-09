@@ -33,7 +33,7 @@ package ch.zhaw.doppelpendel.pendulum
 
 	public interface ISystem extends IEventDispatcher
 	{
-		function setupSystem(xml:XML):void
+		function setupSystem(xml:XML):void;
 
 		function startSystem():void;
 

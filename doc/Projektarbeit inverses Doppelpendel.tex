@@ -57,7 +57,7 @@
 
 % set graphics
 \graphicspath{{./images/}}
-\DeclareGraphicsExtensions{.png, .jpg}
+\DeclareGraphicsExtensions{.png, .jpg, .pdf}
 
 % set equation numbering
 \numberwithin{equation}{subsection}
@@ -81,17 +81,10 @@
 % Titelseite
 \begin{document}
 \maketitle\thispagestyle{empty}
-
-\newpage
-
-\begin{abstract}
-Bei dieser Projektarbeit handelt es sich um die programmiertechnische Umsetzung des Chaotischen Systems eines inversen Doppelpendels in ActionScript 3.
-\end{abstract}
 \newpage
 
 % Inhaltsverzeichnis
 \tableofcontents
-
 \newpage
 
 \section{Projektbeschreibung}
@@ -163,7 +156,7 @@ Es soll ein Programm entwickelt werden das die physikalischen und chaotischen Ei
 
 Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur und/oder Maus einstellbar sein.
 
-\subsection{Zielbestimmung}
+\subsection{Rahmenbedingungen und Einschränkungen}
 \begin{itemize}
 	\item Die Umgebung des Doppelpendels soll als ideal gelten.
 	\item Das Ausgangsmaterial wird als Aluminium Stab definiert (Dichte $2,7 [g/cm^3]$)
@@ -173,7 +166,7 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 
 \subsection{Produktfunktionen}
 \begin{itemize}
-	\item Der Benutzer kann eine Konfiguration als XML-File mit der Erweiterung DIP einlesen.
+	\item Der Benutzer kann eine Konfiguration als XML-File mit der Erweiterung IDP einlesen.
 	\item Der Benutzer kann die einzelnen Glieder des Pendels mit der Maus positionieren.
 	\item Während das Pendel in Bewegung ist werden Winkel und Geschwindigkeit angezeigt.
 	\item Der Benutzer kann den Ablauf starten, jederzeit stoppen und zurückstellen.
@@ -181,8 +174,8 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 
 \newpage
 \section{Umsetzung}
-
-\begin{figure}[h]
+\subsection{Funktionsprinzip Doppelpendel}
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{function.png}
 	\caption{Funktionsweise des Doppelpendels}
@@ -190,10 +183,10 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 \end{figure}
 
 \subsection{Verwendete Technologien}
-
 \subsubsection{ActionScript 3}
 Das Programm wird mittels der Objektorientierten Sprache ActionScript 3 (AS3) und dem Flex SDK in der Eclipse Entwicklungsumgebung Programmiert. Das Programm ist dank dem Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
-Die Implementierung mittels Flex SDK und AS3 ist speziell empfehlenswert, da das Flex Framework speziell für die Animation ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
+
+Eine Implementierung des Doppelpendels mittels AS3 und dem Flex SDK ist  empfehlenswert, da das Flex Framework speziell für Grafische Applikationen mit Animationen ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
 
 \subsubsection{Nummerisches Verfahren}
 Um die Fehlerkomulierten Abweichungen der Berechnung auf möglichst lange Zeit klein zu halten wird das Numerische Verfahren von Runge-Kutta in der 4. Ordnung verwendet. Der Rechenaufwand für dieses Verfahren ist höher als bei anderen Verfahren wie z.B. dem Euler-Verfahren. Seine Genauigkeit auf grosse Zeitintervalle gleichen diesen Mehraufwand wieder aus.
@@ -203,30 +196,30 @@ Das klassische Runge-Kutta-Verfahren (nach Carl Runge und Martin Wilhelm Kutta) 
 
 Das klassische Runge-Kutta-Verfahren verwendet den Ansatz, Ableitungen durch Differenzenquotienten zu approximieren. Die dabei bei nichtlinearen Funktionen notwendigerweise auftretenden können durch geeignete Kombinationen verschiedener Differenzquotienten reduziert werden. Das Runge-Kutta-Verfahren 4. Ordnung ist eine solche Kombination, die Diskretisierungsfehler bis zur dritten Ableitung kompensiert.
 
-\begin{align*}
-	y(t)' &= f(t,y(t)) \quad \text{mit} \quad y(0) = y_0
-	\\
-	\\
-	y^{k+1} &= y^k + h \left(\frac{1}{6}k_1 + \frac{2}{6}k_2 + \frac{2}{6}k_3 + \frac{1}{6}k_4 \right)
-	\\
-	\\
-	\text{mit} \quad k_1 &= f(t_k, y^k)\\
-	k_2 &= f\left(t_k + \frac{h}{2}, y^k + \frac{h}{2}k_1 \right)\\
-	k_3 &= f\left(t_k + \frac{h}{2}, y^k + \frac{h}{2}k_2 \right)\\
-	k_4 &= f\left(t_k + h, y^k + h k_3 \right)
-\end{align*}
+\begin{align} \label{algo:rk}
+	y(t)' &= f(t,y(t)) \quad \text{mit} \quad y(0) = y_0 \nonumber\\
+	\nonumber\\
+	y^{k+1} &= y^k + h \left(\frac{1}{6}k_1 + \frac{2}{6}k_2 + \frac{2}{6}k_3 + \frac{1}{6}k_4 \right)\\
+	\nonumber\\
+	\text{mit} \quad k_1 &= f(t_k, y^k) \nonumber\\
+	k_2 &= f\left(t_k + \frac{h}{2}, y^k + \frac{h}{2}k_1 \right) \nonumber\\
+	k_3 &= f\left(t_k + \frac{h}{2}, y^k + \frac{h}{2}k_2 \right) \nonumber\\
+	k_4 &= f\left(t_k + h, y^k + h k_3 \right)\nonumber
+\end{align}
 
 \newpage
 \section{Physikalische und Mathematische Zusammenhänge}
-\subsection{Physikalische Zusammenhänge}
-Um die Gleichungen des Ausgangsproblems zu definieren, muss man sich erst mit den physikalischen Eigenschaften eines Pendels beschäftigen. Kräfte welche aus der Bewegung entstehen  kombinieren sich mit Statischen. Kräfte des ersten Pendels beeinflussen die des Zweiten. Im Folgenden werden die Kinematik und die Kräfte des Doppelpendels zum gesuchten Ausgansproblem kombiniert.
+\subsection{Physikalische Eigenschaften}
+Um die Gleichungen des Ausgangsproblems zu definieren, muss man sich erst mit den physikalischen Eigenschaften eines Pendels beschäftigen. Kräfte welche aus der Bewegung entstehen kombinieren sich mit Statischen. Kräfte des ersten Pendels beeinflussen die des Zweiten. Im Folgenden werden die Kinematik und die Kräfte des Doppelpendels zum gesuchten Ausgansproblem kombiniert.
+
+Auf Basis der Webseiten \citep{neumann04a}, \citep{kramann11} und \citep{weissstein07} konnten die Kinematik und Kräfte des Doppelpendels zum Ausgangsproblem kombiniert werden. 
 
 \subsubsection{Kinematik des Doppelpendels}
-\begin{figure}[!h]
+\begin{figure}[H]
 	\begin{minipage}[!b]{0.4\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum.png}
-		\caption[Doppelpendel]{Doppelpendel \citep{neumannDp04}}
+		\caption[Doppelpendel]{Doppelpendel \citep{neumann04a}}
 		\label{fig:energy}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
@@ -296,7 +289,7 @@ Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt. Auf
 	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum_m1.png}
-		\caption[Kräfte im oberen Pendel]{Kräfte im oberen Pendel \citep{neumannDp04}}
+		\caption[Kräfte im oberen Pendel]{Kräfte im oberen Pendel \citep{neumann04a}}}
 		\label{fig:force_1}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
@@ -320,7 +313,7 @@ Anhand von Abbildung \ref{fig:force_1} können die folgenden Gleichungen aufgest
 	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum_m2.png}
-		\caption[Kräfte im unteren Pendel]{Kräfte im unteren Pendel \citep{neumannDp04}}
+		\caption[Kräfte im unteren Pendel]{Kräfte im unteren Pendel \citep{neumann04a}}}
 		\label{fig:force_2}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
@@ -388,7 +381,8 @@ Die endgültige Bewegungsgleichung für das Doppelpendel lautet somit:
 	{L_2 (2m_1 + m_2 - m_2 \cos(2 \theta_1 - 2\theta_2))}
 \end{equation}
 
-\subsection{Numerische Differentialgleichung}
+\subsection{Numerische Lösung}
+\subsubsection{Differentialgleichung für Runge-Kutta}
 Die Bewegungsgleichung (\ref{eq:final:1} und \ref{eq:final:2}) lässt sich aber noch nicht mittels des Runge-Kutta Algorithmus numerisch annähern. Um dies zu ermöglichen muss bedacht werden, dass die erste Ableitung von $\theta$ die Winkelgeschwindigkeit $\omega$ ist.
 
 Daraus ergibt sich:
@@ -396,7 +390,7 @@ Daraus ergibt sich:
 	\theta_1' = \omega_1 \quad \text{und} \quad \theta_2' = \omega_2
 \end{equation*}
 
-damit erhält man für den Runge-Kutta Algorithmus folgende Schlussgleichungen:
+damit erhält man für den Runge-Kutta Algorithmus \ref{algo:rk} folgende Schlussgleichungen:
 \begin{equation} \label{eq:rk:1}
 	\theta_1' = \omega_1
 \end{equation}
@@ -417,15 +411,62 @@ damit erhält man für den Runge-Kutta Algorithmus folgende Schlussgleichungen:
 \newpage
 \section{Software}
 \subsection{Grafische Oberfläche}
-Die Grafische Oberfläche wird als Skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Simulation des Pendels passt sich anhand der Fenstergrösse automatisch an.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{software_draft.png}
+	\caption{Entwurf Grafische Oberfläche}
+	\label{fig:gui:draft}
+\end{figure}
+
+Die Grafische Oberfläche wird als skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Grösse der Pendel Simulation passt sich anhand der Fenstergrösse automatisch an.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{software_final.png}
+	\caption{Realisierte Grafische Oberfläche GUI}
+	\label{fig:xml}
+\end{figure}
+
+\subsection{MVC-Pattern}
+In einer ersten Version dieser Applikation wurde der Controller getrennt vom Model aufgebaut. Leider führte dies zu ungewollten Verdoppelung von Aufgaben was zu einer schlechteren Kohäsion führte als die Koppelung von Model und Controller.
+
+\subsubsection{Model-Controller}
+Die Funktion des Model-Controllers wird durch die Klasse Doppelpendel.as übernommen. Sie nimmt sämtliche Event-Aufrufe und Daten entgegen und leitet sie an die entsprechenden Klassen weiter.
+
+\subsubsection{View}
+Die View verteilt sich auf die jeweiligen GUI-Klassen Pendulum.as, PendulumControls.as, Background.as und MenuBar.as.
+
+
+\subsection{Bootstrapper}
+Die Klasse "Main" initialisiert die Applikation und platziert sie auf der "Stage" (Hauptcontainer des GUIs), auf die sie durch die Vererbung der AS3 Klasse "Sprite" zugriff hat. Über die "Main" Klasse wird die Hauptklasse "Doppelpendel" instanziert und gestartet. 
+
+Die Sprite-Klasse ist ein AS3-Grundbaustein der Anzeigeliste: ein Knoten der Anzeigeliste, der Grafiken anzeigen und auch untergeordnete Objekte enthalten kann.
+
+\subsection{Konfiguration des Systems}
+
+\subsubsection{Konfigurationsdateien}
+Die Software arbeitet mittels Konfigurationsdateien um die verschiedenen Anfangswerte eines Doppelpendels laden zu können. Die Konfigurationsdateien sind im XML Format definiert. Es wird für die Dateien eine eigene Dateiendung verwendet. Die IDP-Datei (IDP steht für Inverses Doppel Pendel) kann in jedem Texteditor bearbeitet werden.
+
+Beispiel einer IDP-Konfiguration:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{xml.png}
+	\caption{IPD Konfigurationsdatei}
+	\label{fig:xml}
+\end{figure}
 
 \newpage
 ￼\listoffigures
-\listoftables
 
 \newpage
 \nocite{*}
 \bibliographystyle{plainnat}
 \bibliography{books}
+
+\appendix
+\section{Projektplan}
+\includegraphics[angle=90, width=\textwidth]{projektplan.pdf}
 
 \end{document}  
