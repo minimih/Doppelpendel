@@ -57,6 +57,9 @@ package ch.zhaw.doppelpendel
 
 		/* ---------------------------------------------------------------- */
 
+		/**
+		 * 
+		 */
 		public function Doppelpendel(main:Main)
 		{
 			_main = main;
@@ -69,10 +72,11 @@ package ch.zhaw.doppelpendel
 			system = new PendulumSystem(pendulumSystemSize);
 			main.addChild(system);
 
+			// add controls
 			control = new PendulumControl(pendulumSystemSize);
 			main.addChild(control);
 
-			// create the menubar
+			// add menubar
 			menuBar = new MenuBar();
 			main.addChild(menuBar);
 
