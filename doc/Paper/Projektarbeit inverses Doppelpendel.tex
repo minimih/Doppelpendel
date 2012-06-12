@@ -93,16 +93,14 @@
 Wir möchten an dieser Stelle Herrn Georg Brügger und Herrn Lukas Eppler danken, ohne ihre wertvolle Unterstützung und Anregungen wäre dieses Software Projekt nur schwer umsetzbar gewesen.
 
 \subsection{Aufgabenstellung durch den Experten}
-Das Schwingverhalten eines idealen „Doppelt Inversen Pendel“ soll untersucht und durch geeignete Physikalische und Mathematische Beziehungen nach gebildet werden. Physikalische Effekte wie Reibung und Luftwiderstand werden vernachlässigt, Abmessungen und Materialien müssen als Eingabegrössen variabel gestaltet werden.
+Das Schwingverhalten eines idealen „Doppelt inversen Pendels“ soll untersucht und durch geeignete physikalische und mathematische Beziehungen nachgebildet werden. Physikalische Effekte wie Reibung und Luftwiderstand werden vernachlässigt, Abmessungen und Materialien müssen als Eingabegrössen variabel gestaltet werden.
 
-Der Vorgang wird in „Echtzeit“ am Bildschirm des PC's Graphisch dargestellt visualisiert.
+Der Vorgang wird in „Echtzeit“ am Bildschirm des Computers graphisch dargestellt visualisiert.
 
-Zusätzliche Angaben des Verhaltens können auf der gleichen Bildschirmseite eingeblendet werden.
+Zusätzliche Angaben des Verhaltens können auf der gleichen Seite eingeblendet werden.
 
 \subsection{Motivation}
-Physikalische Eigenschaften mit einer Objekt Orientierten Programmiersprache umzusetzen reizte uns schon immer. Die  Aufgabenstellung ermöglichte uns das theoretisch gelernte aus dem Studienfach Numerik in Verbindung mit realen Physikalischen Grundlagen in einer praktischen Anwendung umzusetzen.
-
-Auch ermöglichte es die algebraischen Zusammenhänge aus vergangenen Vorlesungen besser zu verstehen und Lücken aufzufüllen.
+Physikalische Eigenschaften mit einer objektorientierten Programmiersprache umzusetzen, reizte uns schon immer. Die  Aufgabenstellung ermöglichte uns, das theoretisch Gelernte aus dem Studienfach Numerik in Verbindung mit physikalischen Grundlagen in einer praktischen Anwendung umzusetzen. Auch ermöglichte es die algebraischen Zusammenhänge aus vergangenen Vorlesungen besser zu verstehen und Lücken aufzufüllen.
 
 \subsection{Iterationsplan}
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
@@ -155,23 +153,23 @@ Auch ermöglichte es die algebraischen Zusammenhänge aus vergangenen Vorlesunge
 \newpage
 \section{Anforderungsanalyse}
 \subsection{Zielbestimmung}
-Es soll ein Programm entwickelt werden das die physikalischen und chaotischen Eigenschaften des inversen Doppelpendels grafisch darstellt.
+Es soll ein Programm entwickelt werden, das die physikalischen und chaotischen Eigenschaften des inversen Doppelpendels grafisch darstellt.
 
 Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur und/oder Maus einstellbar sein.
 
 \subsection{Rahmenbedingungen und Einschränkungen}
 \begin{itemize}
 	\item Die Umgebung des Doppelpendels soll als ideal gelten.
-	\item Das Ausgangsmaterial wird als Aluminium Stab definiert (Dichte $2,7 [g/cm^3]$)
+	\item Als Ausgangsmaterial des Pendels wird Aluminium definiert (Dichte $2,7 [g/cm^3]$)
 	\item Die Gravitation wird mit $9.81 [m/s^2]$ definiert
-	\item Wegen der chaotischen Eigenschaft des Pendels können keine aussagenkräftigen Tests implementiert werden.
+	\item Wegen der chaotischen Eigenschaft des Pendels können keine aussagekräftigen Tests implementiert werden.
 \end{itemize}
 
 \subsection{Produktfunktionen}
 \begin{itemize}
 	\item Der Benutzer kann eine Konfiguration als XML-File mit der Erweiterung IDP einlesen.
 	\item Der Benutzer kann die einzelnen Glieder des Pendels mit der Maus positionieren.
-	\item Während das Pendel in Bewegung ist werden Winkel und Geschwindigkeit angezeigt.
+	\item Während das Pendel in Bewegung ist, werden Winkel und Geschwindigkeit angezeigt.
 	\item Der Benutzer kann den Ablauf starten, jederzeit stoppen und zurückstellen.
 \end{itemize}
 
@@ -189,20 +187,27 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 
 \subsection{Verwendete Technologien}
 \subsubsection{ActionScript 3 mit Flex SDK}
-Das Programm wird mittels der Objektorientierten Programmiersprache ActionScript 3 (AS3) und dem Adobe Flex SDK Framework\citep{flex} implementiert. Es ist dank dem Adobe Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
+Das Programm wird mittels der objektorientierten Programmiersprache ActionScript 3 (AS3) und dem Adobe Flex SDK Framework \citep{flex} implementiert. Es ist dank dem Adobe Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
 
-Eine Implementierung des Doppelpendels mittels AS3 und dem Flex SDK ist empfehlenswert, da das Flex Framework speziell für Grafische Applikationen mit Animationen ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
+Eine Implementierung des Doppelpendels mittels AS3 und dem Flex SDK ist empfehlenswert, da das Flex Framework speziell für grafische Applikationen mit Animationen ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
 
 \subsubsection{Entwicklungsumgebung FDT}
-Die FDT (Flash Development Tool)\citep{fdt} Entwicklungsumgebung benutzt Eclipse als Basisframework. FDT stellt für die Entwicklung von AS3 und Flex-Projekten nützliche Funktionen wie Fehlererkennung, Debugger und Autocomplete zur verfügung. Ein AS3 Projekt, das mit dem Flex SDK erstellt wurde kann aber auch ohne FDT verändert und kompiliert werden.
+Als Entwicklungsumgebung wird FDT (Flash Development Tool) \citep{fdt} eingesetzt. FDT stellt für die Entwicklung von AS3 und Flex-Projekten nützliche Funktionen wie Fehlererkennung, Debugger und Autocomplete zur Verfügung.
+
+\subsubsection{git}
+\citep{git}
+\citep{github}
+
+\subsubsection{pivotal}
+\citep{pivotal}
 
 \subsection{Numerisches Verfahren}
-Um die Fehlerkomulierten Abweichungen der Berechnung auf möglichst lange Zeit klein zu halten wird das Numerische Verfahren von Runge-Kutta in der 4. Ordnung verwendet. Der Rechenaufwand für dieses Verfahren ist höher als bei anderen Verfahren wie z.B. dem Euler-Verfahren. Seine Genauigkeit auf grosse Zeitintervalle gleichen diesen Mehraufwand wieder aus.
+Um den Fehler der numerischen Lösung pro Berechnungsschritt auf möglichst lange Zeit klein zu halten, wird das numerische Verfahren von Runge-Kutta in der 4. Ordnung verwendet. Der Rechenaufwand für dieses Verfahren ist höher als bei anderen Verfahren wie z.B. dem Euler-Verfahren. Seine Genauigkeit auf grosse Zeitintervalle gleichen diesen Mehraufwand jedoch wieder aus.
 
 \subsubsection{Runge-Kutta Verfahren 4. Ordnung (RK4)}
-Das klassische Runge-Kutta-Verfahren (nach Carl Runge und Martin Wilhelm Kutta) ist ein spezielles explizites 4-stufiges Runge-Kutta-Verfahren zur numerischen Lösung von Anfangswertproblemen. Runge hat als erster (1895) ein mehrstufiges Verfahren angegeben und Kutta die allgemeine Form expliziter s-stufiger Verfahren.
+Das klassische Runge-Kutta-Verfahren (nach Carl Runge und Martin Wilhelm Kutta) ist ein spezielles explizites 4-stufiges Verfahren zur numerischen Lösung von Anfangswertproblemen. Runge hat als erster (1895) ein mehrstufiges Verfahren angegeben und Kutta (1905) die allgemeine Form expliziter s-stufiger Verfahren definiert.
 
-Das klassische Runge-Kutta-Verfahren verwendet den Ansatz, Ableitungen durch Differenzenquotienten zu approximieren. Die dabei bei nichtlinearen Funktionen notwendigerweise auftretenden Fehler können durch geeignete Kombinationen verschiedener Differenzquotienten reduziert werden. Das RK4 verfahren ist eine solche Kombination, die Diskretisierungsfehler bis zur dritten Ableitung kompensiert.
+Das klassische Runge-Kutta-Verfahren verwendet den Ansatz Ableitungen durch Differenzenquotienten zu approximieren. Die dabei bei nichtlinearen Funktionen notwendigerweise auftretenden Fehler können durch geeignete Kombinationen verschiedener Differenzenquotienten reduziert werden. Das RK4 verfahren ist eine solche Kombination, die Diskretisierungsfehler bis zur dritten Ableitung kompensiert.
 
 \begin{align} \label{algo:rk}
 	y(t)' &= f(t,y(t)) \quad \text{mit} \quad y(0) = y_0 \nonumber\\
@@ -216,20 +221,20 @@ Das klassische Runge-Kutta-Verfahren verwendet den Ansatz, Ableitungen durch Dif
 \end{align}
 
 
-% Physikalische und Mathematische Zusammenhänge
+% Physikalische und mathematische Zusammenhänge
 \newpage
-\section{Physikalische und Mathematische Zusammenhänge}
+\section{Physikalische und mathematische Zusammenhänge}
 \subsection{Physikalische Eigenschaften}
-Um die Gleichungen des Ausgangsproblems zu definieren, muss man sich erst mit den physikalischen Eigenschaften eines Pendels beschäftigen. Kräfte welche aus der Bewegung entstehen kombinieren sich mit Statischen. Kräfte des ersten Pendels beeinflussen die des Zweiten. Im Folgenden werden die Kinematik und die Kräfte des Doppelpendels zum gesuchten Ausgangsproblem kombiniert.
+Um die Gleichungen des Ausgangsproblems zu definieren, muss man sich erst mit den physikalischen Eigenschaften eines Pendels beschäftigen. Kräfte, welche aus der Bewegung entstehen, kombinieren sich mit Statischen. Kräfte des ersten Pendels beeinflussen die des zweiten. Im Folgenden werden die Kinematik und die Kräfte des Doppelpendels zum gesuchten Ausgangsproblem kombiniert.
 
-Auf Basis der Webseiten \citep{neumann04a}, \citep{kramann11} und \citep{weissstein07} konnten die Kinematik und Kräfte des Doppelpendels zum Ausgangsproblem kombiniert werden. 
+Auf Basis der Webseiten \citep{neumann04}, \citep{kramann11} und \citep{weissstein07} konnten die Kinematik und Kräfte des Doppelpendels zum Ausgangsproblem kombiniert werden. 
 
 \subsubsection{Kinematik des Doppelpendels}
 \begin{figure}[H]
 	\begin{minipage}[!b]{0.4\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum.png}
-		\caption[Doppelpendel]{Doppelpendel \citep{neumann04a}}
+		\caption[Doppelpendel]{Doppelpendel \citep{neumann04}}
 		\label{fig:energy}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
@@ -241,10 +246,9 @@ Auf Basis der Webseiten \citep{neumann04a}, \citep{kramann11} und \citep{weissst
 	\end{minipage}
 \end{figure}
 
-Ausgangslage für die Berechnung ist das obere Pendel. Das erste Pendel wird als Subskript $1$ definiert mit $x_1$ und $y_1$. Äquivalent dazu wird das zweite Pendel als Subskript $2$ definiert mit $x_2$ und $y_2$.
+Ausgangslage für die Berechnung ist das obere Pendel. Das erste Pendel $P_1$ wird definiert mit $x_1$ und $y_1$. Äquivalent dazu wird das zweite Pendel $P_2$ definiert mit $x_2$ und $y_2$.
 
 Als erstes werden die trigonometrischen Gleichungen aufgestellt:
-
 \begin{equation} \label{eq:energy:1_1}
 	x_1 = L_1\sin\theta_1
 \end{equation}
@@ -258,7 +262,8 @@ Als erstes werden die trigonometrischen Gleichungen aufgestellt:
 \begin{equation} \label{eq:energy:2_2}
 	y_2 = y_1 - L_2\cos\theta_2
 \end{equation}
-
+\
+\\
 Danach wird aus den Gleichungen (\ref{eq:energy:1_1} - \ref{eq:energy:2_2}) die erste und zweite Ableitung gebildet.
 
 Erste Ableitung (Geschwindigkeit):
@@ -275,7 +280,8 @@ Erste Ableitung (Geschwindigkeit):
 \begin{equation} \label{eq:velocity:2_2}
 	y_2' = y_1' + \theta_2' L_2\sin\theta_2
 \end{equation}
-
+\
+\\
 Zweite Ableitung (Beschleunigung):
 \begin{equation} \label{eq:acceleration:1_1}
 	x_1'' = -{\theta_1'}^2 L_1 \sin\theta_1 + \theta_1'' L_1 \cos\theta_1
@@ -291,6 +297,7 @@ Zweite Ableitung (Beschleunigung):
 	y_2'' = y_1'' + {\theta_2'}^2 L_2\cos\theta_2 + \theta_2'' L_2 \sin\theta_2
 \end{equation}
 
+\newpage
 \subsubsection{Kräfte im Doppelpendel}
 Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt. Auf Grundlage des zweiten newtonschen Gesetzes $(F = m \cdot a)$ können folgende Gleichungen für das Doppelpendel erstellt werden:
 
@@ -299,14 +306,14 @@ Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt. Auf
 	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum_m1.png}
-		\caption[Kräfte im oberen Pendel]{Kräfte im oberen Pendel \citep{neumann04a}}
+		\caption[Kräfte im oberen Pendel]{Kräfte im oberen Pendel \citep{neumann04}}
 		\label{fig:force_1}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
 		\vspace{0pt}\raggedright
 		$T_1$ = Kraft im oberen Pendel\\
 		$m_1$ = Masse des oberen Pendels\\
-		$g$ = Gravitations Konstante
+		$g$ = Gravitationskonstante
 	\end{minipage}
 \end{figure}
 
@@ -323,14 +330,14 @@ Anhand von \autoref{fig:force_1} können die folgenden Gleichungen aufgestellt w
 	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum_m2.png}
-		\caption[Kräfte im unteren Pendel]{Kräfte im unteren Pendel \citep{neumann04a}}
+		\caption[Kräfte im unteren Pendel]{Kräfte im unteren Pendel \citep{neumann04}}
 		\label{fig:force_2}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
 		\vspace{0pt}\raggedright
 		$T_2$ = Kraft im unteren Pendel\\
 		$m_2$ = Masse des unteren Pendels\\
-		$g$ = Gravitations Konstante
+		$g$ = Gravitationskonstante
 	\end{minipage}
 \end{figure}
 
@@ -343,8 +350,7 @@ Anhand von \autoref{fig:force_2} können die folgenden Gleichungen aufgestellt w
 \end{equation}
 
 \subsubsection{Umformen der Gleichungen}
-Um zu der endgültigen Differenziellen Gleichung für die Berechnung zu gelangen müssen die einzelnen Gleichungen algebraisch umgeformt werden.
-Angefangen bei den Kräftegleichungen. Gleichung (\ref{eq:force:2_1}) und (\ref{eq:force:2_2}) werden nach $T_2\sin\theta_2$ bzw. nach $T_2\cos\theta_2$ aufgelöst und in die Gleichungen (\ref{eq:force:1_1}) und (\ref{eq:force:1_2}) eingesetzt.
+Um zu der endgültigen differenziellen Gleichung für die Berechnung zu gelangen, müssen die einzelnen Gleichungen algebraisch umgeformt werden. Die Kräftegleichungen (\ref{eq:force:2_1}) und (\ref{eq:force:2_2}) werden nach $T_2\sin\theta_2$ bzw. nach $T_2\cos\theta_2$ aufgelöst und in die Gleichungen (\ref{eq:force:1_1}) und (\ref{eq:force:1_2}) eingesetzt.
 \begin{equation} \label{eq:dForce:1}
 	m_1 x_1'' = -T_1\sin\theta_1 - m_2 x_2''
 \end{equation}
@@ -359,25 +365,29 @@ Gleichung (\ref{eq:dForce:1}) wird mit $\cos\theta_1$ und Gleichung (\ref{eq:dFo
 \begin{equation} \label{eq:thetaForce:1_2}
 	T_1\sin\theta_1\cos\theta_1 = \sin\theta_1(m_1 y_1'' + m_2 y_2'' + m_2 g + m_1 g)
 \end{equation}
-
-Daraus ergibt sich die erste Teil der Bewegungsgleichung.
+\
+\\
+Daraus ergibt sich der erste Teil der Bewegungsgleichung.
 \begin{equation} \label{eq:motion:1}
 	\sin\theta_1(m_1 y_1'' + m_2 y_2'' + m_2 g + m_1 g) = -\cos\theta_1(m_1 x_1'' + m_2 x_2'')
 \end{equation}
-
-Um den zweiten Teil der Gleichung zu erhalten wird die Gleichung (\ref{eq:force:2_1}) mit $\cos\theta_2$ und die (\ref{eq:force:2_2}) mit $\sin\theta_2$ erweitert.
+\
+\\
+Um den zweiten Teil der Gleichung zu erhalten, wird die Gleichung (\ref{eq:force:2_1}) mit $\cos\theta_2$ und die (\ref{eq:force:2_2}) mit $\sin\theta_2$ erweitert.
 \begin{equation} \label{eq:thetaForce:2_1}
 	T_2\sin\theta_2\cos\theta_2 = -\cos\theta_2(m_2 x_2'')
 \end{equation}
 \begin{equation} \label{eq:thetaForce:2_2}
 	T_2\sin\theta_2\cos\theta_2 = \sin\theta_2(m_2 y_2'' + m_2 g)
 \end{equation}
-
+\
+\\
 Der zweite Teil der Gleichung ergibt somit
 \begin{equation} \label{eq:motion:2}
 	\sin\theta_2(m_2 y_2'' + m_2 g) = -\cos\theta_2(m_2 x_2'')
 \end{equation}
-
+\
+\\
 $x_2''$, $x_2''$, $y_1''$ und $y_2''$ werden durch die Gleichungen (\ref{eq:acceleration:1_1} – \ref{eq:acceleration:2_2}) ersetzt und mit Hilfe des Lagrange-Formalismus nach $\theta_1''$ und $\theta_2''$ aufgelöst.
 
 Die endgültige Bewegungsgleichung für das Doppelpendel lautet somit:
@@ -393,13 +403,14 @@ Die endgültige Bewegungsgleichung für das Doppelpendel lautet somit:
 
 \subsection{Numerische Lösung}
 \subsubsection{Differentialgleichung für Runge-Kutta}
-Die Bewegungsgleichung (\ref{eq:final:1} und \ref{eq:final:2}) lässt sich aber noch nicht mittels des Runge-Kutta Algorithmus numerisch annähern. Um dies zu ermöglichen muss bedacht werden, dass die erste Ableitung von $\theta$ die Winkelgeschwindigkeit $\omega$ ist.
+Die Bewegungsgleichung (\ref{eq:final:1} und \ref{eq:final:2}) lässt sich aber noch nicht mittels des Runge-Kutta Algorithmus numerisch annähern. Um dies zu ermöglichen, muss bedacht werden, dass die erste Ableitung von $\theta$ die Winkelgeschwindigkeit $\omega$ ist.
 
 Daraus ergibt sich:
 \begin{equation*}
 	\theta_1' = \omega_1 \quad \text{und} \quad \theta_2' = \omega_2
 \end{equation*}
-
+\
+\\
 damit erhält man für den Runge-Kutta Algorithmus \ref{algo:rk} folgende Schlussgleichungen:
 \begin{equation} \label{eq:rk:1}
 	\theta_1' = \omega_1
@@ -418,7 +429,6 @@ damit erhält man für den Runge-Kutta Algorithmus \ref{algo:rk} folgende Schlus
 	{L_2 (2m_1 + m_2 - m_2 \cos(2 \theta_1 - 2\theta_2))}
 \end{equation}
 
-
 % Software
 \newpage
 \section{Software}
@@ -427,21 +437,21 @@ damit erhält man für den Runge-Kutta Algorithmus \ref{algo:rk} folgende Schlus
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{software_draft.png}
-	\caption{Entwurf Grafische Oberfläche}
+	\caption{Entwurf grafische Oberfläche}
 	\label{fig:gui:draft}
 \end{figure}
 
-Die Grafische Oberfläche wird als skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Grösse der Pendel Simulation passt sich anhand der Fenstergrösse automatisch an.
+Die grafische Oberfläche wird als skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Grösse der Pendelsimulation passt sich anhand der Fenstergrösse automatisch an.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{software_final.png}
-	\caption{Realisierte Grafische Oberfläche GUI}
+	\caption{Realisierte grafische Oberfläche}
 	\label{fig:xml}
 \end{figure}
 
 \subsection{MVC-Pattern}
-In einer ersten Version dieser Applikation wurde der Controller getrennt vom Model aufgebaut. Leider führte dies zu ungewollten Verdoppelung von Aufgaben was zu einer schlechteren Kohäsion führte als die Koppelung von Model und Controller.
+In einer ersten Version dieser Applikation wurde der Controller getrennt vom Model aufgebaut. Leider führte dies zu ungewollten Verdoppelungen von Aufgaben, was zu einer schlechteren Kohäsion führte als die Koppelung von Model und Controller.
 
 \subsubsection{Model-Controller}
 Die Funktion des Model-Controllers wird durch die Klasse \textit{Doppelpendel} übernommen. Sie nimmt sämtliche Event-Aufrufe und Daten entgegen und leitet sie an die entsprechenden Klassen weiter.
@@ -450,12 +460,12 @@ Die Funktion des Model-Controllers wird durch die Klasse \textit{Doppelpendel} �
 Die View verteilt sich auf die jeweiligen GUI-Klassen \textit{Pendulum}, \textit{PendulumControls}, \textit{Background} und \textit{MenuBar}.
 
 \subsection{Bootstrapper}
-Die Klasse \textit{Main} initialisiert die Applikation und platziert sie auf der \textit{Stage} (Hauptcontainer des GUIs), auf die sie durch die Vererbung der AS3 Klasse "Sprite" zugriff hat. Über die \textit{Main} Klasse wird die Hauptklasse \textit{Doppelpendel} instanziert und gestartet. 
+Die Klasse \textit{Main} initialisiert die Applikation und platziert sie auf der \textit{Stage} (Hauptcontainer des GUIs), auf die sie durch die Vererbung der AS3 Klasse \textit{Sprite} zugriff hat. Über die \textit{Main} Klasse wird die Hauptklasse \textit{Doppelpendel} instanziert und gestartet. 
 
 Die Sprite-Klasse ist ein AS3-Grundbaustein der Anzeigeliste: ein Knoten der Anzeigeliste, der Grafiken anzeigen und auch untergeordnete Objekte enthalten kann.
 
 \subsection{Solver Klassen (Runge-Kutta)}
-Die Bewegungsberechnung des Doppelpendels werden in 3 Klassen berechnet. Die Klasse \textit{PendulumSystem} nimmt die aktuellen Werte der Pendel entgegen und leitet sie zum Berechnen an die Klassen \textit{RungeKutta} und \textit{PendulumSolver} weiter. Die Klasse \textit{RungeKutta} nähert die Differentialgleichung, die in der Klasse \textit{PendulumSolver} definiert ist, über das RK4 verfahren an. Die Lösung wird als Vektor im \textit{PendulumSolver} gespeichert.
+Die Bewegungsgleichung des Doppelpendels wird in drei abgetrennten Klassen berechnet. Die Klasse \textit{PendulumSystem} nimmt die aktuellen Werte der Pendel entgegen und leitet sie zum Berechnen an die Klassen \textit{RungeKutta} und \textit{PendulumSolver} weiter. Die Klasse \textit{RungeKutta} nähert die Differentialgleichung, die in der Klasse \textit{PendulumSolver} definiert ist, über das RK4-Verfahren an. Die Lösung wird als Vektor im \textit{PendulumSolver} gespeichert.
 
 \begin{figure}[H]
 	\centering
@@ -480,14 +490,13 @@ Die Bewegungsberechnung des Doppelpendels werden in 3 Klassen berechnet. Die Kla
 
 \subsection{Konfiguration des Systems}
 \subsubsection{Konfigurationsdateien}
-Die Software arbeitet mittels Konfigurationsdateien um die verschiedenen Anfangswerte eines Doppelpendels laden zu können. Die Konfigurationsdateien sind im XML Format definiert. Es wird für die Dateien eine eigene Dateiendung verwendet. Die IDP-Datei (IDP steht für Inverses Doppel Pendel) kann in jedem Texteditor bearbeitet werden.
+Die Software arbeitet mittels Konfigurationsdateien, um die verschiedenen Anfangswerte eines Doppelpendels laden zu können. Die Konfigurationsdateien sind im XML Format definiert. Es wird für die Dateien eine eigene Dateiendung verwendet. Die IDP-Datei (IDP steht für Inverses Doppel Pendel) kann in jedem Texteditor bearbeitet werden.
 
-Beispiel einer IDP-Konfiguration:
-
+Beispiel einer IDP-Konfigurationsdatei:
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{xml.png}
-	\caption{IPD Konfigurationsdatei}
+	\caption{IDP Konfigurationsdatei}
 	\label{fig:xml}
 \end{figure}
 
