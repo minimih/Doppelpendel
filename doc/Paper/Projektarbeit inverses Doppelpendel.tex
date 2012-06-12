@@ -87,6 +87,7 @@
 \tableofcontents
 \newpage
 
+% Projektbeschreibung
 \section{Projektbeschreibung}
 \subsection{Danksagung}
 Wir möchten an dieser Stelle Herrn Georg Brügger und Herrn Lukas Eppler danken, ohne ihre wertvolle Unterstützung und Anregungen wäre dieses Software Projekt nur schwer umsetzbar gewesen.
@@ -149,6 +150,8 @@ Auch ermöglichte es die algebraischen Zusammenhänge aus vergangenen Vorlesunge
 	\hline
 \end{tabularx}
 
+
+% Anforderungsanalyse
 \newpage
 \section{Anforderungsanalyse}
 \subsection{Zielbestimmung}
@@ -172,6 +175,8 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 	\item Der Benutzer kann den Ablauf starten, jederzeit stoppen und zurückstellen.
 \end{itemize}
 
+
+% Umsetzung
 \newpage
 \section{Umsetzung}
 \subsection{Funktionsprinzip Doppelpendel}
@@ -183,18 +188,21 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 \end{figure}
 
 \subsection{Verwendete Technologien}
-\subsubsection{ActionScript 3}
-Das Programm wird mittels der Objektorientierten Sprache ActionScript 3 (AS3) und dem Flex SDK in der Eclipse Entwicklungsumgebung Programmiert. Das Programm ist dank dem Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
+\subsubsection{ActionScript 3 mit Flex SDK}
+Das Programm wird mittels der Objektorientierten Programmiersprache ActionScript 3 (AS3) und dem Adobe Flex SDK Framework\citep{flex} implementiert. Es ist dank dem Adobe Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
 
-Eine Implementierung des Doppelpendels mittels AS3 und dem Flex SDK ist  empfehlenswert, da das Flex Framework speziell für Grafische Applikationen mit Animationen ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
+Eine Implementierung des Doppelpendels mittels AS3 und dem Flex SDK ist empfehlenswert, da das Flex Framework speziell für Grafische Applikationen mit Animationen ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
 
-\subsubsection{Nummerisches Verfahren}
+\subsubsection{Entwicklungsumgebung FDT}
+Die FDT (Flash Development Tool)\citep{fdt} Entwicklungsumgebung benutzt Eclipse als Basisframework. FDT stellt für die Entwicklung von AS3 und Flex-Projekten nützliche Funktionen wie Fehlererkennung, Debugger und Autocomplete zur verfügung. Ein AS3 Projekt, das mit dem Flex SDK erstellt wurde kann aber auch ohne FDT verändert und kompiliert werden.
+
+\subsection{Numerisches Verfahren}
 Um die Fehlerkomulierten Abweichungen der Berechnung auf möglichst lange Zeit klein zu halten wird das Numerische Verfahren von Runge-Kutta in der 4. Ordnung verwendet. Der Rechenaufwand für dieses Verfahren ist höher als bei anderen Verfahren wie z.B. dem Euler-Verfahren. Seine Genauigkeit auf grosse Zeitintervalle gleichen diesen Mehraufwand wieder aus.
 
-\paragraph{Runge-Kutta Verfahren 4. Ordnung}
+\subsubsection{Runge-Kutta Verfahren 4. Ordnung (RK4)}
 Das klassische Runge-Kutta-Verfahren (nach Carl Runge und Martin Wilhelm Kutta) ist ein spezielles explizites 4-stufiges Runge-Kutta-Verfahren zur numerischen Lösung von Anfangswertproblemen. Runge hat als erster (1895) ein mehrstufiges Verfahren angegeben und Kutta die allgemeine Form expliziter s-stufiger Verfahren.
 
-Das klassische Runge-Kutta-Verfahren verwendet den Ansatz, Ableitungen durch Differenzenquotienten zu approximieren. Die dabei bei nichtlinearen Funktionen notwendigerweise auftretenden können durch geeignete Kombinationen verschiedener Differenzquotienten reduziert werden. Das Runge-Kutta-Verfahren 4. Ordnung ist eine solche Kombination, die Diskretisierungsfehler bis zur dritten Ableitung kompensiert.
+Das klassische Runge-Kutta-Verfahren verwendet den Ansatz, Ableitungen durch Differenzenquotienten zu approximieren. Die dabei bei nichtlinearen Funktionen notwendigerweise auftretenden Fehler können durch geeignete Kombinationen verschiedener Differenzquotienten reduziert werden. Das RK4 verfahren ist eine solche Kombination, die Diskretisierungsfehler bis zur dritten Ableitung kompensiert.
 
 \begin{align} \label{algo:rk}
 	y(t)' &= f(t,y(t)) \quad \text{mit} \quad y(0) = y_0 \nonumber\\
@@ -207,10 +215,12 @@ Das klassische Runge-Kutta-Verfahren verwendet den Ansatz, Ableitungen durch Dif
 	k_4 &= f\left(t_k + h, y^k + h k_3 \right)\nonumber
 \end{align}
 
+
+% Physikalische und Mathematische Zusammenhänge
 \newpage
 \section{Physikalische und Mathematische Zusammenhänge}
 \subsection{Physikalische Eigenschaften}
-Um die Gleichungen des Ausgangsproblems zu definieren, muss man sich erst mit den physikalischen Eigenschaften eines Pendels beschäftigen. Kräfte welche aus der Bewegung entstehen kombinieren sich mit Statischen. Kräfte des ersten Pendels beeinflussen die des Zweiten. Im Folgenden werden die Kinematik und die Kräfte des Doppelpendels zum gesuchten Ausgansproblem kombiniert.
+Um die Gleichungen des Ausgangsproblems zu definieren, muss man sich erst mit den physikalischen Eigenschaften eines Pendels beschäftigen. Kräfte welche aus der Bewegung entstehen kombinieren sich mit Statischen. Kräfte des ersten Pendels beeinflussen die des Zweiten. Im Folgenden werden die Kinematik und die Kräfte des Doppelpendels zum gesuchten Ausgangsproblem kombiniert.
 
 Auf Basis der Webseiten \citep{neumann04a}, \citep{kramann11} und \citep{weissstein07} konnten die Kinematik und Kräfte des Doppelpendels zum Ausgangsproblem kombiniert werden. 
 
@@ -289,7 +299,7 @@ Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt. Auf
 	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum_m1.png}
-		\caption[Kräfte im oberen Pendel]{Kräfte im oberen Pendel \citep{neumann04a}}}
+		\caption[Kräfte im oberen Pendel]{Kräfte im oberen Pendel \citep{neumann04a}}
 		\label{fig:force_1}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
@@ -300,7 +310,7 @@ Die Kräfte werden pro Pendel berechnet und in einzelne Gleichungen gesetzt. Auf
 	\end{minipage}
 \end{figure}
 
-Anhand von Abbildung \ref{fig:force_1} können die folgenden Gleichungen aufgestellt werden.
+Anhand von \autoref{fig:force_1} können die folgenden Gleichungen aufgestellt werden.
 \begin{equation} \label{eq:force:1_1}
 	m_1 x_1'' = -T_1\sin\theta_1 + T_2\sin\theta_2
 \end{equation}
@@ -313,7 +323,7 @@ Anhand von Abbildung \ref{fig:force_1} können die folgenden Gleichungen aufgest
 	\begin{minipage}[!b]{0.5\textwidth}
 		\centering
 		\includegraphics[scale=1]{dbl_pendulum_m2.png}
-		\caption[Kräfte im unteren Pendel]{Kräfte im unteren Pendel \citep{neumann04a}}}
+		\caption[Kräfte im unteren Pendel]{Kräfte im unteren Pendel \citep{neumann04a}}
 		\label{fig:force_2}
 	\end{minipage}
 	\begin{minipage}[!t]{\textwidth}
@@ -324,7 +334,7 @@ Anhand von Abbildung \ref{fig:force_1} können die folgenden Gleichungen aufgest
 	\end{minipage}
 \end{figure}
 
-Anhand von Abbildung \ref{fig:force_2} können die folgenden Gleichungen aufgestellt werden.
+Anhand von \autoref{fig:force_2} können die folgenden Gleichungen aufgestellt werden.
 \begin{equation} \label{eq:force:2_1}
 	m_2 x_2'' = -T_2\sin\theta_2
 \end{equation}
@@ -408,6 +418,8 @@ damit erhält man für den Runge-Kutta Algorithmus \ref{algo:rk} folgende Schlus
 	{L_2 (2m_1 + m_2 - m_2 \cos(2 \theta_1 - 2\theta_2))}
 \end{equation}
 
+
+% Software
 \newpage
 \section{Software}
 \subsection{Grafische Oberfläche}
@@ -432,19 +444,41 @@ Die Grafische Oberfläche wird als skalierbares Modell aufgebaut. Der Vorteil in
 In einer ersten Version dieser Applikation wurde der Controller getrennt vom Model aufgebaut. Leider führte dies zu ungewollten Verdoppelung von Aufgaben was zu einer schlechteren Kohäsion führte als die Koppelung von Model und Controller.
 
 \subsubsection{Model-Controller}
-Die Funktion des Model-Controllers wird durch die Klasse Doppelpendel.as übernommen. Sie nimmt sämtliche Event-Aufrufe und Daten entgegen und leitet sie an die entsprechenden Klassen weiter.
+Die Funktion des Model-Controllers wird durch die Klasse \textit{Doppelpendel} übernommen. Sie nimmt sämtliche Event-Aufrufe und Daten entgegen und leitet sie an die entsprechenden Klassen weiter.
 
 \subsubsection{View}
-Die View verteilt sich auf die jeweiligen GUI-Klassen Pendulum.as, PendulumControls.as, Background.as und MenuBar.as.
-
+Die View verteilt sich auf die jeweiligen GUI-Klassen \textit{Pendulum}, \textit{PendulumControls}, \textit{Background} und \textit{MenuBar}.
 
 \subsection{Bootstrapper}
-Die Klasse "Main" initialisiert die Applikation und platziert sie auf der "Stage" (Hauptcontainer des GUIs), auf die sie durch die Vererbung der AS3 Klasse "Sprite" zugriff hat. Über die "Main" Klasse wird die Hauptklasse "Doppelpendel" instanziert und gestartet. 
+Die Klasse \textit{Main} initialisiert die Applikation und platziert sie auf der \textit{Stage} (Hauptcontainer des GUIs), auf die sie durch die Vererbung der AS3 Klasse "Sprite" zugriff hat. Über die \textit{Main} Klasse wird die Hauptklasse \textit{Doppelpendel} instanziert und gestartet. 
 
 Die Sprite-Klasse ist ein AS3-Grundbaustein der Anzeigeliste: ein Knoten der Anzeigeliste, der Grafiken anzeigen und auch untergeordnete Objekte enthalten kann.
 
-\subsection{Konfiguration des Systems}
+\subsection{Solver Klassen (Runge-Kutta)}
+Die Bewegungsberechnung des Doppelpendels werden in 3 Klassen berechnet. Die Klasse \textit{PendulumSystem} nimmt die aktuellen Werte der Pendel entgegen und leitet sie zum Berechnen an die Klassen \textit{RungeKutta} und \textit{PendulumSolver} weiter. Die Klasse \textit{RungeKutta} nähert die Differentialgleichung, die in der Klasse \textit{PendulumSolver} definiert ist, über das RK4 verfahren an. Die Lösung wird als Vektor im \textit{PendulumSolver} gespeichert.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{diag_PendulumSystem.jpg}
+	\caption{Klassendiagramm Pendulumsystem}
+	\label{fig:xml}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{diag_IODESolver.jpg}
+	\caption{Klassendiagramm PendulumSolver/IODESolver}
+	\label{fig:xml}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{diag_IODE.jpg}
+	\caption{Klassendiagramm RungeKutta/IODE}
+	\label{fig:xml}
+\end{figure}
+
+\subsection{Konfiguration des Systems}
 \subsubsection{Konfigurationsdateien}
 Die Software arbeitet mittels Konfigurationsdateien um die verschiedenen Anfangswerte eines Doppelpendels laden zu können. Die Konfigurationsdateien sind im XML Format definiert. Es wird für die Dateien eine eigene Dateiendung verwendet. Die IDP-Datei (IDP steht für Inverses Doppel Pendel) kann in jedem Texteditor bearbeitet werden.
 
@@ -456,6 +490,8 @@ Beispiel einer IDP-Konfiguration:
 	\caption{IPD Konfigurationsdatei}
 	\label{fig:xml}
 \end{figure}
+
+\section{xxx}
 
 \newpage
 ￼\listoffigures
