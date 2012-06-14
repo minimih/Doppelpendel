@@ -85,9 +85,10 @@
 
 % Inhaltsverzeichnis
 \tableofcontents
-\newpage
+
 
 % Projektbeschreibung
+\newpage
 \section{Projektbeschreibung}
 \subsection{Danksagung}
 Wir möchten an dieser Stelle Herrn Georg Brügger und Herrn Lukas Eppler danken, ohne ihre wertvolle Unterstützung und Anregungen wäre dieses Software Projekt nur schwer umsetzbar gewesen.
@@ -101,38 +102,6 @@ Zusätzliche Angaben des Verhaltens können auf der gleichen Seite eingeblendet 
 
 \subsection{Motivation}
 Physikalische Eigenschaften mit einer objektorientierten Programmiersprache umzusetzen, reizte uns schon immer. Die  Aufgabenstellung ermöglichte uns, das theoretisch Gelernte aus dem Studienfach Numerik in Verbindung mit physikalischen Grundlagen in einer praktischen Anwendung umzusetzen. Auch ermöglichte es die algebraischen Zusammenhänge aus vergangenen Vorlesungen besser zu verstehen und Lücken aufzufüllen.
-
-\subsection{Iterationsplan}
-\newcolumntype{L}{>{\raggedright\arraybackslash}X}
-\begin{tabularx}{\textwidth}{|l|l|L|}
-	\hline
-	\textbf{Iteration} & \textbf{Termin}     & \textbf{Task}\\
-	\hline
-	1                  & Mi 04.04.2012       & \begin{itemize}
-													\item Physikalische Eigenschaften des Doppelpendels aufstellen
-													\item Evaluierung der Programmiersprache
-													\item Gleichungssystem aufstellen
-											   \end{itemize}\\
-	\hline
-	2                  & Fr 27.04.2012       & \begin{itemize}
-													\item Grafische Benutzeroberfläche
-													\item Programmierung des ersten Pendels
-													\item Programmierung des zweiten Pendels
-													\item Runge Kutta definieren
-											   \end{itemize}\\
-	\hline
-	3                  & Mi 23.05.2012       & \begin{itemize}
-													\item Pendel einstellen
-													\item Projektdokumentation
-													\item Präsentation
-											   \end{itemize}\\
-	\hline
-	4                  & Präsentationstermin & \begin{itemize}
-													\item Präsentation
-													\item Projektdokumentation
-											   \end{itemize}\\
-	\hline
-\end{tabularx}
 
 \subsection{Beteiligte Personen}
 \begin{tabularx}{\textwidth}{|X|X|}
@@ -153,7 +122,7 @@ Physikalische Eigenschaften mit einer objektorientierten Programmiersprache umzu
 \newpage
 \section{Anforderungsanalyse}
 \subsection{Zielbestimmung}
-Es soll ein Programm entwickelt werden, das die physikalischen und chaotischen Eigenschaften des inversen Doppelpendels grafisch darstellt.
+Es soll ein Programm entwickelt werden, das die physikalischen und chaotischen Eigenschaften des Doppelt inversen Pendels grafisch darstellt.
 
 Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur und/oder Maus einstellbar sein.
 
@@ -174,9 +143,10 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 \end{itemize}
 
 
-% Umsetzung
+% Physikalische und mathematische Zusammenhänge
 \newpage
-\section{Umsetzung}
+\section{Physikalische und mathematische Zusammenhänge}
+
 \subsection{Funktionsprinzip Doppelpendel}
 \begin{figure}[H]
 	\centering
@@ -185,45 +155,6 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 	\label{fig:function}
 \end{figure}
 
-\subsection{Verwendete Technologien}
-\subsubsection{ActionScript 3 mit Flex SDK}
-Das Programm wird mittels der objektorientierten Programmiersprache ActionScript 3 (AS3) und dem Adobe Flex SDK Framework \citep{flex} implementiert. Es ist dank dem Adobe Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
-
-Eine Implementierung des Doppelpendels mittels AS3 und dem Flex SDK ist empfehlenswert, da das Flex Framework speziell für grafische Applikationen mit Animationen ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
-
-\subsubsection{Entwicklungsumgebung FDT}
-Als Entwicklungsumgebung wird FDT (Flash Development Tool) \citep{fdt} eingesetzt. FDT stellt für die Entwicklung von AS3 und Flex-Projekten nützliche Funktionen wie Fehlererkennung, Debugger und Autocomplete zur Verfügung.
-
-\subsubsection{git}
-\citep{git}
-\citep{github}
-
-\subsubsection{pivotal}
-\citep{pivotal}
-
-\subsection{Numerisches Verfahren}
-Um den Fehler der numerischen Lösung pro Berechnungsschritt auf möglichst lange Zeit klein zu halten, wird das numerische Verfahren von Runge-Kutta in der 4. Ordnung verwendet. Der Rechenaufwand für dieses Verfahren ist höher als bei anderen Verfahren wie z.B. dem Euler-Verfahren. Seine Genauigkeit auf grosse Zeitintervalle gleichen diesen Mehraufwand jedoch wieder aus.
-
-\subsubsection{Runge-Kutta Verfahren 4. Ordnung (RK4)}
-Das klassische Runge-Kutta-Verfahren (nach Carl Runge und Martin Wilhelm Kutta) ist ein spezielles explizites 4-stufiges Verfahren zur numerischen Lösung von Anfangswertproblemen. Runge hat als erster (1895) ein mehrstufiges Verfahren angegeben und Kutta (1905) die allgemeine Form expliziter s-stufiger Verfahren definiert.
-
-Das klassische Runge-Kutta-Verfahren verwendet den Ansatz Ableitungen durch Differenzenquotienten zu approximieren. Die dabei bei nichtlinearen Funktionen notwendigerweise auftretenden Fehler können durch geeignete Kombinationen verschiedener Differenzenquotienten reduziert werden. Das RK4 verfahren ist eine solche Kombination, die Diskretisierungsfehler bis zur dritten Ableitung kompensiert.
-
-\begin{align} \label{algo:rk}
-	y(t)' &= f(t,y(t)) \quad \text{mit} \quad y(0) = y_0 \nonumber\\
-	\nonumber\\
-	y^{k+1} &= y^k + h \left(\frac{1}{6}k_1 + \frac{2}{6}k_2 + \frac{2}{6}k_3 + \frac{1}{6}k_4 \right)\\
-	\nonumber\\
-	\text{mit} \quad k_1 &= f(t_k, y^k) \nonumber\\
-	k_2 &= f\left(t_k + \frac{h}{2}, y^k + \frac{h}{2}k_1 \right) \nonumber\\
-	k_3 &= f\left(t_k + \frac{h}{2}, y^k + \frac{h}{2}k_2 \right) \nonumber\\
-	k_4 &= f\left(t_k + h, y^k + h k_3 \right)\nonumber
-\end{align}
-
-
-% Physikalische und mathematische Zusammenhänge
-\newpage
-\section{Physikalische und mathematische Zusammenhänge}
 \subsection{Physikalische Eigenschaften}
 Um die Gleichungen des Ausgangsproblems zu definieren, muss man sich erst mit den physikalischen Eigenschaften eines Pendels beschäftigen. Kräfte, welche aus der Bewegung entstehen, kombinieren sich mit Statischen. Kräfte des ersten Pendels beeinflussen die des zweiten. Im Folgenden werden die Kinematik und die Kräfte des Doppelpendels zum gesuchten Ausgangsproblem kombiniert.
 
@@ -401,9 +332,29 @@ Die endgültige Bewegungsgleichung für das Doppelpendel lautet somit:
 	{L_2 (2m_1 + m_2 - m_2 \cos(2 \theta_1 - 2\theta_2))}
 \end{equation}
 
-\subsection{Numerische Lösung}
-\subsubsection{Differentialgleichung für Runge-Kutta}
-Die Bewegungsgleichung (\ref{eq:final:1} und \ref{eq:final:2}) lässt sich aber noch nicht mittels des Runge-Kutta Algorithmus numerisch annähern. Um dies zu ermöglichen, muss bedacht werden, dass die erste Ableitung von $\theta$ die Winkelgeschwindigkeit $\omega$ ist.
+% Numerisches Verfahren
+\newpage
+\section{Numerisches Verfahren}
+Um den Fehler der numerischen Lösung pro Berechnungsschritt auf möglichst lange Zeit klein zu halten, wird das numerische Verfahren von Runge-Kutta in der 4. Ordnung verwendet. Der Rechenaufwand für dieses Verfahren ist höher als bei anderen Verfahren wie z.B. dem Euler-Verfahren. Seine Genauigkeit auf grosse Zeitintervalle gleichen diesen Mehraufwand jedoch wieder aus.
+
+\subsection{Runge-Kutta Verfahren 4. Ordnung (RK4)}
+Das klassische Runge-Kutta-Verfahren (nach Carl Runge und Martin Wilhelm Kutta) ist ein spezielles explizites 4-stufiges Verfahren zur numerischen Lösung von Anfangswertproblemen. Runge hat als erster (1895) ein mehrstufiges Verfahren angegeben und Kutta (1905) die allgemeine Form expliziter s-stufiger Verfahren definiert.
+
+Das klassische Runge-Kutta-Verfahren verwendet den Ansatz Ableitungen durch Differenzenquotienten zu approximieren. Die dabei bei nichtlinearen Funktionen notwendigerweise auftretenden Fehler können durch geeignete Kombinationen verschiedener Differenzenquotienten reduziert werden. Das RK4 verfahren ist eine solche Kombination, die Diskretisierungsfehler bis zur dritten Ableitung kompensiert.
+
+\begin{align} \label{algo:rk}
+	y(t)' &= f(t,y(t)) \quad \text{mit} \quad y(0) = y_0 \nonumber\\
+	\nonumber\\
+	y^{k+1} &= y^k + h \left(\frac{1}{6}k_1 + \frac{2}{6}k_2 + \frac{2}{6}k_3 + \frac{1}{6}k_4 \right)\\
+	\nonumber\\
+	\text{mit} \quad k_1 &= f(t_k, y^k) \nonumber\\
+	k_2 &= f\left(t_k + \frac{h}{2}, y^k + \frac{h}{2}k_1 \right) \nonumber\\
+	k_3 &= f\left(t_k + \frac{h}{2}, y^k + \frac{h}{2}k_2 \right) \nonumber\\
+	k_4 &= f\left(t_k + h, y^k + h k_3 \right)\nonumber
+\end{align}
+
+\subsection{Differentialgleichung für Runge-Kutta}
+Die Bewegungsgleichung (\ref{eq:final:1} und \ref{eq:final:2}) lässt sich noch nicht mittels des Runge-Kutta Algorithmus numerisch annähern. Um dies zu ermöglichen, muss bedacht werden, dass die erste Ableitung von $\theta$ die Winkelgeschwindigkeit $\omega$ ist.
 
 Daraus ergibt sich:
 \begin{equation*}
@@ -411,7 +362,7 @@ Daraus ergibt sich:
 \end{equation*}
 \
 \\
-damit erhält man für den Runge-Kutta Algorithmus \ref{algo:rk} folgende Schlussgleichungen:
+damit erhält man für den Runge-Kutta Algorithmus (\ref{algo:rk}) folgende Schlussgleichungen:
 \begin{equation} \label{eq:rk:1}
 	\theta_1' = \omega_1
 \end{equation}
@@ -429,10 +380,52 @@ damit erhält man für den Runge-Kutta Algorithmus \ref{algo:rk} folgende Schlus
 	{L_2 (2m_1 + m_2 - m_2 \cos(2 \theta_1 - 2\theta_2))}
 \end{equation}
 
-% Software
+
+% Umsetzung
 \newpage
-\section{Software}
+\section{Umsetzung}
+
+\subsection{Projektplanung}
+Um das Softwareprojekt und die einzelnen Iterationen planen und verwalten zu können, wurde Pivotaltracker \citep{pivotal} von Pivotal Labs eingesetzt. Die einzelnen Tasks der Projektplanung können unter \citep{hoehnHauenstein} nachgeschlagen werden.
+
+\subsection{Iterationsplan}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\begin{tabularx}{\textwidth}{|l|l|L|}
+	\hline
+	\textbf{Iteration} & \textbf{Termin}     & \textbf{Story}\\
+	\hline
+	1                  & Mi 04.04.2012       & \begin{itemize}
+													\item Evaluierung der Programmiersprache
+													\item Physikalische Eigenschaften des Doppelpendels verstehen
+													\item Gleichungssystem aufstellen
+											 \end{itemize}\\
+	\hline
+	2                  & Fr 27.04.2012       & \begin{itemize}
+													\item Grafische Benutzeroberfläche
+													\item Programmierung des ersten Pendels
+													\item Programmierung des zweiten Pendels
+													\item Runge Kutta definieren
+										   	 \end{itemize}\\
+	\hline
+	3                  & Mi 23.05.2012       & \begin{itemize}
+													\item Pendel einstellen
+													\item Projektdokumentation
+											 \end{itemize}\\
+	\hline
+	4                  & SA 16.06.2012       & \begin{itemize}
+													\item Projektdokumentation
+													\item Präsentation
+											 \end{itemize}\\
+	\hline
+\end{tabularx}
+
+\subsection{Programmiersprache}
+Das Programm wird mittels der objektorientierten Programmiersprache ActionScript 3 (AS3) und dem Adobe Flex SDK Framework \citep{flex} implementiert. Es ist dank dem Adobe Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
+
+Eine Implementierung des Doppelpendels mittels AS3 und dem Flex SDK ist empfehlenswert, da das Flex Framework speziell für grafische Applikationen mit Animationen ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
+
 \subsection{Grafische Oberfläche}
+Die grafische Oberfläche wird als skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Grösse der Pendelsimulation passt sich anhand der Fenstergrösse automatisch an.
 
 \begin{figure}[H]
 	\centering
@@ -441,12 +434,27 @@ damit erhält man für den Runge-Kutta Algorithmus \ref{algo:rk} folgende Schlus
 	\label{fig:gui:draft}
 \end{figure}
 
-Die grafische Oberfläche wird als skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Grösse der Pendelsimulation passt sich anhand der Fenstergrösse automatisch an.
+
+% Software
+\newpage
+\section{Software}
+\subsection{Verwendete Technologien}
+\subsubsection{Flash Development Tool (FDT)}
+Als Entwicklungsumgebung wird FDT \citep{fdt} eingesetzt. FDT stellt für die Entwicklung von AS3 und Flex-Projekten nützliche Funktionen wie Fehlererkennung, Debugger und Autocomplete zur Verfügung.
+
+\subsubsection{Versionskontrolle}
+Die Versionskontrolle des Quellcodes wurde mit git \citep{git} umgesetzt. Das Git repository des Doppelt inversen Pendels ist auf GitHub \citep{github} verfügbar. Im Git repository befindet sich auch die Dokumentation und eine Kopie der GNU Public License, unter der diese Software veröffentlicht ist.
+
+
+\subsection{Aufbau}
+Die Klasse \textit{Main} initialisiert die Applikation und platziert sie auf der \textit{Stage} (Hauptcontainer des GUIs), auf die sie durch die Vererbung der AS3 Klasse \textit{Sprite} zugriff hat. Über die \textit{Main} Klasse wird die Hauptklasse \textit{Doppelpendel} instanziert und gestartet. 
+
+Die Sprite-Klasse ist ein AS3-Grundbaustein der Anzeigeliste: ein Knoten der Anzeigeliste, der Grafiken anzeigen und auch untergeordnete Objekte enthalten kann.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{software_final.png}
-	\caption{Realisierte grafische Oberfläche}
+	\caption{Grafische Oberfläche Doppelt inverses Pendel}
 	\label{fig:xml}
 \end{figure}
 
@@ -458,11 +466,6 @@ Die Funktion des Model-Controllers wird durch die Klasse \textit{Doppelpendel} �
 
 \subsubsection{View}
 Die View verteilt sich auf die jeweiligen GUI-Klassen \textit{Pendulum}, \textit{PendulumControls}, \textit{Background} und \textit{MenuBar}.
-
-\subsection{Bootstrapper}
-Die Klasse \textit{Main} initialisiert die Applikation und platziert sie auf der \textit{Stage} (Hauptcontainer des GUIs), auf die sie durch die Vererbung der AS3 Klasse \textit{Sprite} zugriff hat. Über die \textit{Main} Klasse wird die Hauptklasse \textit{Doppelpendel} instanziert und gestartet. 
-
-Die Sprite-Klasse ist ein AS3-Grundbaustein der Anzeigeliste: ein Knoten der Anzeigeliste, der Grafiken anzeigen und auch untergeordnete Objekte enthalten kann.
 
 \subsection{Solver Klassen (Runge-Kutta)}
 Die Bewegungsgleichung des Doppelpendels wird in drei abgetrennten Klassen berechnet. Die Klasse \textit{PendulumSystem} nimmt die aktuellen Werte der Pendel entgegen und leitet sie zum Berechnen an die Klassen \textit{RungeKutta} und \textit{PendulumSolver} weiter. Die Klasse \textit{RungeKutta} nähert die Differentialgleichung, die in der Klasse \textit{PendulumSolver} definiert ist, über das RK4-Verfahren an. Die Lösung wird als Vektor im \textit{PendulumSolver} gespeichert.
@@ -499,8 +502,6 @@ Beispiel einer IDP-Konfigurationsdatei:
 	\caption{IDP Konfigurationsdatei}
 	\label{fig:xml}
 \end{figure}
-
-\section{xxx}
 
 \newpage
 ￼\listoffigures
