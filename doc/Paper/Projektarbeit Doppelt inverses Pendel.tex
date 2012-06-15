@@ -143,6 +143,60 @@ Die einzelnen Segmente des Pendels sollen durch Benutzereingaben über Tastatur 
 \end{itemize}
 
 
+% Umsetzung
+\newpage
+\section{Umsetzung}
+
+\subsection{Projektplanung}
+Um das Softwareprojekt und die einzelnen Iterationen planen und verwalten zu können, wurde Pivotaltracker \citep{pivotal} von Pivotal Labs eingesetzt. Die einzelnen Tasks der Projektplanung können unter \citep{hoehnHauenstein} nachgeschlagen werden.
+
+\subsection{Iterationsplan}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\begin{tabularx}{\textwidth}{|l|l|L|}
+	\hline
+	\textbf{Iteration} & \textbf{Termin}     & \textbf{Story}\\
+	\hline
+	1                  & Mi 04.04.2012       & \begin{itemize}
+													\item Evaluierung der Programmiersprache
+													\item Physikalische Eigenschaften des Doppelpendels verstehen
+													\item Gleichungssystem aufstellen
+											 \end{itemize}\\
+	\hline
+	2                  & Fr 27.04.2012       & \begin{itemize}
+													\item Grafische Benutzeroberfläche
+													\item Programmierung des ersten Pendels
+													\item Programmierung des zweiten Pendels
+													\item Runge Kutta definieren
+										   	 \end{itemize}\\
+	\hline
+	3                  & Mi 23.05.2012       & \begin{itemize}
+													\item Pendel einstellen
+													\item Projektdokumentation
+											 \end{itemize}\\
+	\hline
+	4                  & SA 16.06.2012       & \begin{itemize}
+													\item Projektdokumentation
+													\item Präsentation
+											 \end{itemize}\\
+	\hline
+\end{tabularx}
+
+\subsection{Programmiersprache}
+Das Programm wird mittels der objektorientierten Programmiersprache ActionScript 3 (AS3) und dem Adobe Flex SDK Framework \citep{flex} implementiert. Es ist dank dem Adobe Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
+
+Eine Implementierung des Doppelpendels mittels AS3 und dem Flex SDK ist empfehlenswert, da das Flex Framework speziell für grafische Applikationen mit Animationen ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
+
+\subsection{Grafische Oberfläche}
+Die grafische Oberfläche wird als skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Grösse der Pendelsimulation passt sich anhand der Fenstergrösse automatisch an.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{software_draft.png}
+	\caption{Entwurf grafische Oberfläche}
+	\label{fig:gui:draft}
+\end{figure}
+
+
 % Physikalische und mathematische Zusammenhänge
 \newpage
 \section{Physikalische und mathematische Zusammenhänge}
@@ -382,60 +436,6 @@ damit erhält man für den Runge-Kutta Algorithmus (\ref{algo:rk}) folgende Schl
 \end{equation}
 
 
-% Umsetzung
-\newpage
-\section{Umsetzung}
-
-\subsection{Projektplanung}
-Um das Softwareprojekt und die einzelnen Iterationen planen und verwalten zu können, wurde Pivotaltracker \citep{pivotal} von Pivotal Labs eingesetzt. Die einzelnen Tasks der Projektplanung können unter \citep{hoehnHauenstein} nachgeschlagen werden.
-
-\subsection{Iterationsplan}
-\newcolumntype{L}{>{\raggedright\arraybackslash}X}
-\begin{tabularx}{\textwidth}{|l|l|L|}
-	\hline
-	\textbf{Iteration} & \textbf{Termin}     & \textbf{Story}\\
-	\hline
-	1                  & Mi 04.04.2012       & \begin{itemize}
-													\item Evaluierung der Programmiersprache
-													\item Physikalische Eigenschaften des Doppelpendels verstehen
-													\item Gleichungssystem aufstellen
-											 \end{itemize}\\
-	\hline
-	2                  & Fr 27.04.2012       & \begin{itemize}
-													\item Grafische Benutzeroberfläche
-													\item Programmierung des ersten Pendels
-													\item Programmierung des zweiten Pendels
-													\item Runge Kutta definieren
-										   	 \end{itemize}\\
-	\hline
-	3                  & Mi 23.05.2012       & \begin{itemize}
-													\item Pendel einstellen
-													\item Projektdokumentation
-											 \end{itemize}\\
-	\hline
-	4                  & SA 16.06.2012       & \begin{itemize}
-													\item Projektdokumentation
-													\item Präsentation
-											 \end{itemize}\\
-	\hline
-\end{tabularx}
-
-\subsection{Programmiersprache}
-Das Programm wird mittels der objektorientierten Programmiersprache ActionScript 3 (AS3) und dem Adobe Flex SDK Framework \citep{flex} implementiert. Es ist dank dem Adobe Flashplayer auf fast jedem Betriebssystem und Browser lauffähig.
-
-Eine Implementierung des Doppelpendels mittels AS3 und dem Flex SDK ist empfehlenswert, da das Flex Framework speziell für grafische Applikationen mit Animationen ausgelegt ist und es dadurch zu einer grossen Zeiteinsparung bei der Entwicklung kommt.
-
-\subsection{Grafische Oberfläche}
-Die grafische Oberfläche wird als skalierbares Modell aufgebaut. Der Vorteil in diesem Aufbau besteht darin, dass die Applikation auf jeder Bildschirmauflösung optimal dargestellt wird. Die Grösse der Pendelsimulation passt sich anhand der Fenstergrösse automatisch an.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{software_draft.png}
-	\caption{Entwurf grafische Oberfläche}
-	\label{fig:gui:draft}
-\end{figure}
-
-
 % Software
 \newpage
 \section{Software}
@@ -455,7 +455,7 @@ Die Sprite-Klasse ist ein AS3-Grundbaustein der Anzeigeliste: ein Knoten der Anz
 	\centering
 	\includegraphics[width=\textwidth]{software_final.png}
 	\caption{Grafische Oberfläche Doppelt inverses Pendel}
-	\label{fig:xml}
+	\label{fig:gui:final}
 \end{figure}
 
 \subsection{MVC-Pattern}
@@ -468,14 +468,14 @@ Die Funktion des Model-Controllers wird durch die Klasse \textit{Doppelpendel} �
 	\centering
 	\includegraphics[width=\textwidth]{diag_Doppelpendel.jpg}
 	\caption{Klassendiagramm Doppelpendel}
-	\label{fig:xml}
+	\label{fig:diag:doppelpendel}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{diag_Event.jpg}
 	\caption{Klassendiagramm Eventsystem}
-	\label{fig:xml}
+	\label{fig:diag:event}
 \end{figure}
 
 \subsubsection{View}
@@ -488,21 +488,21 @@ Die Bewegungsgleichung des Doppelpendels wird in drei abgetrennten Klassen berec
 	\centering
 	\includegraphics[scale=0.45]{diag_PendulumSystem.jpg}
 	\caption{Klassendiagramm Pendulumsystem}
-	\label{fig:xml}
+	\label{fig:diag:pendulumSystem}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.45]{diag_IODESolver.jpg}
 	\caption{Klassendiagramm PendulumSolver/IODESolver}
-	\label{fig:xml}
+	\label{fig:diag:iodeSolver}
 
 \end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.45]{diag_IODE.jpg}
 	\caption{Klassendiagramm RungeKutta/IODE}
-	\label{fig:xml}
+	\label{fig:diag:iode}
 \end{figure}
 
 \subsection{Konfiguration des Systems}
@@ -522,12 +522,12 @@ Beispiel einer IDP-Konfigurationsdatei:
 \section{Fazit Projektarbeit}
 Die Entscheidung die Projektarbeit mit AS3 und dem FlexSDK zu entwickeln, erwies sich schnell als richtig. Die grundlegenden Strukturen der Applikation konnten in kurzer Zeit umgesetzt werden und dem Experten zur Ansicht vorgelegt werden. Um den Effekt der Pendelbewegung  möglichst schnell zu visualisieren, wurde die Bewegung zu beginn als lineare Animation implementiert. Die Animation der Pendel konnte dank der losen Kopplung der AS3 Strukturen leicht gegen die finale Bewegungsgleichung ausgetauscht werden.
 
-Obschon wir mit dem Resultat der Implementierung in AS3 sehr zufrieden sind, mussten wir feststellen, dass die AS3 Programmiersprache bezüglich Perfomance von Realtime Berechnungen gewisse Nachteile mit sich brachte. Die Animation des Doppelpendels ruckelte zu Beginn relativ Stark, was uns zu unfangreichen Optimierungen im Renderer des Pendelsystems gezwungen hat.
+Obschon wir mit dem Resultat der Implementierung in AS3 sehr zufrieden sind, mussten wir feststellen, dass die AS3 Programmiersprache bezüglich Performance von Realtime Berechnungen gewisse Nachteile mit sich brachte. Die Animation des Doppelpendels ruckelte zu Beginn relativ Stark, was uns zu umfangreichen Optimierungen im Renderer des Pendelsystems gezwungen hat.
 
-Die Projektarbeit über das Doppelt inverse Pendel ermöglichte uns wertvolle Einblicke in physikalische Problemstellungen und deren numerische Lösungsverfahren. Insgesammt war diese Projektarbeit für uns sehr spannend und aufschlussreich.
+Die Projektarbeit über das Doppelt inverse Pendel ermöglichte uns wertvolle Einblicke in physikalische Problemstellungen und deren numerische Lösungsverfahren. Insgesamt war diese Projektarbeit für uns sehr spannend und aufschlussreich.
 
 \newpage
-￼\listoffigures
+\listoffigures
 
 \newpage
 \nocite{*}
