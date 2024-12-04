@@ -1,24 +1,16 @@
-== Readme
-
+## Readme
 Informatik Projekt 2 - Doppelpendel 
 
-
-== Projektteam
-
+## Projektteam
 Michael Hoehn, Stefan Hauenstein
 
-
-== Iterationsplan
-
+## Iterationsplan
 https://www.pivotaltracker.com/projects/505419
 
-== Website
-
+## Website
 http://ussvoyager.ch/zhaw/doppelpendel/
 
-
-== Setup
-
+## Setup
 1. FDT5 free installieren (http://fdt.powerflasher.com/buy-download/)
 2. FDT5 starten
 3. FlexSDK 4.6.0 als SDK im FDT5 hinzufügen
