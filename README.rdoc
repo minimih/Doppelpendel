@@ -21,5 +21,5 @@ http://ussvoyager.ch/zhaw/doppelpendel/
 
 1. FDT5 free installieren (http://fdt.powerflasher.com/buy-download/)
 2. FDT5 starten
-3. FlexSDK 4.6.0 als SDK im FDT5 hinzufügen
+3. FlexSDK 4.6.0 als SDK im FDT5 hinzufÃ¼gen
 4. ZHAW_Doppelpendel Projekt ins FDT5 importieren mittels File/Import
